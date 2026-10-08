@@ -223,7 +223,7 @@ void App::Render() {
 #ifdef CSOPESY_SHOW_IMGUI_DEMO
       ImGui::ShowDemoWindow();
 #endif
-      taskbar_.Draw(window_manager_);
+      taskbar_.Draw(window_manager_, state_machine_);
       break;
     case AppState::kShutdown:
       DrawCenteredPlaceholder(theme_.boot_font(), "Shutting down...");

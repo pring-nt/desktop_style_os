@@ -8,6 +8,7 @@
 #include "imgui.h"
 
 #include "apps/app_window.h"
+#include "core/state_machine.h"
 #include "shell/desktop.h"
 #include "shell/window_manager.h"
 
@@ -15,6 +16,9 @@ namespace csopesy::shell {
 
 // The picture drawn on an app's taskbar button.
 enum class TaskbarIcon : std::uint8_t { kFolder, kTerminal, kActivity };
+
+// The system tray buttons, left to right.
+enum class TrayButton : std::uint8_t { kVolume, kNetwork, kPower };
 
 // What the indicator under an app's taskbar button shows.
 enum class IndicatorState : std::uint8_t { kHidden, kRunning, kActive };
@@ -34,16 +38,22 @@ enum class IndicatorState : std::uint8_t { kHidden, kRunning, kActive };
 [[nodiscard]] ScreenRect TaskbarButtonRect(const ScreenRect& taskbar,
                                            std::size_t index);
 
+// Where a system tray button goes: the tray is right-aligned in the taskbar.
+[[nodiscard]] ScreenRect TrayButtonRect(const ScreenRect& taskbar,
+                                        TrayButton button);
+
 // The fixed bottom panel. It is placed from the main viewport every frame and
-// kept in front of every app window. It only reports clicks; WindowManager
-// decides what a click does.
+// kept in front of every app window. It only reports clicks: WindowManager
+// decides what an app button click does, and PWR asks the StateMachine for a
+// shutdown, which this class confirms with a modal dialog.
 class Taskbar {
  public:
   // Adds an app button after the existing ones. The window is borrowed and
   // must outlive the taskbar.
   void Pin(apps::AppWindow& window, TaskbarIcon icon);
 
-  void Draw(WindowManager& window_manager) const;
+  void Draw(WindowManager& window_manager,
+            core::StateMachine& state_machine) const;
 
  private:
   struct AppButton {
@@ -55,6 +65,9 @@ class Taskbar {
                        const ScreenRect& button);
   static void DrawIndicator(ImDrawList& draw_list, IndicatorState state,
                             const ScreenRect& button);
+  static void DrawTray(const ScreenRect& bar,
+                       core::StateMachine& state_machine);
+  static void DrawShutdownDialog(core::StateMachine& state_machine);
 
   std::vector<AppButton> buttons_;
 };

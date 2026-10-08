@@ -8,6 +8,7 @@
 
 #include "apps/app_window.h"
 #include "core/imgui_flags.h"
+#include "core/state_machine.h"
 #include "core/theme.h"
 #include "shell/desktop.h"
 #include "shell/window_manager.h"
@@ -23,6 +24,14 @@ constexpr ImGuiWindowFlags kTaskbarFlags = core::CombineFlags(
     ImGuiWindowFlags_NoMove, ImGuiWindowFlags_NoScrollbar,
     ImGuiWindowFlags_NoScrollWithMouse, ImGuiWindowFlags_NoSavedSettings,
     ImGuiWindowFlags_NoCollapse);
+
+constexpr ImGuiWindowFlags kDialogFlags = core::CombineFlags(
+    ImGuiWindowFlags_AlwaysAutoResize, ImGuiWindowFlags_NoMove,
+    ImGuiWindowFlags_NoSavedSettings);
+
+constexpr const char* kShutdownDialogId = "Shut Down##pwr";
+constexpr int kTrayButtonCount = 3;
+constexpr ImVec2 kCenterPivot{0.5F, 0.5F};
 
 // Icon geometry, as offsets from the button's center, for a 44 px button.
 constexpr ImVec2 kFolderTabMin{-14.0F, -11.0F};
@@ -126,11 +135,25 @@ ScreenRect TaskbarButtonRect(const ScreenRect& taskbar, std::size_t index) {
   };
 }
 
+ScreenRect TrayButtonRect(const ScreenRect& taskbar, TrayButton button) {
+  constexpr float kStep = Theme::kTrayButtonSize.x + Theme::kTrayButtonSpacing;
+  constexpr float kTrayWidth = (kStep * static_cast<float>(kTrayButtonCount)) -
+                               Theme::kTrayButtonSpacing;
+  const float height = taskbar.max.y - taskbar.min.y;
+  const ImVec2 min{
+      taskbar.max.x - Theme::kTaskbarPadding - kTrayWidth +
+          (kStep * static_cast<float>(button)),
+      taskbar.min.y + ((height - Theme::kTrayButtonSize.y) * 0.5F),
+  };
+  return {.min = min, .max = min + Theme::kTrayButtonSize};
+}
+
 void Taskbar::Pin(apps::AppWindow& window, TaskbarIcon icon) {
   buttons_.push_back({.window = &window, .icon = icon});
 }
 
-void Taskbar::Draw(WindowManager& window_manager) const {
+void Taskbar::Draw(WindowManager& window_manager,
+                   core::StateMachine& state_machine) const {
   const ScreenRect bar = TaskbarRect(MainViewportRect());
   ImGui::SetNextWindowPos(bar.min);
   ImGui::SetNextWindowSize(bar.max - bar.min);
@@ -139,8 +162,11 @@ void Taskbar::Draw(WindowManager& window_manager) const {
   ImGui::PushStyleColor(ImGuiCol_WindowBg, Theme::kTaskbarColor);
   ImGui::Begin("##taskbar", nullptr, kTaskbarFlags);
   // App windows come to the front when focused; the taskbar must stay above
-  // them, so it is moved back to the front every frame.
-  ImGui::BringWindowToDisplayFront(ImGui::GetCurrentWindow());
+  // them, so it is moved back to the front every frame. A modal dialog stays
+  // above (and dims) the taskbar instead.
+  if (ImGui::GetTopMostPopupModal() == nullptr) {
+    ImGui::BringWindowToDisplayFront(ImGui::GetCurrentWindow());
+  }
   ImDrawList& draw_list = *ImGui::GetWindowDrawList();
   draw_list.AddLine(bar.min, ImVec2(bar.max.x, bar.min.y),
                     ImGui::GetColorU32(Theme::kTaskbarBorderColor),
@@ -173,6 +199,8 @@ void Taskbar::Draw(WindowManager& window_manager) const {
     }
   }
 
+  DrawTray(bar, state_machine);
+  DrawShutdownDialog(state_machine);
   ImGui::End();
   ImGui::PopStyleColor();
   ImGui::PopStyleVar(2);
@@ -210,6 +238,51 @@ void Taskbar::DrawIndicator(ImDrawList& draw_list, IndicatorState state,
                    button.max.y + Theme::kIndicatorHeight};
   draw_list.AddRectFilled(min, max, ImGui::GetColorU32(color),
                           Theme::kIndicatorRounding);
+}
+
+void Taskbar::DrawTray(const ScreenRect& bar,
+                       core::StateMachine& state_machine) {
+  ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0F, 0.0F, 0.0F, 0.0F));
+  ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
+                        Theme::kTaskbarButtonHoverColor);
+  ImGui::PushStyleColor(ImGuiCol_Text, Theme::kTrayTextColor);
+  // VOL and NET are placeholders until their popups arrive in Phase 4.
+  ImGui::SetCursorScreenPos(TrayButtonRect(bar, TrayButton::kVolume).min);
+  ImGui::Button("VOL", Theme::kTrayButtonSize);
+  ImGui::SetCursorScreenPos(TrayButtonRect(bar, TrayButton::kNetwork).min);
+  ImGui::Button("NET", Theme::kTrayButtonSize);
+
+  ImGui::PushStyleColor(ImGuiCol_Text, Theme::kPowerTextColor);
+  ImGui::SetCursorScreenPos(TrayButtonRect(bar, TrayButton::kPower).min);
+  if (ImGui::Button("PWR", Theme::kTrayButtonSize)) {
+    state_machine.RequestShutdown();
+  }
+  ImGui::PopStyleColor(4);
+}
+
+void Taskbar::DrawShutdownDialog(core::StateMachine& state_machine) {
+  if (state_machine.is_shutdown_pending() &&
+      !ImGui::IsPopupOpen(kShutdownDialogId)) {
+    ImGui::OpenPopup(kShutdownDialogId);
+  }
+  ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(),
+                          ImGuiCond_Always, kCenterPivot);
+  if (!ImGui::BeginPopupModal(kShutdownDialogId, nullptr, kDialogFlags)) {
+    return;
+  }
+  ImGui::TextUnformatted("Shut down CSOPESY OS?");
+  ImGui::Spacing();
+  if (ImGui::Button("Shut Down", Theme::kDialogButtonSize)) {
+    state_machine.ConfirmShutdown();
+    ImGui::CloseCurrentPopup();
+  }
+  ImGui::SameLine();
+  if (ImGui::Button("Cancel", Theme::kDialogButtonSize) ||
+      ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
+    state_machine.CancelShutdown();
+    ImGui::CloseCurrentPopup();
+  }
+  ImGui::EndPopup();
 }
 
 }  // namespace csopesy::shell

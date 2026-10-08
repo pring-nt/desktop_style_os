@@ -18,7 +18,7 @@
 
 ## Acceptance criteria (Desktop, shared with F03, F04)
 
-- [ ] PWR → Shut Down closes the app cleanly with exit code 0; Cancel returns to the desktop.
+- [x] PWR → Shut Down closes the app cleanly with exit code 0; Cancel returns to the desktop.
 
 ## Unit tests to write
 

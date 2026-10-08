@@ -17,7 +17,7 @@ Image wallpaper, taskbar with 3 buttons and running indicators, PWR shutdown wit
 - [x] 3.2 F06 taskbar layout.
 - [x] 3.3 F07 three app icon buttons and click behavior.
 - [x] 3.4 F08 running-app indicators.
-- [ ] 3.5 F09 PWR in the system tray + F05 shutdown flow with confirm modal.
+- [x] 3.5 F09 PWR in the system tray + F05 shutdown flow with confirm modal.
 - [ ] 3.6 F13 `DummyProcessTable` + unit tests.
 - [ ] 3.7 F12 + F13 Task Manager window with Processes table.
 - [ ] 3.8 F10 File Explorer.
@@ -30,7 +30,7 @@ _Done when every row of the traceability table passes and `check` is green._
 
 - [x] Wallpaper fills the entire window at any size and is the first layer drawn.
 - [ ] Clock seconds/minutes visibly advance without user input.
-- [ ] PWR → Shut Down closes the app cleanly with exit code 0; Cancel returns to the desktop.
+- [x] PWR → Shut Down closes the app cleanly with exit code 0; Cancel returns to the desktop.
 - [x] At least 3 icon buttons; each opens its window on click.
 - [x] Taskbar stays visible above every app window and at the bottom after resizing.
 - [x] Running indicators match which windows are open.
