@@ -19,3 +19,5 @@ One line per design decision, for the Technical Report.
 - 2026-10-08: Tests are registered per test case with `doctest_discover_tests`, so `ctest -R <name>` runs a single case. The Phase 1 test is a smoke test of the harness; real tests start with `Clock` in task 2.1.
 - 2026-10-08: `scripts/check.*` list files with `git ls-files --cached --others --exclude-standard`, so new files that are not yet committed are checked too. Gate 7 treats `src/data/`, `src/core/clock.*` and `src/core/state_machine.*` as testable logic.
 - 2026-10-08: On Windows the check runs as `powershell -ExecutionPolicy Bypass -File scripts/check.ps1` instead of changing the machine's execution policy.
+- 2026-10-08: `Clock` splits time-zone conversion (`ToLocalTime`, via `localtime_s` / `localtime_r`) from formatting (`FormatDateTime`, `std::put_time` with the classic locale). Formatting tests build `std::tm` fields directly, so they pass in any time zone; the injection test compares against the same conversion.
+- 2026-10-08: `csopesy_core` starts with `src/core/clock.cc`; `src/` is its public include root, so project includes read `"core/clock.h"`.

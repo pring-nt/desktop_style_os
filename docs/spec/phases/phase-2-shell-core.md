@@ -12,7 +12,7 @@
 
 ## Task order
 
-- [ ] 2.1 `Clock` with an injected time point + unit tests.
+- [x] 2.1 `Clock` with an injected time point + unit tests.
 - [ ] 2.2 `StateMachine` (`Bios`, `Splash`, `Desktop`, `Shutdown`; transitions and timers) + unit tests.
 - [ ] 2.3 `Theme` and fonts (monospace for boot screens, ImGui default or sans for the shell), applied once at startup.
 - [ ] 2.4 `AppWindow` base (shared window behavior in `01-architecture.md`).

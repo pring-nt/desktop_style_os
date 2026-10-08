@@ -25,7 +25,7 @@ Details: [phases/phase-2-shell-core.md](phases/phase-2-shell-core.md).
 
 | #   | Task                                                                                       | Depends on | Status |
 | --- | ------------------------------------------------------------------------------------------ | ---------- | ------ |
-| 2.1 | `Clock` with injected time point + unit tests                                              | Phase 1    | [ ]    |
+| 2.1 | `Clock` with injected time point + unit tests                                              | Phase 1    | [x]    |
 | 2.2 | `StateMachine` (`Bios`, `Splash`, `Desktop`, `Shutdown`, transitions, timers) + unit tests | Phase 1    | [ ]    |
 | 2.3 | `Theme` and fonts (monospace for boot, default/sans for shell), applied once at startup    | Phase 1    | [ ]    |
 | 2.4 | `AppWindow` base (shared window behavior)                                                  | 2.3        | [ ]    |

@@ -49,3 +49,5 @@ CheckOptions:
   readability-identifier-naming.StaticConstantCase: CamelCase
   readability-identifier-naming.StaticConstantPrefix: k
   readability-identifier-naming.MacroDefinitionCase: UPPER_CASE
+  # Google-style header guards end in an underscore; gate 7 checks their names.
+  readability-identifier-naming.MacroDefinitionIgnoredRegexp: '^CSOPESY_SRC_[A-Z0-9_]+_H_$'

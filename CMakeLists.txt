@@ -25,8 +25,13 @@ include(CompilerWarnings)
 include(Dependencies)
 include(Tooling)
 
+add_library(csopesy_core STATIC src/core/clock.cc)
+target_include_directories(csopesy_core PUBLIC "${PROJECT_SOURCE_DIR}/src")
+csopesy_set_warnings(csopesy_core)
+csopesy_enable_sanitizers(csopesy_core)
+
 add_executable(csopesy_os src/main.cc)
-target_link_libraries(csopesy_os PRIVATE imgui glad glfw)
+target_link_libraries(csopesy_os PRIVATE csopesy_core imgui glad glfw)
 target_compile_definitions(
   csopesy_os PRIVATE $<$<AND:$<BOOL:${CSOPESY_IMGUI_DEMO}>,$<CONFIG:Debug>>:CSOPESY_SHOW_IMGUI_DEMO>)
 csopesy_set_warnings(csopesy_os)
