@@ -18,7 +18,7 @@
 
 ## Acceptance criteria (Desktop, shared with F04, F05)
 
-- [ ] Wallpaper fills the entire window at any size and is the first layer drawn.
+- [x] Wallpaper fills the entire window at any size and is the first layer drawn.
 
 ## Unit tests to write
 

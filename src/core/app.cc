@@ -11,6 +11,7 @@
 #include <glad/gl.h>
 
 #include "apps/app_window.h"
+#include "core/paths.h"
 #include "core/state_machine.h"
 #include "core/theme.h"
 #include "shell/desktop.h"
@@ -28,6 +29,7 @@ constexpr const char* kGlslVersion = "#version 330 core";
 constexpr ImVec4 kClearColor{0.0F, 0.0F, 0.0F, 1.0F};
 // Boot placeholders are drawn at this multiple of the pixel font's size.
 constexpr float kBootTextScale = 2.0F;
+constexpr const char* kWallpaperPath = "assets/wallpaper.jpg";
 
 void PrintGlfwError(int code, const char* description) {
   std::fprintf(stderr, "GLFW error %d: %s\n", code, description);
@@ -179,6 +181,7 @@ int App::Run() {
     return EXIT_FAILURE;
   }
   theme_.Apply();
+  desktop_.LoadWallpaper(ExecutableDirectory() / kWallpaperPath);
 
   while (glfwWindowShouldClose(window.get()) == GLFW_FALSE) {
     glfwPollEvents();
@@ -190,6 +193,8 @@ int App::Run() {
     }
     EndFrame(window.get());
   }
+  // GL objects must be freed while the context still exists.
+  desktop_.ReleaseWallpaper();
   return EXIT_SUCCESS;
 }
 
@@ -209,7 +214,7 @@ void App::Render() {
       DrawCenteredPlaceholder(theme_.boot_font(), "Loading...");
       break;
     case AppState::kDesktop:
-      shell::Desktop::Draw(clock_);
+      desktop_.Draw(clock_);
       window_manager_.RenderAll(DesktopWorkArea());
 #ifdef CSOPESY_SHOW_IMGUI_DEMO
       ImGui::ShowDemoWindow();

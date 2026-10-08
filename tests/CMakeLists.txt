@@ -3,6 +3,7 @@ add_executable(
   app_window_test.cc
   clock_test.cc
   desktop_test.cc
+  paths_test.cc
   smoke_test.cc
   state_machine_test.cc
   theme_test.cc

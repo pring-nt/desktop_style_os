@@ -13,7 +13,7 @@ Image wallpaper, taskbar with 3 buttons and running indicators, PWR shutdown wit
 
 ## Task order
 
-- [ ] 3.1 F03 image wallpaper (stb_image texture, cover scaling, gradient fallback).
+- [x] 3.1 F03 image wallpaper (stb_image texture, cover scaling, gradient fallback).
 - [ ] 3.2 F06 taskbar layout.
 - [ ] 3.3 F07 three app icon buttons and click behavior.
 - [ ] 3.4 F08 running-app indicators.
@@ -28,7 +28,7 @@ Image wallpaper, taskbar with 3 buttons and running indicators, PWR shutdown wit
 
 _Done when every row of the traceability table passes and `check` is green._
 
-- [ ] Wallpaper fills the entire window at any size and is the first layer drawn.
+- [x] Wallpaper fills the entire window at any size and is the first layer drawn.
 - [ ] Clock seconds/minutes visibly advance without user input.
 - [ ] PWR → Shut Down closes the app cleanly with exit code 0; Cancel returns to the desktop.
 - [ ] At least 3 icon buttons; each opens its window on click.

@@ -1,17 +1,28 @@
 BasedOnStyle: Google
 IncludeBlocks: Regroup
 # Google include order: related header (priority 0, automatic), C system,
-# C++ standard, other libraries, project headers.
+# C++ standard, other libraries, project headers. Blocks follow Priority;
+# within the C system block, <windows.h> sorts first because the Win32
+# sub-headers that declare what we use need it included before them.
 IncludeCategories:
+  - Regex: '^<windows\.h>$'
+    Priority: 1
+    SortPriority: 1
   - Regex: '^<(GLFW|glad|KHR|doctest|stb)/'
     Priority: 3
+    SortPriority: 4
   - Regex: '^[<"](imgui|imgui_impl_[a-z0-9]+|imgui_internal|stb_image)\.h[>"]$'
     Priority: 3
+    SortPriority: 4
   - Regex: '^<[a-z_/]+\.h>$'
     Priority: 1
+    SortPriority: 2
   - Regex: '^<[a-z_/]+>$'
     Priority: 2
+    SortPriority: 3
   - Regex: '^"(core|boot|shell|apps|data)/'
     Priority: 4
+    SortPriority: 5
   - Regex: '.*'
     Priority: 3
+    SortPriority: 4

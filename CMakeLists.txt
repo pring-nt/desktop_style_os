@@ -30,12 +30,17 @@ add_library(
   src/apps/app_window.cc
   src/core/app.cc
   src/core/clock.cc
+  src/core/paths.cc
   src/core/state_machine.cc
+  src/core/texture.cc
   src/core/theme.cc
   src/shell/desktop.cc
   src/shell/window_manager.cc)
 target_include_directories(csopesy_core PUBLIC "${PROJECT_SOURCE_DIR}/src")
-target_link_libraries(csopesy_core PUBLIC imgui PRIVATE glad glfw)
+target_link_libraries(csopesy_core PUBLIC imgui PRIVATE glad glfw stb)
+if(WIN32)
+  target_compile_definitions(csopesy_core PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
+endif()
 target_compile_definitions(
   csopesy_core PRIVATE $<$<AND:$<BOOL:${CSOPESY_IMGUI_DEMO}>,$<CONFIG:Debug>>:CSOPESY_SHOW_IMGUI_DEMO>)
 csopesy_set_warnings(csopesy_core)

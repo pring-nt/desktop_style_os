@@ -4,6 +4,7 @@
 #include "core/clock.h"
 #include "core/state_machine.h"
 #include "core/theme.h"
+#include "shell/desktop.h"
 #include "shell/window_manager.h"
 
 namespace csopesy::core {
@@ -26,6 +27,7 @@ class App {
   StateMachine state_machine_;
   Clock clock_;
   Theme theme_;
+  shell::Desktop desktop_;
   shell::WindowManager window_manager_;
 };
 
