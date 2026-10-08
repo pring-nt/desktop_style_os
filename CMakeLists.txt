@@ -31,22 +31,7 @@ target_compile_definitions(
   csopesy_os PRIVATE $<$<AND:$<BOOL:${CSOPESY_IMGUI_DEMO}>,$<CONFIG:Debug>>:CSOPESY_SHOW_IMGUI_DEMO>)
 csopesy_set_warnings(csopesy_os)
 csopesy_enable_sanitizers(csopesy_os)
-
-# Let the exe run without MinGW on PATH: link the C++ runtime statically and
-# copy libwinpthread next to the exe (a fully static link fails with the
-# MinGW toolchain bundled with CLion).
-if(MINGW)
-  target_link_options(csopesy_os PRIVATE -static-libgcc -static-libstdc++)
-  get_filename_component(csopesy_mingw_bin "${CMAKE_CXX_COMPILER}" DIRECTORY)
-  if(EXISTS "${csopesy_mingw_bin}/libwinpthread-1.dll")
-    add_custom_command(
-      TARGET csopesy_os
-      POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different "${csopesy_mingw_bin}/libwinpthread-1.dll"
-              "$<TARGET_FILE_DIR:csopesy_os>"
-      VERBATIM)
-  endif()
-endif()
+csopesy_use_portable_runtime(csopesy_os)
 
 if(EXISTS "${PROJECT_SOURCE_DIR}/assets")
   add_custom_command(
@@ -55,4 +40,9 @@ if(EXISTS "${PROJECT_SOURCE_DIR}/assets")
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/assets"
             "$<TARGET_FILE_DIR:csopesy_os>/assets"
     VERBATIM)
+endif()
+
+if(CSOPESY_BUILD_TESTS)
+  enable_testing()
+  add_subdirectory(tests)
 endif()

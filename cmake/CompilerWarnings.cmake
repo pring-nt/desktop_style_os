@@ -1,5 +1,5 @@
-# Warning and sanitizer flags. Applied to our own targets only, never to
-# third-party code.
+# Compiler and linker options for our own targets (warnings, sanitizers,
+# runtime linking). Never applied to third-party code.
 
 function(csopesy_set_warnings target)
   if(MSVC)
@@ -33,4 +33,24 @@ function(csopesy_enable_sanitizers target)
   set(sanitizers -fsanitize=address,undefined -fno-omit-frame-pointer)
   target_compile_options(${target} PRIVATE ${sanitizers})
   target_link_options(${target} PRIVATE ${sanitizers})
+endfunction()
+
+# Lets an exe run without MinGW on PATH, and stops it from loading a
+# mismatched runtime from another MinGW on PATH (such as Git's): links the C++
+# runtime statically and copies libwinpthread next to the exe. A fully static
+# link fails with the MinGW toolchain bundled with CLion.
+function(csopesy_use_portable_runtime target)
+  if(NOT MINGW)
+    return()
+  endif()
+  target_link_options(${target} PRIVATE -static-libgcc -static-libstdc++)
+  get_filename_component(mingw_bin "${CMAKE_CXX_COMPILER}" DIRECTORY)
+  if(EXISTS "${mingw_bin}/libwinpthread-1.dll")
+    add_custom_command(
+      TARGET ${target}
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different "${mingw_bin}/libwinpthread-1.dll"
+              "$<TARGET_FILE_DIR:${target}>"
+      VERBATIM)
+  endif()
 endfunction()
