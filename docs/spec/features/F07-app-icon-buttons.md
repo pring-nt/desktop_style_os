@@ -23,7 +23,7 @@
 
 ## Acceptance criteria (Taskbar, shared with F06, F08)
 
-- [ ] At least 3 icon buttons; each opens its window on click.
+- [x] At least 3 icon buttons; each opens its window on click.
 
 ## Unit tests to write
 

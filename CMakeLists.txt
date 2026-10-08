@@ -28,6 +28,9 @@ include(Tooling)
 add_library(
   csopesy_core STATIC
   src/apps/app_window.cc
+  src/apps/file_explorer.cc
+  src/apps/task_manager.cc
+  src/apps/terminal.cc
   src/core/app.cc
   src/core/clock.cc
   src/core/paths.cc

@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 #include <glad/gl.h>
 
+#include "apps/app_window.h"
 #include "core/paths.h"
 #include "core/state_machine.h"
 #include "core/theme.h"
@@ -152,6 +153,16 @@ void DrawCenteredPlaceholder(ImFont* font, const char* text) {
 
 }  // namespace
 
+App::App() {
+  const auto add = [this](apps::AppWindow& window, shell::TaskbarIcon icon) {
+    window_manager_.Add(window);
+    taskbar_.Pin(window, icon);
+  };
+  add(file_explorer_, shell::TaskbarIcon::kFolder);
+  add(terminal_, shell::TaskbarIcon::kTerminal);
+  add(task_manager_, shell::TaskbarIcon::kActivity);
+}
+
 int App::Run() {
   glfwSetErrorCallback(PrintGlfwError);
   const GlfwSession glfw;
@@ -212,7 +223,7 @@ void App::Render() {
 #ifdef CSOPESY_SHOW_IMGUI_DEMO
       ImGui::ShowDemoWindow();
 #endif
-      shell::Taskbar::Draw();
+      taskbar_.Draw(window_manager_);
       break;
     case AppState::kShutdown:
       DrawCenteredPlaceholder(theme_.boot_font(), "Shutting down...");

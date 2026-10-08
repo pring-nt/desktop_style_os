@@ -19,7 +19,7 @@ The taskbar is a fixed bottom panel, always on top, with at least three clickabl
 
 ## Acceptance criteria (Taskbar, shared with F07, F08)
 
-- [ ] Taskbar stays visible above every app window and at the bottom after resizing.
+- [x] Taskbar stays visible above every app window and at the bottom after resizing.
 
 ## Unit tests to write
 

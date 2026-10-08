@@ -1,5 +1,8 @@
 #include "shell/taskbar.h"
 
+#include <array>
+#include <cstddef>
+
 #include "imgui.h"
 #include "imgui_internal.h"
 
@@ -7,6 +10,7 @@
 #include "core/imgui_flags.h"
 #include "core/theme.h"
 #include "shell/desktop.h"
+#include "shell/window_manager.h"
 
 namespace csopesy::shell {
 
@@ -19,6 +23,68 @@ constexpr ImGuiWindowFlags kTaskbarFlags = core::CombineFlags(
     ImGuiWindowFlags_NoMove, ImGuiWindowFlags_NoScrollbar,
     ImGuiWindowFlags_NoScrollWithMouse, ImGuiWindowFlags_NoSavedSettings,
     ImGuiWindowFlags_NoCollapse);
+
+// Icon geometry, as offsets from the button's center, for a 44 px button.
+constexpr ImVec2 kFolderTabMin{-14.0F, -11.0F};
+constexpr ImVec2 kFolderTabMax{-2.0F, -5.0F};
+constexpr ImVec2 kFolderBodyMin{-14.0F, -7.0F};
+constexpr ImVec2 kFolderBodyMax{14.0F, 11.0F};
+constexpr float kFolderRounding = 2.5F;
+
+constexpr ImVec2 kTerminalFrameMin{-14.0F, -11.0F};
+constexpr ImVec2 kTerminalFrameMax{14.0F, 11.0F};
+constexpr float kTerminalRounding = 3.0F;
+constexpr std::array<ImVec2, 3> kTerminalChevron{
+    ImVec2(-9.0F, -5.0F),
+    ImVec2(-4.0F, 0.0F),
+    ImVec2(-9.0F, 5.0F),
+};
+constexpr ImVec2 kTerminalCursorStart{-1.0F, 5.0F};
+constexpr ImVec2 kTerminalCursorEnd{8.0F, 5.0F};
+
+constexpr std::array<ImVec2, 7> kActivityLine{
+    ImVec2(-15.0F, 2.0F), ImVec2(-8.0F, 2.0F), ImVec2(-4.0F, -9.0F),
+    ImVec2(1.0F, 10.0F),  ImVec2(5.0F, -3.0F), ImVec2(8.0F, 2.0F),
+    ImVec2(15.0F, 2.0F),
+};
+
+constexpr float kIconStroke = 2.0F;
+
+template <std::size_t N>
+void DrawPolyline(ImDrawList& draw_list, ImVec2 center,
+                  const std::array<ImVec2, N>& offsets, ImU32 color) {
+  std::array<ImVec2, N> points{};
+  for (std::size_t i = 0; i < N; ++i) {
+    points.at(i) = center + offsets.at(i);
+  }
+  draw_list.AddPolyline(points.data(), static_cast<int>(N), color, kIconStroke);
+}
+
+void DrawFolder(ImDrawList& draw_list, ImVec2 center) {
+  draw_list.AddRectFilled(center + kFolderTabMin, center + kFolderTabMax,
+                          ImGui::GetColorU32(Theme::kFolderTabColor),
+                          kFolderRounding);
+  draw_list.AddRectFilled(center + kFolderBodyMin, center + kFolderBodyMax,
+                          ImGui::GetColorU32(Theme::kFolderIconColor),
+                          kFolderRounding);
+}
+
+void DrawTerminal(ImDrawList& draw_list, ImVec2 center) {
+  const ImU32 color = ImGui::GetColorU32(Theme::kTerminalIconColor);
+  draw_list.AddRectFilled(
+      center + kTerminalFrameMin, center + kTerminalFrameMax,
+      ImGui::GetColorU32(Theme::kTerminalIconBackground), kTerminalRounding);
+  draw_list.AddRect(center + kTerminalFrameMin, center + kTerminalFrameMax,
+                    color, kTerminalRounding);
+  DrawPolyline(draw_list, center, kTerminalChevron, color);
+  draw_list.AddLine(center + kTerminalCursorStart, center + kTerminalCursorEnd,
+                    color, kIconStroke);
+}
+
+void DrawActivity(ImDrawList& draw_list, ImVec2 center) {
+  DrawPolyline(draw_list, center, kActivityLine,
+               ImGui::GetColorU32(Theme::kActivityIconColor));
+}
 
 }  // namespace
 
@@ -36,7 +102,26 @@ apps::WorkArea WorkAreaAboveTaskbar(const ScreenRect& viewport) {
   };
 }
 
-void Taskbar::Draw() {
+ScreenRect TaskbarButtonRect(const ScreenRect& taskbar, std::size_t index) {
+  constexpr float kStep =
+      Theme::kTaskbarButtonSize + Theme::kTaskbarButtonSpacing;
+  const float height = taskbar.max.y - taskbar.min.y;
+  const ImVec2 min{
+      taskbar.min.x + Theme::kTaskbarPadding +
+          (kStep * static_cast<float>(index)),
+      taskbar.min.y + ((height - Theme::kTaskbarButtonSize) * 0.5F),
+  };
+  return {
+      .min = min,
+      .max = min + ImVec2(Theme::kTaskbarButtonSize, Theme::kTaskbarButtonSize),
+  };
+}
+
+void Taskbar::Pin(apps::AppWindow& window, TaskbarIcon icon) {
+  buttons_.push_back({.window = &window, .icon = icon});
+}
+
+void Taskbar::Draw(WindowManager& window_manager) const {
   const ScreenRect bar = TaskbarRect(MainViewportRect());
   ImGui::SetNextWindowPos(bar.min);
   ImGui::SetNextWindowSize(bar.max - bar.min);
@@ -47,13 +132,49 @@ void Taskbar::Draw() {
   // App windows come to the front when focused; the taskbar must stay above
   // them, so it is moved back to the front every frame.
   ImGui::BringWindowToDisplayFront(ImGui::GetCurrentWindow());
-  ImGui::GetWindowDrawList()->AddLine(
-      bar.min, ImVec2(bar.max.x, bar.min.y),
-      ImGui::GetColorU32(Theme::kTaskbarBorderColor),
-      Theme::kTaskbarBorderThickness);
+  ImDrawList& draw_list = *ImGui::GetWindowDrawList();
+  draw_list.AddLine(bar.min, ImVec2(bar.max.x, bar.min.y),
+                    ImGui::GetColorU32(Theme::kTaskbarBorderColor),
+                    Theme::kTaskbarBorderThickness);
+
+  for (std::size_t i = 0; i < buttons_.size(); ++i) {
+    const AppButton& button = buttons_.at(i);
+    const ScreenRect rect = TaskbarButtonRect(bar, i);
+    ImGui::SetCursorScreenPos(rect.min);
+    ImGui::PushID(button.window);
+    const bool clicked = ImGui::InvisibleButton("##app", rect.max - rect.min);
+    ImGui::PopID();
+    if (ImGui::IsItemHovered()) {
+      draw_list.AddRectFilled(
+          rect.min, rect.max,
+          ImGui::GetColorU32(Theme::kTaskbarButtonHoverColor),
+          Theme::kTaskbarButtonRounding);
+    }
+    DrawIcon(draw_list, button.icon, rect);
+    if (clicked) {
+      window_manager.ToggleFromTaskbar(*button.window);
+    }
+  }
+
   ImGui::End();
   ImGui::PopStyleColor();
   ImGui::PopStyleVar(2);
+}
+
+void Taskbar::DrawIcon(ImDrawList& draw_list, TaskbarIcon icon,
+                       const ScreenRect& button) {
+  const ImVec2 center = (button.min + button.max) * 0.5F;
+  switch (icon) {
+    case TaskbarIcon::kFolder:
+      DrawFolder(draw_list, center);
+      break;
+    case TaskbarIcon::kTerminal:
+      DrawTerminal(draw_list, center);
+      break;
+    case TaskbarIcon::kActivity:
+      DrawActivity(draw_list, center);
+      break;
+  }
 }
 
 }  // namespace csopesy::shell

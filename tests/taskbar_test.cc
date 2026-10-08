@@ -1,5 +1,6 @@
 #include "shell/taskbar.h"
 
+#include <cstddef>
 #include <string_view>
 
 #include "fake_app_window.h"
@@ -29,6 +30,29 @@ constexpr ScreenRect kResizedViewport{
     .max = ImVec2(900.0F, 560.0F),
 };
 
+void DrawFrame(const Taskbar& taskbar, WindowManager& manager) {
+  HeadlessImGui::BeginFrame();
+  manager.RenderAll(WorkAreaAboveTaskbar(MainViewportRect()));
+  taskbar.Draw(manager);
+  HeadlessImGui::EndFrame();
+}
+
+// Moves the mouse onto the app button at `index`, then presses and releases
+// the left button, one input event per frame as ImGui expects.
+void ClickAppButton(const Taskbar& taskbar, WindowManager& manager,
+                    std::size_t index) {
+  const ScreenRect button =
+      TaskbarButtonRect(TaskbarRect(MainViewportRect()), index);
+  const ImVec2 center = (button.min + button.max) * 0.5F;
+  ImGuiIO& io = ImGui::GetIO();
+  io.AddMousePosEvent(center.x, center.y);
+  DrawFrame(taskbar, manager);
+  io.AddMouseButtonEvent(ImGuiMouseButton_Left, true);
+  DrawFrame(taskbar, manager);
+  io.AddMouseButtonEvent(ImGuiMouseButton_Left, false);
+  DrawFrame(taskbar, manager);
+}
+
 TEST_CASE("TaskbarRect spans the full width at the bottom") {
   const ScreenRect bar = TaskbarRect(kViewport);
   CHECK(bar.min.x == kViewport.min.x);
@@ -52,21 +76,57 @@ TEST_CASE("The work area ends where the taskbar begins") {
   CHECK(area.max.y == TaskbarRect(kViewport).min.y);
 }
 
+TEST_CASE("App buttons sit in a row inside the taskbar") {
+  const ScreenRect bar = TaskbarRect(kViewport);
+  const ScreenRect first = TaskbarButtonRect(bar, 0);
+  const ScreenRect second = TaskbarButtonRect(bar, 1);
+  CHECK(first.min.x == bar.min.x + Theme::kTaskbarPadding);
+  CHECK(first.min.y >= bar.min.y);
+  CHECK(first.max.y <= bar.max.y);
+  CHECK(first.max.x - first.min.x == Theme::kTaskbarButtonSize);
+  CHECK(second.min.x - first.max.x == Theme::kTaskbarButtonSpacing);
+  CHECK(second.min.y == first.min.y);
+}
+
 TEST_CASE("The taskbar is drawn in front of a focused app window") {
   const HeadlessImGui imgui;
   WindowManager manager;
   FakeAppWindow app;
   manager.Add(app);
+  Taskbar taskbar;
+  taskbar.Pin(app, TaskbarIcon::kFolder);
   manager.ToggleFromTaskbar(app);
 
-  HeadlessImGui::BeginFrame();
-  manager.RenderAll(WorkAreaAboveTaskbar(MainViewportRect()));
-  Taskbar::Draw();
-  HeadlessImGui::EndFrame();
+  DrawFrame(taskbar, manager);
 
   const ImGuiContext& context = *ImGui::GetCurrentContext();
   REQUIRE_FALSE(context.Windows.empty());
   CHECK(std::string_view(context.Windows.back()->Name) == "##taskbar");
+}
+
+TEST_CASE("Clicking an app button opens, minimizes and restores its window") {
+  const HeadlessImGui imgui;
+  WindowManager manager;
+  FakeAppWindow first("First");
+  FakeAppWindow second("Second");
+  manager.Add(first);
+  manager.Add(second);
+  Taskbar taskbar;
+  taskbar.Pin(first, TaskbarIcon::kFolder);
+  taskbar.Pin(second, TaskbarIcon::kTerminal);
+  DrawFrame(taskbar, manager);
+
+  ClickAppButton(taskbar, manager, 1);
+  CHECK(second.is_open());
+  CHECK(manager.IsActive(second));
+  CHECK_FALSE(first.is_open());
+
+  ClickAppButton(taskbar, manager, 1);
+  CHECK(second.is_minimized());
+
+  ClickAppButton(taskbar, manager, 1);
+  CHECK_FALSE(second.is_minimized());
+  CHECK(manager.IsActive(second));
 }
 
 }  // namespace

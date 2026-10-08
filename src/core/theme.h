@@ -32,6 +32,18 @@ class Theme {
   static constexpr ImVec4 kTaskbarColor{0.05F, 0.06F, 0.09F, 0.88F};
   static constexpr ImVec4 kTaskbarBorderColor{1.0F, 1.0F, 1.0F, 0.14F};
   static constexpr float kTaskbarBorderThickness = 1.0F;
+  static constexpr float kTaskbarPadding = 10.0F;
+
+  // Taskbar app buttons: rounded squares with an icon drawn on top.
+  static constexpr float kTaskbarButtonSize = 44.0F;
+  static constexpr float kTaskbarButtonSpacing = 6.0F;
+  static constexpr float kTaskbarButtonRounding = 8.0F;
+  static constexpr ImVec4 kTaskbarButtonHoverColor{1.0F, 1.0F, 1.0F, 0.10F};
+  static constexpr ImVec4 kFolderIconColor{0.98F, 0.78F, 0.30F, 1.0F};
+  static constexpr ImVec4 kFolderTabColor{0.85F, 0.62F, 0.18F, 1.0F};
+  static constexpr ImVec4 kTerminalIconColor{0.35F, 0.92F, 0.45F, 1.0F};
+  static constexpr ImVec4 kTerminalIconBackground{0.07F, 0.08F, 0.10F, 1.0F};
+  static constexpr ImVec4 kActivityIconColor{0.38F, 0.72F, 1.0F, 1.0F};
 
   // Loads the fonts and sets the ImGui style. Call once, after
   // ImGui::CreateContext() and before the first frame.
