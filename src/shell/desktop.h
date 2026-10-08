@@ -23,6 +23,9 @@ struct UvRect {
   ImVec2 max;
 };
 
+// The main viewport (the whole application window) in screen pixels.
+[[nodiscard]] ScreenRect MainViewportRect();
+
 // Where the clock panel goes for a viewport: anchored to its top-right
 // corner, so it follows the corner when the window is resized.
 [[nodiscard]] ScreenRect ClockPanelRect(const ScreenRect& viewport,

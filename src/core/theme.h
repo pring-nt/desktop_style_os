@@ -26,6 +26,13 @@ class Theme {
   static constexpr float kClockPanelRounding = 8.0F;
   static constexpr float kClockPanelMargin = 12.0F;
 
+  // Taskbar: a dark, semi-opaque strip along the bottom with a thin top
+  // border.
+  static constexpr float kTaskbarHeight = 56.0F;
+  static constexpr ImVec4 kTaskbarColor{0.05F, 0.06F, 0.09F, 0.88F};
+  static constexpr ImVec4 kTaskbarBorderColor{1.0F, 1.0F, 1.0F, 0.14F};
+  static constexpr float kTaskbarBorderThickness = 1.0F;
+
   // Loads the fonts and sets the ImGui style. Call once, after
   // ImGui::CreateContext() and before the first frame.
   void Apply();

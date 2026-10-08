@@ -10,11 +10,11 @@
 #include <GLFW/glfw3.h>
 #include <glad/gl.h>
 
-#include "apps/app_window.h"
 #include "core/paths.h"
 #include "core/state_machine.h"
 #include "core/theme.h"
 #include "shell/desktop.h"
+#include "shell/taskbar.h"
 
 namespace csopesy::core {
 
@@ -150,14 +150,6 @@ void DrawCenteredPlaceholder(ImFont* font, const char* text) {
       font, size, position, ImGui::GetColorU32(ImGuiCol_Text), text);
 }
 
-[[nodiscard]] apps::WorkArea DesktopWorkArea() {
-  const ImGuiViewport* viewport = ImGui::GetMainViewport();
-  return {
-      .min = viewport->WorkPos,
-      .max = viewport->WorkPos + viewport->WorkSize,
-  };
-}
-
 }  // namespace
 
 int App::Run() {
@@ -215,10 +207,12 @@ void App::Render() {
       break;
     case AppState::kDesktop:
       desktop_.Draw(clock_);
-      window_manager_.RenderAll(DesktopWorkArea());
+      window_manager_.RenderAll(
+          shell::WorkAreaAboveTaskbar(shell::MainViewportRect()));
 #ifdef CSOPESY_SHOW_IMGUI_DEMO
       ImGui::ShowDemoWindow();
 #endif
+      shell::Taskbar::Draw();
       break;
     case AppState::kShutdown:
       DrawCenteredPlaceholder(theme_.boot_font(), "Shutting down...");

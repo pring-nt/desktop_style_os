@@ -14,6 +14,14 @@ namespace csopesy::shell {
 
 using core::Theme;
 
+ScreenRect MainViewportRect() {
+  const ImGuiViewport* viewport = ImGui::GetMainViewport();
+  return {
+      .min = viewport->Pos,
+      .max = viewport->Pos + viewport->Size,
+  };
+}
+
 ScreenRect ClockPanelRect(const ScreenRect& viewport, ImVec2 text_size) {
   const ImVec2 panel_size = text_size + (Theme::kClockPanelPadding * 2.0F);
   const ImVec2 max{viewport.max.x - Theme::kClockPanelMargin,
@@ -46,11 +54,7 @@ void Desktop::LoadWallpaper(const std::filesystem::path& path) {
 void Desktop::ReleaseWallpaper() { wallpaper_.reset(); }
 
 void Desktop::Draw(const core::Clock& clock) const {
-  const ImGuiViewport* viewport = ImGui::GetMainViewport();
-  const ScreenRect bounds{
-      .min = viewport->Pos,
-      .max = viewport->Pos + viewport->Size,
-  };
+  const ScreenRect bounds = MainViewportRect();
   ImDrawList& draw_list = *ImGui::GetBackgroundDrawList();
   DrawWallpaper(draw_list, bounds);
   DrawClock(draw_list, bounds, clock);

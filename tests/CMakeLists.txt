@@ -3,9 +3,11 @@ add_executable(
   app_window_test.cc
   clock_test.cc
   desktop_test.cc
+  imgui_flags_test.cc
   paths_test.cc
   smoke_test.cc
   state_machine_test.cc
+  taskbar_test.cc
   theme_test.cc
   window_manager_test.cc)
 target_link_libraries(csopesy_tests PRIVATE csopesy_core doctest::doctest_with_main)
