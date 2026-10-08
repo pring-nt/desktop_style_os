@@ -2,6 +2,7 @@ add_executable(
   csopesy_tests
   app_window_test.cc
   clock_test.cc
+  desktop_test.cc
   smoke_test.cc
   state_machine_test.cc
   theme_test.cc

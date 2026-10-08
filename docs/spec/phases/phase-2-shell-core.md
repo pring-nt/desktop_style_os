@@ -18,11 +18,11 @@
 - [x] 2.4 `AppWindow` base (shared window behavior in `01-architecture.md`).
 - [x] 2.5 `WindowManager` (open/close/focus/minimize, z-order, running flags) + unit tests.
 - [x] 2.6 `App`: owns the GLFW window, ImGui context and state machine; runs the frame loop; one cleanup path.
-- [ ] 2.7 Desktop state with gradient wallpaper (F03) and clock (F04).
+- [x] 2.7 Desktop state with gradient wallpaper (F03) and clock (F04).
 
 ## Exit criteria
 
-- [ ] F04 acceptance: Clock seconds/minutes visibly advance without user input.
-- [ ] `Clock`, `StateMachine` and `WindowManager` unit tests from `04-quality-gates.md` pass.
-- [ ] `scripts/check` green.
+- [x] F04 acceptance: Clock seconds/minutes visibly advance without user input.
+- [x] `Clock`, `StateMachine` and `WindowManager` unit tests from `04-quality-gates.md` pass.
+- [x] `scripts/check` green.
 - [ ] User approves moving to Phase 3.

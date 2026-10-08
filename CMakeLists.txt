@@ -32,6 +32,7 @@ add_library(
   src/core/clock.cc
   src/core/state_machine.cc
   src/core/theme.cc
+  src/shell/desktop.cc
   src/shell/window_manager.cc)
 target_include_directories(csopesy_core PUBLIC "${PROJECT_SOURCE_DIR}/src")
 target_link_libraries(csopesy_core PUBLIC imgui PRIVATE glad glfw)

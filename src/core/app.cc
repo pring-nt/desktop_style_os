@@ -13,6 +13,7 @@
 #include "apps/app_window.h"
 #include "core/state_machine.h"
 #include "core/theme.h"
+#include "shell/desktop.h"
 
 namespace csopesy::core {
 
@@ -208,6 +209,7 @@ void App::Render() {
       DrawCenteredPlaceholder(theme_.boot_font(), "Loading...");
       break;
     case AppState::kDesktop:
+      shell::Desktop::Draw(clock_);
       window_manager_.RenderAll(DesktopWorkArea());
 #ifdef CSOPESY_SHOW_IMGUI_DEMO
       ImGui::ShowDemoWindow();

@@ -1,6 +1,7 @@
 #ifndef CSOPESY_SRC_CORE_APP_H_
 #define CSOPESY_SRC_CORE_APP_H_
 
+#include "core/clock.h"
 #include "core/state_machine.h"
 #include "core/theme.h"
 #include "shell/window_manager.h"
@@ -23,6 +24,7 @@ class App {
   void Render();
 
   StateMachine state_machine_;
+  Clock clock_;
   Theme theme_;
   shell::WindowManager window_manager_;
 };

@@ -17,7 +17,7 @@
 
 ## Acceptance criteria (Desktop, shared with F03, F05)
 
-- [ ] Clock seconds/minutes visibly advance without user input.
+- [x] Clock seconds/minutes visibly advance without user input.
 
 ## Unit tests to write
 
