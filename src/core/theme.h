@@ -71,6 +71,10 @@ class Theme {
   static constexpr float kFileSizeColumnWidth = 90.0F;
   static constexpr float kFileDateColumnWidth = 150.0F;
 
+  // Terminal: green-on-black, like a classic console.
+  static constexpr ImVec4 kTerminalBackground{0.02F, 0.02F, 0.02F, 1.0F};
+  static constexpr ImVec4 kTerminalTextColor{0.72F, 0.95F, 0.72F, 1.0F};
+
   static constexpr ImVec4 kFolderIconColor{0.98F, 0.78F, 0.30F, 1.0F};
   static constexpr ImVec4 kFolderTabColor{0.85F, 0.62F, 0.18F, 1.0F};
   static constexpr ImVec4 kTerminalIconColor{0.35F, 0.92F, 0.45F, 1.0F};

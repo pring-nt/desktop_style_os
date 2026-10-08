@@ -39,9 +39,9 @@
 
 ## Acceptance criteria (Unique app screens, shared with F10)
 
-- [ ] Each screen has its own layout, not a copy of the other or of the Task Manager.
-- [ ] Both show placeholder data and respond to basic interaction (select, type, sort).
-- [ ] Open, minimize, restore and close all work from the window and the taskbar.
+- [x] Each screen has its own layout, not a copy of the other or of the Task Manager.
+- [x] Both show placeholder data and respond to basic interaction (select, type, sort).
+- [x] Open, minimize, restore and close all work from the window and the taskbar.
 
 ## Unit tests to write
 

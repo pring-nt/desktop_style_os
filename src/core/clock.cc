@@ -12,7 +12,15 @@ namespace csopesy::core {
 
 namespace {
 
-constexpr const char* kDateTimeFormat = "%A, %b %d, %Y | %I:%M %p";
+constexpr const char* kDateFormat = "%A, %b %d, %Y";
+constexpr const char* kTimeFormat = "%I:%M %p";
+
+std::string FormatWith(const std::tm& local_time, const char* format) {
+  std::ostringstream stream;
+  stream.imbue(std::locale::classic());
+  stream << std::put_time(&local_time, format);
+  return stream.str();
+}
 
 }  // namespace
 
@@ -29,11 +37,16 @@ std::tm ToLocalTime(std::chrono::system_clock::time_point time) {
   return local_time;
 }
 
+std::string FormatDate(const std::tm& local_time) {
+  return FormatWith(local_time, kDateFormat);
+}
+
+std::string FormatTime(const std::tm& local_time) {
+  return FormatWith(local_time, kTimeFormat);
+}
+
 std::string FormatDateTime(const std::tm& local_time) {
-  std::ostringstream stream;
-  stream.imbue(std::locale::classic());
-  stream << std::put_time(&local_time, kDateTimeFormat);
-  return stream.str();
+  return FormatDate(local_time) + " | " + FormatTime(local_time);
 }
 
 Clock::Clock() : Clock(std::chrono::system_clock::now) {}
@@ -46,6 +59,14 @@ std::chrono::system_clock::time_point Clock::Now() const {
 
 std::string Clock::FormattedNow() const {
   return FormatDateTime(ToLocalTime(Now()));
+}
+
+std::string Clock::FormattedDate() const {
+  return FormatDate(ToLocalTime(Now()));
+}
+
+std::string Clock::FormattedTime() const {
+  return FormatTime(ToLocalTime(Now()));
 }
 
 }  // namespace csopesy::core

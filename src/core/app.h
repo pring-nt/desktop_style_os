@@ -38,7 +38,7 @@ class App {
   shell::Desktop desktop_;
   data::DummyProcessTable process_table_;
   apps::FileExplorer file_explorer_;
-  apps::Terminal terminal_;
+  apps::Terminal terminal_{clock_, process_table_};
   apps::TaskManager task_manager_{process_table_};
   shell::WindowManager window_manager_;
   shell::Taskbar taskbar_;

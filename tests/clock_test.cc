@@ -46,6 +46,12 @@ TEST_CASE("FormatDateTime shows noon as 12 PM") {
         "Friday, Oct 09, 2026 | 12:00 PM");
 }
 
+TEST_CASE("FormatDate and FormatTime split the date from the time") {
+  const std::tm local_time = MakeLocalTime(2026y / October / 8d, 19h, 43min);
+  CHECK(FormatDate(local_time) == "Thursday, Oct 08, 2026");
+  CHECK(FormatTime(local_time) == "07:43 PM");
+}
+
 TEST_CASE("Clock reads the injected time source") {
   const auto fixed_time =
       std::chrono::sys_days(2026y / October / 8d) + 19h + 43min;
@@ -53,6 +59,8 @@ TEST_CASE("Clock reads the injected time source") {
 
   CHECK(clock.Now() == fixed_time);
   CHECK(clock.FormattedNow() == FormatDateTime(ToLocalTime(fixed_time)));
+  CHECK(clock.FormattedDate() == FormatDate(ToLocalTime(fixed_time)));
+  CHECK(clock.FormattedTime() == FormatTime(ToLocalTime(fixed_time)));
 }
 
 }  // namespace
