@@ -12,6 +12,8 @@
 #include <GLFW/glfw3.h>
 #include <glad/gl.h>
 
+#include "core/theme.h"
+
 namespace {
 
 constexpr int kWindowWidth = 1280;
@@ -144,6 +146,8 @@ int main() {
   if (!imgui.ok()) {
     return EXIT_FAILURE;
   }
+  csopesy::core::Theme theme;
+  theme.Apply();
 
   while (glfwWindowShouldClose(window.get()) == GLFW_FALSE) {
     glfwPollEvents();
