@@ -21,3 +21,4 @@ One line per design decision, for the Technical Report.
 - 2026-10-08: On Windows the check runs as `powershell -ExecutionPolicy Bypass -File scripts/check.ps1` instead of changing the machine's execution policy.
 - 2026-10-08: `Clock` splits time-zone conversion (`ToLocalTime`, via `localtime_s` / `localtime_r`) from formatting (`FormatDateTime`, `std::put_time` with the classic locale). Formatting tests build `std::tm` fields directly, so they pass in any time zone; the injection test compares against the same conversion.
 - 2026-10-08: `csopesy_core` starts with `src/core/clock.cc`; `src/` is its public include root, so project includes read `"core/clock.h"`.
+- 2026-10-08: `StateMachine` holds state, timers and the PWR confirm step (`RequestShutdown` / `CancelShutdown` / `ConfirmShutdown`) but draws nothing; `App` picks what to render for each state, so the logic stays unit-testable. Default durations: BIOS 4 s, splash 2.5 s, shutdown 1 s.

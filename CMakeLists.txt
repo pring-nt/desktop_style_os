@@ -25,7 +25,7 @@ include(CompilerWarnings)
 include(Dependencies)
 include(Tooling)
 
-add_library(csopesy_core STATIC src/core/clock.cc)
+add_library(csopesy_core STATIC src/core/clock.cc src/core/state_machine.cc)
 target_include_directories(csopesy_core PUBLIC "${PROJECT_SOURCE_DIR}/src")
 csopesy_set_warnings(csopesy_core)
 csopesy_enable_sanitizers(csopesy_core)
