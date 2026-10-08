@@ -30,7 +30,8 @@ add_library(
   src/apps/app_window.cc
   src/core/clock.cc
   src/core/state_machine.cc
-  src/core/theme.cc)
+  src/core/theme.cc
+  src/shell/window_manager.cc)
 target_include_directories(csopesy_core PUBLIC "${PROJECT_SOURCE_DIR}/src")
 target_link_libraries(csopesy_core PUBLIC imgui)
 csopesy_set_warnings(csopesy_core)

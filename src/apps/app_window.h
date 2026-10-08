@@ -54,6 +54,7 @@ class AppWindow {
 
   // Offset of the first-time position from the work area's top-left corner,
   // so windows opened for the first time do not stack exactly.
+  [[nodiscard]] ImVec2 default_offset() const { return default_offset_; }
   void set_default_offset(ImVec2 default_offset) {
     default_offset_ = default_offset;
   }

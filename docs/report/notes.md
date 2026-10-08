@@ -28,3 +28,4 @@ One line per design decision, for the Technical Report.
 - 2026-10-08: `IMGUI_DEFINE_MATH_OPERATORS` is defined on the `imgui` target so `ImVec2` arithmetic works everywhere.
 - 2026-10-08: UI code is tested headless (`tests/imgui_test_support.h`): a bare ImGui context with `RendererHasTextures` set runs real frames with no window or GPU, and Debug builds keep IM_ASSERT on.
 - 2026-10-08: A Roboto sans shell font is planned as optional Phase 4 polish (task 4.6).
+- 2026-10-08: `WindowManager` tracks the active (front-most) app window itself instead of asking ImGui at click time, because clicking a taskbar button moves ImGui focus to the taskbar. The active window is set by the taskbar and by ImGui focus each frame, and dropped when it is minimized or closed. Clicking the desktop background does not clear it.

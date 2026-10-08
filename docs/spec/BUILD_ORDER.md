@@ -29,7 +29,7 @@ Details: [phases/phase-2-shell-core.md](phases/phase-2-shell-core.md).
 | 2.2 | `StateMachine` (`Bios`, `Splash`, `Desktop`, `Shutdown`, transitions, timers) + unit tests | Phase 1    | [x]    |
 | 2.3 | `Theme` and fonts (monospace for boot, default/sans for shell), applied once at startup    | Phase 1    | [x]    |
 | 2.4 | `AppWindow` base (shared window behavior)                                                  | 2.3        | [x]    |
-| 2.5 | `WindowManager` (open/close/focus/minimize, z-order, running flags) + unit tests           | 2.4        | [ ]    |
+| 2.5 | `WindowManager` (open/close/focus/minimize, z-order, running flags) + unit tests           | 2.4        | [x]    |
 | 2.6 | `App`: owns GLFW window, ImGui context, state machine; frame loop; single cleanup path     | 2.2, 2.3   | [ ]    |
 | 2.7 | Desktop state with gradient wallpaper (F03 fallback) and clock (F04)                       | 2.1, 2.6   | [ ]    |
 | 2.8 | Exit: phase acceptance boxes ticked, `check` green                                         | 2.1–2.7    | [ ]    |

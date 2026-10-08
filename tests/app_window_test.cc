@@ -1,5 +1,6 @@
 #include "apps/app_window.h"
 
+#include "fake_app_window.h"
 #include "imgui.h"
 #include "imgui_test_support.h"
 #include <doctest/doctest.h>
@@ -12,7 +13,9 @@ constexpr WorkArea kArea{
     .min = ImVec2(0.0F, 0.0F),
     .max = ImVec2(1280.0F, 660.0F),
 };
-constexpr ImVec2 kWindowSize{400.0F, 300.0F};
+using testing::FakeAppWindow;
+
+constexpr ImVec2 kWindowSize = FakeAppWindow::kDefaultSize;
 constexpr float kTitleBarHeight = 20.0F;
 
 constexpr ImVec2 kInside{100.0F, 100.0F};
@@ -24,19 +27,6 @@ constexpr ImVec2 kFarRight{5000.0F, 100.0F};
 ImVec2 Clamp(ImVec2 position) {
   return ClampToWorkArea(position, kWindowSize, kArea, kTitleBarHeight);
 }
-
-class FakeApp : public AppWindow {
- public:
-  FakeApp() : AppWindow("Fake", kWindowSize) {}
-
-  [[nodiscard]] int draw_count() const { return draw_count_; }
-
- protected:
-  void Draw() override { ++draw_count_; }
-
- private:
-  int draw_count_ = 0;
-};
 
 void RenderOneFrame(AppWindow& app) {
   testing::HeadlessImGui::BeginFrame();
@@ -64,14 +54,14 @@ TEST_CASE("ClampToWorkArea keeps part of the window visible sideways") {
 }
 
 TEST_CASE("AppWindow starts closed") {
-  const FakeApp app;
+  const FakeAppWindow app;
   CHECK(app.title() == "Fake");
   CHECK_FALSE(app.is_open());
   CHECK_FALSE(app.is_minimized());
 }
 
 TEST_CASE("AppWindow open, minimize, restore and close") {
-  FakeApp app;
+  FakeAppWindow app;
   app.Open();
   CHECK(app.is_open());
   app.Minimize();
@@ -86,7 +76,7 @@ TEST_CASE("AppWindow open, minimize, restore and close") {
 
 TEST_CASE("AppWindow draws its contents and takes focus when opened") {
   const testing::HeadlessImGui imgui;
-  FakeApp app;
+  FakeAppWindow app;
   app.Open();
   RenderOneFrame(app);
   CHECK(app.draw_count() == 1);
@@ -95,7 +85,7 @@ TEST_CASE("AppWindow draws its contents and takes focus when opened") {
 
 TEST_CASE("AppWindow skips drawing while closed or minimized") {
   const testing::HeadlessImGui imgui;
-  FakeApp app;
+  FakeAppWindow app;
   RenderOneFrame(app);
   app.Open();
   app.Minimize();
