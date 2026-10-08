@@ -17,7 +17,7 @@
 - [x] 2.3 `Theme` and fonts (monospace for boot screens, ImGui default or sans for the shell), applied once at startup.
 - [x] 2.4 `AppWindow` base (shared window behavior in `01-architecture.md`).
 - [x] 2.5 `WindowManager` (open/close/focus/minimize, z-order, running flags) + unit tests.
-- [ ] 2.6 `App`: owns the GLFW window, ImGui context and state machine; runs the frame loop; one cleanup path.
+- [x] 2.6 `App`: owns the GLFW window, ImGui context and state machine; runs the frame loop; one cleanup path.
 - [ ] 2.7 Desktop state with gradient wallpaper (F03) and clock (F04).
 
 ## Exit criteria
