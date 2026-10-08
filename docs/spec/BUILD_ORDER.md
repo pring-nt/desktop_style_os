@@ -48,7 +48,7 @@ Details: [phases/phase-3-required-features.md](phases/phase-3-required-features.
 | 3.6  | F13 `DummyProcessTable` + unit tests                                       | Phase 2    | [x]    |
 | 3.7  | F12 + F13 Task Manager window with Processes table                         | 3.3, 3.6   | [x]    |
 | 3.8  | F10 File Explorer                                                          | 3.3        | [x]    |
-| 3.9  | F11 `TerminalCommands` + unit tests                                        | 3.6        | [ ]    |
+| 3.9  | F11 `TerminalCommands` + unit tests                                        | 3.6        | [x]    |
 | 3.10 | F11 Terminal window                                                        | 3.3, 3.9   | [ ]    |
 | 3.11 | Exit: every traceability row (except F1, F2, D1, D2) passes, `check` green | 3.1–3.10   | [ ]    |
 

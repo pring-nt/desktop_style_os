@@ -38,6 +38,7 @@ add_library(
   src/core/texture.cc
   src/core/theme.cc
   src/data/dummy_process_table.cc
+  src/data/terminal_commands.cc
   src/shell/desktop.cc
   src/shell/taskbar.cc
   src/shell/window_manager.cc)

@@ -10,6 +10,7 @@ add_executable(
   smoke_test.cc
   state_machine_test.cc
   task_manager_test.cc
+  terminal_commands_test.cc
   taskbar_test.cc
   theme_test.cc
   window_manager_test.cc)

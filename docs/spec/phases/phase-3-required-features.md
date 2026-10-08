@@ -21,7 +21,7 @@ Image wallpaper, taskbar with 3 buttons and running indicators, PWR shutdown wit
 - [x] 3.6 F13 `DummyProcessTable` + unit tests.
 - [x] 3.7 F12 + F13 Task Manager window with Processes table.
 - [x] 3.8 F10 File Explorer.
-- [ ] 3.9 F11 `TerminalCommands` + unit tests.
+- [x] 3.9 F11 `TerminalCommands` + unit tests.
 - [ ] 3.10 F11 Terminal window.
 
 ## Exit criteria
