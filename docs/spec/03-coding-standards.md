@@ -22,7 +22,7 @@ Dear ImGui's own API is already PascalCase (`ImGui::Begin`), so our function nam
 
 ## Google style rules we rely on most
 
-- `#define` header guards, not `#pragma once`, in the form `CSOPESY_SRC_<DIR>_<FILE>_H_` (e.g. `CSOPESY_SRC_CORE_APP_H_`); clang-tidy `llvm-header-guard` is configured to that pattern.
+- `#define` header guards, not `#pragma once`, in the form `CSOPESY_SRC_<DIR>_<FILE>_H_` (e.g. `CSOPESY_SRC_CORE_APP_H_`); gate 7 of `scripts/check` verifies that pattern (clang-tidy `llvm-header-guard` cannot be configured to it).
 - Include order, set by clang-format: related header, C system headers, C++ standard headers, other libraries (GLFW, ImGui, glad), project headers; each group separated by a blank line. Include what you use; no forward declarations of types from other libraries.
 - Everything inside `namespace csopesy { ... }` (with sub-namespaces per folder); no `using namespace` directives anywhere; unnamed namespaces for file-local helpers in `.cc` files.
 - No exceptions thrown by our code: errors are returned (`bool`, `std::optional`, or a small result struct) and checked at startup (GLFW, GL loader, texture load).

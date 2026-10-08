@@ -421,7 +421,7 @@ Dear ImGui's own API is already PascalCase (`ImGui::Begin`), so our function nam
 
 **Google style rules we rely on most**
 
-- `#define` header guards, not `#pragma once`, in the form `CSOPESY_SRC_<DIR>_<FILE>_H_` (e.g. `CSOPESY_SRC_CORE_APP_H_`); clang-tidy `llvm-header-guard` is configured to that pattern.
+- `#define` header guards, not `#pragma once`, in the form `CSOPESY_SRC_<DIR>_<FILE>_H_` (e.g. `CSOPESY_SRC_CORE_APP_H_`); gate 7 of `scripts/check` verifies that pattern (clang-tidy `llvm-header-guard` cannot be configured to it).
 - Include order, set by clang-format: related header, C system headers, C++ standard headers, other libraries (GLFW, ImGui, glad), project headers; each group separated by a blank line. Include what you use; no forward declarations of types from other libraries.
 - Everything inside `namespace csopesy { ... }` (with sub-namespaces per folder); no `using namespace` directives anywhere; unnamed namespaces for file-local helpers in `.cc` files.
 - No exceptions thrown by our code: errors are returned (`bool`, `std::optional`, or a small result struct) and checked at startup (GLFW, GL loader, texture load).
@@ -467,20 +467,20 @@ One command, `scripts/check.sh` (or `scripts/check.ps1` on Windows), runs every 
 
 **Gates, in order (the script stops at the first failure)**
 
-| #   | Gate                | Command                                                                     | Fails when                                        |
-| --- | ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------- |
-| 1   | Tool versions       | `clang-format --version`, `clang-tidy --version`, `bunx prettier --version` | A tool is missing from PATH or the wrong version  |
-| 2   | C++ formatting      | `clang-format --dry-run --Werror` on `src/` and `tests/`                    | Any file differs from the style                   |
-| 3   | Markdown formatting | `bunx prettier@<pinned> --check "docs/**/*.md"`                             | Spec or report Markdown is not formatted          |
-| 4   | Configure + build   | `cmake --preset ci && cmake --build --preset ci`                            | Any compiler warning or error                     |
-| 5   | Unit tests          | `ctest --preset ci --output-on-failure`                                     | Any doctest case fails                            |
-| 6   | Static analysis     | `clang-tidy -p build/ci` on `src/` and `tests/`                             | Any enabled check fires (`WarningsAsErrors: '*'`) |
-| 7   | Layering            | Search `src/data/` and the logic files for `imgui.h` / GL includes          | UI headers leak into testable logic               |
+| #   | Gate                       | Command                                                                                                                                      | Fails when                                                                    |
+| --- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| 1   | Tool versions              | `clang-format --version`, `clang-tidy --version`, `bunx prettier --version`                                                                  | A tool is missing from PATH or the wrong version                              |
+| 2   | C++ formatting             | `clang-format --dry-run --Werror` on `src/` and `tests/`                                                                                     | Any file differs from the style                                               |
+| 3   | Markdown formatting        | `bunx prettier@<pinned> --check "docs/**/*.md"`                                                                                              | Spec or report Markdown is not formatted                                      |
+| 4   | Configure + build          | `cmake --preset ci && cmake --build --preset ci`                                                                                             | Any compiler warning or error                                                 |
+| 5   | Unit tests                 | `ctest --preset ci --output-on-failure`                                                                                                      | Any doctest case fails                                                        |
+| 6   | Static analysis            | `clang-tidy -p build/ci` on `src/` and `tests/`                                                                                              | Any enabled check fires (`WarningsAsErrors: '*'`)                             |
+| 7   | Layering and header guards | Search `src/data/` and the logic files for `imgui.h` / GL includes; check every header in `src/` for its `CSOPESY_SRC_<DIR>_<FILE>_H_` guard | UI headers leak into testable logic, or a header guard is missing or misnamed |
 
 **Config baselines**
 
 - `.clang-format`: `BasedOnStyle: Google` with no overrides except `IncludeBlocks: Regroup` and `IncludeCategories` matching the Google include order (related header, C system, C++ standard, third-party, project).
-- `.clang-tidy`: enable `google-*`, `bugprone-*`, `cppcoreguidelines-*`, `modernize-*`, `performance-*`, `readability-*`, `misc-*`, plus `llvm-header-guard`; `readability-identifier-naming` configured to the Google naming table above. Disable only with a written reason, e.g. `modernize-use-trailing-return-type` (conflicts with Google style) and `cppcoreguidelines-pro-type-vararg` (ImGui's `Text()` is variadic by design). `HeaderFilterRegex` limited to `src/`.
+- `.clang-tidy`: enable `google-*`, `bugprone-*`, `cppcoreguidelines-*`, `modernize-*`, `performance-*`, `readability-*`, `misc-*`; `readability-identifier-naming` configured to the Google naming table above, with snake_case methods exempt so accessors such as `is_open()` pass. Disable only with a written reason, e.g. `modernize-use-trailing-return-type` (conflicts with Google style) and `cppcoreguidelines-pro-type-vararg` (ImGui's `Text()` is variadic by design), `readability-identifier-length` (Google style allows short names such as `i` and `dt`) and `llvm-header-guard` (builds the expected guard from each machine's absolute path; gate 7 checks guards instead). `HeaderFilterRegex` limited to `src/`.
 - `.prettierrc`: `proseWrap: "preserve"`, `printWidth: 100`, so diffs on the report stay readable.
 
 **Unit tests (doctest, `tests/`)**
