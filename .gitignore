@@ -1,4 +1,22 @@
-CLAUDE.md
+# Build output
 build/
 cmake-build-*/
+out/
+
+# IDE folders
 .idea/
+.vs/
+.vscode/
+
+# Binaries
+*.exe
+*.dll
+*.lib
+*.a
+*.o
+*.obj
+*.pdb
+*.ilk
+
+# Agent instructions (local only)
+CLAUDE.md

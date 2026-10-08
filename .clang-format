@@ -1,0 +1,17 @@
+BasedOnStyle: Google
+IncludeBlocks: Regroup
+# Google include order: related header (priority 0, automatic), C system,
+# C++ standard, other libraries, project headers.
+IncludeCategories:
+  - Regex: '^<(GLFW|glad|KHR|doctest|stb)/'
+    Priority: 3
+  - Regex: '^[<"](imgui|imgui_impl_[a-z0-9]+|imgui_internal|stb_image)\.h[>"]$'
+    Priority: 3
+  - Regex: '^<[a-z_/]+\.h>$'
+    Priority: 1
+  - Regex: '^<[a-z_/]+>$'
+    Priority: 2
+  - Regex: '^"(core|boot|shell|apps|data)/'
+    Priority: 4
+  - Regex: '.*'
+    Priority: 3
