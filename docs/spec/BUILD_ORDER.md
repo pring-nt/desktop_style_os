@@ -50,7 +50,7 @@ Details: [phases/phase-3-required-features.md](phases/phase-3-required-features.
 | 3.8  | F10 File Explorer                                                          | 3.3        | [x]    |
 | 3.9  | F11 `TerminalCommands` + unit tests                                        | 3.6        | [x]    |
 | 3.10 | F11 Terminal window                                                        | 3.3, 3.9   | [x]    |
-| 3.11 | Exit: every traceability row (except F1, F2, D1, D2) passes, `check` green | 3.1–3.10   | [ ]    |
+| 3.11 | Exit: every traceability row (except F1, F2, D1, D2) passes, `check` green | 3.1–3.10   | [x]    |
 
 ## Phase 4 — Boot sequence and polish
 
