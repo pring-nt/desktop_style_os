@@ -16,6 +16,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CSOPESY_ENABLE_SANITIZERS": "ON",
+        "CSOPESY_IMGUI_DEMO": "ON",
         "CSOPESY_BUILD_TESTS": "ON"
       }
     },

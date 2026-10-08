@@ -13,3 +13,6 @@ One line per design decision, for the Technical Report.
 - 2026-10-08: Dependencies pinned as release archives with SHA-256 hashes: GLFW 3.4 (as the spec fixes it, although 3.5.1 exists), Dear ImGui v1.92.9b, doctest v2.5.3. Vendored: glad2 2.0.8 (GL 3.3 core, no extensions) and stb_image v2.30.
 - 2026-10-08: ASan + UBSan only run outside Windows: MinGW GCC has no sanitizer runtime. The `release` preset skips tests; `ci` builds them.
 - 2026-10-08: Third-party include dirs are made SYSTEM via `INTERFACE_SYSTEM_INCLUDE_DIRECTORIES`, because the `SYSTEM` option of `FetchContent_Declare` needs CMake 3.25 and the floor is 3.24.
+- 2026-10-08: The Phase 1 bootstrap lives in `src/main.cc` (RAII wrappers for GLFW, the window and ImGui) and moves into `App` in task 2.6. `csopesy_core` is added once there are sources besides `main.cc`.
+- 2026-10-08: The ImGui demo window is behind the `CSOPESY_IMGUI_DEMO` CMake option (ON in the `debug` preset) and only compiles into Debug builds. `imgui.ini` is disabled (`IniFilename = nullptr`) so no layout state persists between runs.
+- 2026-10-08: MinGW builds link libgcc/libstdc++ statically and copy `libwinpthread-1.dll` next to the exe; a fully static link fails with the MinGW bundled with CLion.
