@@ -22,19 +22,19 @@ We are building a single-window C++ application that looks and behaves like a mi
 
 The stack is fixed by the spec: C++ on GLFW + OpenGL + Dear ImGui; everything else below is a recommended default.
 
-| Layer | Choice | Role |
-| --- | --- | --- |
-| Language | C++20 | `std::chrono`, `std::format` where the compiler supports it, `std::filesystem` for assets |
-| Windowing / input | GLFW 3.4 | Creates the app window and GL context |
-| Rendering | OpenGL 3.3 core | Clears the frame, holds the wallpaper texture |
-| UI | Dear ImGui (pinned master release tag; docking branch not used) | All desktop, taskbar and window drawing |
-| Image loading | stb_image | Loads the wallpaper into a GL texture |
-| GL loader | glad (generated for GL 3.3 core) | Loads OpenGL function pointers |
-| Build | CMake ≥ 3.24 + Ninja, `CMakePresets.json` | One reproducible build on every machine |
-| Style guide | [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) | Naming, headers, language-feature rules |
-| Formatting | clang-format, `BasedOnStyle: Google` (LLVM version pinned in CONTRIBUTING.md) | Enforced style, checked in CI-style script |
-| Linting | clang-tidy (same version), including `google-*` checks | Static analysis, warnings as errors |
-| Tests | doctest | Unit tests for non-UI logic |
+| Layer             | Choice                                                                        | Role                                                                                      |
+| ----------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Language          | C++20                                                                         | `std::chrono`, `std::format` where the compiler supports it, `std::filesystem` for assets |
+| Windowing / input | GLFW 3.4                                                                      | Creates the app window and GL context                                                     |
+| Rendering         | OpenGL 3.3 core                                                               | Clears the frame, holds the wallpaper texture                                             |
+| UI                | Dear ImGui (pinned master release tag; docking branch not used)               | All desktop, taskbar and window drawing                                                   |
+| Image loading     | stb_image                                                                     | Loads the wallpaper into a GL texture                                                     |
+| GL loader         | glad (generated for GL 3.3 core)                                              | Loads OpenGL function pointers                                                            |
+| Build             | CMake ≥ 3.24 + Ninja, `CMakePresets.json`                                     | One reproducible build on every machine                                                   |
+| Style guide       | [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)   | Naming, headers, language-feature rules                                                   |
+| Formatting        | clang-format, `BasedOnStyle: Google` (LLVM version pinned in CONTRIBUTING.md) | Enforced style, checked in CI-style script                                                |
+| Linting           | clang-tidy (same version), including `google-*` checks                        | Static analysis, warnings as errors                                                       |
+| Tests             | doctest                                                                       | Unit tests for non-UI logic                                                               |
 
 **Repository layout**
 
@@ -103,15 +103,15 @@ Boot runs once on timers; the Desktop state redraws its four layers every frame 
 
 **Core modules**
 
-| Module | Responsibility |
-| --- | --- |
-| `App` | Owns GLFW window, ImGui context, state machine; runs the loop; performs cleanup |
-| `StateMachine` | Holds current `State` (`Bios`, `Splash`, `Desktop`, `Shutdown`), handles transitions and timers |
-| `Clock` | Returns formatted local date/time each frame via `std::chrono` + `std::put_time` |
-| `WindowManager` | List of `AppWindow*`, open/close/focus/minimize, z-order, "running" flag for the taskbar |
-| `AppWindow` (base) | `title_`, `is_open_`, `is_minimized_`, `virtual void Draw()`; each app subclasses it |
-| `Theme` | Colors, fonts, rounding, spacing; applied once at startup |
-| `DummyProcessTable` | Holds the fixed list of fake process rows used by the Task Manager and the Terminal's ps |
+| Module              | Responsibility                                                                                  |
+| ------------------- | ----------------------------------------------------------------------------------------------- |
+| `App`               | Owns GLFW window, ImGui context, state machine; runs the loop; performs cleanup                 |
+| `StateMachine`      | Holds current `State` (`Bios`, `Splash`, `Desktop`, `Shutdown`), handles transitions and timers |
+| `Clock`             | Returns formatted local date/time each frame via `std::chrono` + `std::put_time`                |
+| `WindowManager`     | List of `AppWindow*`, open/close/focus/minimize, z-order, "running" flag for the taskbar        |
+| `AppWindow` (base)  | `title_`, `is_open_`, `is_minimized_`, `virtual void Draw()`; each app subclasses it            |
+| `Theme`             | Colors, fonts, rounding, spacing; applied once at startup                                       |
+| `DummyProcessTable` | Holds the fixed list of fake process rows used by the Task Manager and the Terminal's ps        |
 
 **Key design rules**
 
@@ -186,11 +186,11 @@ The taskbar is a fixed bottom panel, always on top, with at least three clickabl
 
 **F7. App icon buttons (required: ≥ 3)**
 
-| Button | Opens | Notes |
-| --- | --- | --- |
-| App A (File Explorer) | Unique UI screen #1 | Folder icon |
-| App B (Terminal) | Unique UI screen #2 | Own icon and color |
-| Task Manager | Task Manager window | Activity/graph icon |
+| Button                | Opens               | Notes               |
+| --------------------- | ------------------- | ------------------- |
+| App A (File Explorer) | Unique UI screen #1 | Folder icon         |
+| App B (Terminal)      | Unique UI screen #2 | Own icon and color  |
+| Task Manager          | Task Manager window | Activity/graph icon |
 
 - Round or rounded-square buttons drawn with `ImageButton` (icon textures) or `Button` + draw-list shapes; colored text labels are acceptable, as in the reference.
 - Hover: lighter background + tooltip with the app name.
@@ -237,17 +237,17 @@ Two taskbar buttons must each open a unique UI screen with placeholder informati
 - Command history: Up/Down arrows cycle previous commands via an `InputText` history callback.
 - Placeholder commands, all printing fake output:
 
-| Command | Output |
-| --- | --- |
-| `help` | List of available commands |
-| `ver` | `CSOPESY OS v1.0` |
-| `date` / `time` | Current date / time from `Clock` |
-| `echo <text>` | Echoes the text |
-| `ps` | The Task Manager's dummy process list in text form |
-| `whoami` | `csopesy\user` |
-| `cls` | Clears the scrollback |
-| `exit` | Closes the Terminal window (not the OS) |
-| anything else | `'<cmd>' is not recognized as a command.` |
+| Command         | Output                                             |
+| --------------- | -------------------------------------------------- |
+| `help`          | List of available commands                         |
+| `ver`           | `CSOPESY OS v1.0`                                  |
+| `date` / `time` | Current date / time from `Clock`                   |
+| `echo <text>`   | Echoes the text                                    |
+| `ps`            | The Task Manager's dummy process list in text form |
+| `whoami`        | `csopesy\user`                                     |
+| `cls`           | Clears the scrollback                              |
+| `exit`          | Closes the Terminal window (not the OS)            |
+| anything else   | `'<cmd>' is not recognized as a command.`          |
 
 - Command parsing and output live in `data/TerminalCommands` as plain functions (input string → output lines) with no ImGui calls, so they are unit-tested directly.
 
@@ -273,12 +273,12 @@ The spec asks for exactly two things here: a Windows-like look and a placeholder
 
 **F13. Processes table (required)**
 
-| Column | Example |
-| --- | --- |
-| Name | `csopesy_shell.exe` |
-| Status | Running |
-| CPU | 3.4% |
-| Memory | 128.6 MB |
+| Column | Example             |
+| ------ | ------------------- |
+| Name   | `csopesy_shell.exe` |
+| Status | Running             |
+| CPU    | 3.4%                |
+| Memory | 128.6 MB            |
 
 - Built with `BeginTable` (`RowBg | BordersInnerV | ScrollY`, frozen header row); numbers right-aligned.
 - Rows come from `DummyProcessTable`: a fixed list of ~20 fake processes defined in one place, so the screen is identical on every run and easy to test.
@@ -296,23 +296,23 @@ The spec asks for exactly two things here: a Windows-like look and a placeholder
 
 Every bullet in the spec's checklist maps to one feature above; the boot screens are extra polish taken from the reference images.
 
-| Spec requirement | Spec bullet | Feature |
-| --- | --- | --- |
-| Desktop | Full-screen base layer, rendered first each frame | F3, Architecture frame loop |
-| Desktop | Fills the entire application window | F3 |
-| Desktop | Wallpaper: gradient, ImGui pattern, or image texture | F3 (image + gradient fallback) |
-| Desktop | Real-time clock, updated every frame, fixed corner | F4 |
-| Desktop | PWR button as shutdown; no force exit | F5, F9 |
-| Taskbar | Fixed panel at top or bottom | F6 |
-| Taskbar | Shows running applications | F8 |
-| Taskbar | ≥ 3 clickable icon buttons | F7 |
-| Taskbar | Two buttons open unique UI screens with placeholder info | F10, F11 |
-| Taskbar | Third button opens the Task Manager | F7, F12 |
-| Task Manager | Closely resembles Windows Task Manager | F12 |
-| Task Manager | Placeholder Processes table with CPU and memory, dummy values | F13 |
-| SOURCE | Source code, README.txt with names, run instructions and entry file (or GitHub link) | D1 |
-| PPT (Technical Report) | Cover, video walkthrough, architectural diagram, code snippets, design discussion | D2 |
-| (Reference images) | BIOS POST and splash screens | F1, F2 |
+| Spec requirement       | Spec bullet                                                                          | Feature                        |
+| ---------------------- | ------------------------------------------------------------------------------------ | ------------------------------ |
+| Desktop                | Full-screen base layer, rendered first each frame                                    | F3, Architecture frame loop    |
+| Desktop                | Fills the entire application window                                                  | F3                             |
+| Desktop                | Wallpaper: gradient, ImGui pattern, or image texture                                 | F3 (image + gradient fallback) |
+| Desktop                | Real-time clock, updated every frame, fixed corner                                   | F4                             |
+| Desktop                | PWR button as shutdown; no force exit                                                | F5, F9                         |
+| Taskbar                | Fixed panel at top or bottom                                                         | F6                             |
+| Taskbar                | Shows running applications                                                           | F8                             |
+| Taskbar                | ≥ 3 clickable icon buttons                                                           | F7                             |
+| Taskbar                | Two buttons open unique UI screens with placeholder info                             | F10, F11                       |
+| Taskbar                | Third button opens the Task Manager                                                  | F7, F12                        |
+| Task Manager           | Closely resembles Windows Task Manager                                               | F12                            |
+| Task Manager           | Placeholder Processes table with CPU and memory, dummy values                        | F13                            |
+| SOURCE                 | Source code, README.txt with names, run instructions and entry file (or GitHub link) | D1                             |
+| PPT (Technical Report) | Cover, video walkthrough, architectural diagram, code snippets, design discussion    | D2                             |
+| (Reference images)     | BIOS POST and splash screens                                                         | F1, F2                         |
 
 ## Deliverables
 
@@ -335,17 +335,17 @@ Written for any reader, from a first-year student to the instructor: every idea 
 
 Each `## Slide N — <title>` heading maps to one slide; under it go 3–5 short bullets (slide text) and a `> Notes:` block (what the presenter says). Diagrams live in `docs/report/diagrams/` as Mermaid source plus an exported PNG.
 
-| Slide | Content | Spec item |
-| --- | --- | --- |
-| 1 | Cover: project title, course, group name and members, date | Cover |
-| 2 | Video walkthrough: link, plus a timestamped outline (boot, desktop, each app, PWR) | Video Walkthrough |
-| 3 | What we built, in one picture: a screenshot of the desktop with labels | Design discussion |
-| 4 | Key idea: immediate-mode UI, explained with an analogy (redrawing a whiteboard every frame vs. moving sticky notes) | Design discussion |
-| 5 | Architectural diagram: state flow + per-frame layer order, and the module map | Architectural Diagram |
-| 6–9 | One slide per feature (Desktop, Taskbar, Task Manager, Terminal + File Explorer): what it does, the design choice, one short snippet | Code Snippets |
-| 10 | Code quality: formatting, linting and tests, and why they were automated | Design discussion |
-| 11 | Challenges and trade-offs (e.g. layering, resizing, keeping UI and data apart) | Design discussion |
-| 12 | Conclusion and what we'd add next | Design discussion |
+| Slide | Content                                                                                                                              | Spec item             |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| 1     | Cover: project title, course, group name and members, date                                                                           | Cover                 |
+| 2     | Video walkthrough: link, plus a timestamped outline (boot, desktop, each app, PWR)                                                   | Video Walkthrough     |
+| 3     | What we built, in one picture: a screenshot of the desktop with labels                                                               | Design discussion     |
+| 4     | Key idea: immediate-mode UI, explained with an analogy (redrawing a whiteboard every frame vs. moving sticky notes)                  | Design discussion     |
+| 5     | Architectural diagram: state flow + per-frame layer order, and the module map                                                        | Architectural Diagram |
+| 6–9   | One slide per feature (Desktop, Taskbar, Task Manager, Terminal + File Explorer): what it does, the design choice, one short snippet | Code Snippets         |
+| 10    | Code quality: formatting, linting and tests, and why they were automated                                                             | Design discussion     |
+| 11    | Challenges and trade-offs (e.g. layering, resizing, keeping UI and data apart)                                                       | Design discussion     |
+| 12    | Conclusion and what we'd add next                                                                                                    | Design discussion     |
 
 **Rules for code snippets**
 
@@ -372,14 +372,14 @@ One CMake setup builds identically on every member's machine: pinned dependencie
 
 **Targets**
 
-| Target | Type | Contents |
-| --- | --- | --- |
-| `imgui` | static lib | Dear ImGui core + GLFW/OpenGL3 backends |
-| `csopesy_core` | static lib | Everything in `src/` except `main.cc` |
-| `csopesy_os` | executable | `main.cc`, links `csopesy_core` |
-| `csopesy_tests` | executable | doctest tests, links `csopesy_core`; registered with CTest |
-| `format` / `format-check` | custom | Apply / verify clang-format |
-| `tidy` | custom | Run clang-tidy on `src/` and `tests/` |
+| Target                    | Type       | Contents                                                   |
+| ------------------------- | ---------- | ---------------------------------------------------------- |
+| `imgui`                   | static lib | Dear ImGui core + GLFW/OpenGL3 backends                    |
+| `csopesy_core`            | static lib | Everything in `src/` except `main.cc`                      |
+| `csopesy_os`              | executable | `main.cc`, links `csopesy_core`                            |
+| `csopesy_tests`           | executable | doctest tests, links `csopesy_core`; registered with CTest |
+| `format` / `format-check` | custom     | Apply / verify clang-format                                |
+| `tidy`                    | custom     | Run clang-tidy on `src/` and `tests/`                      |
 
 **Warnings (`cmake/CompilerWarnings.cmake`, applied to our targets only)**
 
@@ -389,11 +389,11 @@ One CMake setup builds identically on every member's machine: pinned dependencie
 
 **Presets (`CMakePresets.json`, Ninja generator, output in `build/<preset>/`)**
 
-| Preset | Purpose |
-| --- | --- |
-| `debug` | Day-to-day work; debug symbols; ASan + UBSan on GCC/Clang |
-| `release` | Optimized build for the demo and submission |
-| `ci` | Release + tests + warnings as errors; what `scripts/check.*` uses |
+| Preset    | Purpose                                                           |
+| --------- | ----------------------------------------------------------------- |
+| `debug`   | Day-to-day work; debug symbols; ASan + UBSan on GCC/Clang         |
+| `release` | Optimized build for the demo and submission                       |
+| `ci`      | Release + tests + warnings as errors; what `scripts/check.*` uses |
 
 Standard commands: `cmake --preset debug`, `cmake --build --preset debug`, `ctest --preset debug`.
 
@@ -403,19 +403,19 @@ All C++ follows the [Google C++ Style Guide](https://google.github.io/styleguide
 
 **Naming (Google style, enforced by clang-tidy `readability-identifier-naming`)**
 
-| Element | Style | Example |
-| --- | --- | --- |
-| Namespaces | snake_case | `csopesy::shell` |
-| Classes, structs, enums, type aliases | PascalCase | `WindowManager`, `enum class AppState` |
-| Enum values | `k` + PascalCase | `AppState::kDesktop` |
-| Functions, methods | PascalCase | `DrawTaskbar()` |
-| Accessors / mutators | snake_case, matching the member | `is_open()`, `set_is_open()` |
-| Local variables, parameters | snake_case | `frame_time` |
-| Class data members | snake_case + trailing `_` | `is_open_` |
-| Struct data members | snake_case, no trailing `_` | `cpu_percent` |
-| Constants, `constexpr` | `k` + PascalCase | `kTaskbarHeight` |
-| Macros (avoid) | UPPER_SNAKE with project prefix | `CSOPESY_DEBUG` |
-| Files | snake_case, `.h` / `.cc` | `task_manager.h`, `task_manager.cc` |
+| Element                               | Style                           | Example                                |
+| ------------------------------------- | ------------------------------- | -------------------------------------- |
+| Namespaces                            | snake_case                      | `csopesy::shell`                       |
+| Classes, structs, enums, type aliases | PascalCase                      | `WindowManager`, `enum class AppState` |
+| Enum values                           | `k` + PascalCase                | `AppState::kDesktop`                   |
+| Functions, methods                    | PascalCase                      | `DrawTaskbar()`                        |
+| Accessors / mutators                  | snake_case, matching the member | `is_open()`, `set_is_open()`           |
+| Local variables, parameters           | snake_case                      | `frame_time`                           |
+| Class data members                    | snake_case + trailing `_`       | `is_open_`                             |
+| Struct data members                   | snake_case, no trailing `_`     | `cpu_percent`                          |
+| Constants, `constexpr`                | `k` + PascalCase                | `kTaskbarHeight`                       |
+| Macros (avoid)                        | UPPER_SNAKE with project prefix | `CSOPESY_DEBUG`                        |
+| Files                                 | snake_case, `.h` / `.cc`        | `task_manager.h`, `task_manager.cc`    |
 
 Dear ImGui's own API is already PascalCase (`ImGui::Begin`), so our function names read consistently next to it.
 
@@ -429,7 +429,7 @@ Dear ImGui's own API is already PascalCase (`ImGui::Begin`), so our function nam
 - `explicit` on single-argument constructors; copy/move operations declared explicitly (`= default` / `= delete`) on every class that owns a resource.
 - 2-space indent, 80-column limit, `char* p` pointer alignment: all applied by clang-format, never by hand.
 - `auto` only when the type is obvious from the line or truly noisy (iterators, lambdas).
-- Comments: Google-style file and class comments on public headers; inside functions, comments only to explain *why*. No commented-out code.
+- Comments: Google-style file and class comments on public headers; inside functions, comments only to explain _why_. No commented-out code.
 
 **Project C++ rules (on top of Google)**
 
@@ -467,15 +467,15 @@ One command, `scripts/check.sh` (or `scripts/check.ps1` on Windows), runs every 
 
 **Gates, in order (the script stops at the first failure)**
 
-| # | Gate | Command | Fails when |
-| --- | --- | --- | --- |
-| 1 | Tool versions | `clang-format --version`, `clang-tidy --version`, `bunx prettier --version` | A tool is missing from PATH or the wrong version |
-| 2 | C++ formatting | `clang-format --dry-run --Werror` on `src/` and `tests/` | Any file differs from the style |
-| 3 | Markdown formatting | `bunx prettier@<pinned> --check "docs/**/*.md"` | Spec or report Markdown is not formatted |
-| 4 | Configure + build | `cmake --preset ci && cmake --build --preset ci` | Any compiler warning or error |
-| 5 | Unit tests | `ctest --preset ci --output-on-failure` | Any doctest case fails |
-| 6 | Static analysis | `clang-tidy -p build/ci` on `src/` and `tests/` | Any enabled check fires (`WarningsAsErrors: '*'`) |
-| 7 | Layering | Search `src/data/` and the logic files for `imgui.h` / GL includes | UI headers leak into testable logic |
+| #   | Gate                | Command                                                                     | Fails when                                        |
+| --- | ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------- |
+| 1   | Tool versions       | `clang-format --version`, `clang-tidy --version`, `bunx prettier --version` | A tool is missing from PATH or the wrong version  |
+| 2   | C++ formatting      | `clang-format --dry-run --Werror` on `src/` and `tests/`                    | Any file differs from the style                   |
+| 3   | Markdown formatting | `bunx prettier@<pinned> --check "docs/**/*.md"`                             | Spec or report Markdown is not formatted          |
+| 4   | Configure + build   | `cmake --preset ci && cmake --build --preset ci`                            | Any compiler warning or error                     |
+| 5   | Unit tests          | `ctest --preset ci --output-on-failure`                                     | Any doctest case fails                            |
+| 6   | Static analysis     | `clang-tidy -p build/ci` on `src/` and `tests/`                             | Any enabled check fires (`WarningsAsErrors: '*'`) |
+| 7   | Layering            | Search `src/data/` and the logic files for `imgui.h` / GL includes          | UI headers leak into testable logic               |
 
 **Config baselines**
 
@@ -485,13 +485,13 @@ One command, `scripts/check.sh` (or `scripts/check.ps1` on Windows), runs every 
 
 **Unit tests (doctest, `tests/`)**
 
-| Area | Example cases |
-| --- | --- |
-| `Clock` | Fixed time point formats as `Thursday, Oct 08, 2026 \| 07:43 PM`; midnight and noon edge cases |
-| `StateMachine` | BIOS → Splash after its duration; Splash → Desktop; PWR confirm → Shutdown; Cancel stays on Desktop |
-| `WindowManager` | Taskbar click toggles open → focus → minimize → restore; running flags match open windows |
-| `TerminalCommands` | Each command's exact output lines; unknown command message; `cls` clears; history order |
-| `DummyProcessTable` | Row count, totals equal row sums, CPU total capped at 100% |
+| Area                | Example cases                                                                                       |
+| ------------------- | --------------------------------------------------------------------------------------------------- |
+| `Clock`             | Fixed time point formats as `Thursday, Oct 08, 2026 \| 07:43 PM`; midnight and noon edge cases      |
+| `StateMachine`      | BIOS → Splash after its duration; Splash → Desktop; PWR confirm → Shutdown; Cancel stays on Desktop |
+| `WindowManager`     | Taskbar click toggles open → focus → minimize → restore; running flags match open windows           |
+| `TerminalCommands`  | Each command's exact output lines; unknown command message; `cls` clears; history order             |
+| `DummyProcessTable` | Row count, totals equal row sums, CPU total capped at 100%                                          |
 
 UI drawing itself is verified by the manual test checklist in the Milestones section; the gates cover everything that can be checked without a screen.
 
@@ -501,11 +501,11 @@ UI drawing itself is verified by the manual test checklist in the Milestones sec
 
 Not everyone has clang tools on PATH yet, so `CONTRIBUTING.md` walks each member through setup and records the pinned versions everyone must match.
 
-| Tool | Windows | macOS | Linux |
-| --- | --- | --- | --- |
-| LLVM (clang-format, clang-tidy) | `winget install LLVM.LLVM`, then add `C:\Program Files\LLVM\bin` to PATH | `brew install llvm@<N>`, then add its `bin` to PATH (keg-only) | `apt.llvm.org` script for version `<N>` |
-| CMake ≥ 3.24 + Ninja | `winget install Kitware.CMake Ninja-build.Ninja` | `brew install cmake ninja` | Package manager |
-| bun (for Prettier) | `winget install Oven-sh.Bun` | `brew install oven-sh/bun/bun` | `curl -fsSL https://bun.sh/install \| bash` |
+| Tool                            | Windows                                                                  | macOS                                                          | Linux                                       |
+| ------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------- | ------------------------------------------- |
+| LLVM (clang-format, clang-tidy) | `winget install LLVM.LLVM`, then add `C:\Program Files\LLVM\bin` to PATH | `brew install llvm@<N>`, then add its `bin` to PATH (keg-only) | `apt.llvm.org` script for version `<N>`     |
+| CMake ≥ 3.24 + Ninja            | `winget install Kitware.CMake Ninja-build.Ninja`                         | `brew install cmake ninja`                                     | Package manager                             |
+| bun (for Prettier)              | `winget install Oven-sh.Bun`                                             | `brew install oven-sh/bun/bun`                                 | `curl -fsSL https://bun.sh/install \| bash` |
 
 - During Phase 1, pick the newest stable LLVM major version, write it into `CONTRIBUTING.md` as `<N>`, and have every member install that exact major version.
 - A "Verify your setup" step: run `clang-format --version`, `clang-tidy --version`, `cmake --version`, `ninja --version`, `bun --version`, then `scripts/check`.
@@ -515,20 +515,20 @@ Not everyone has clang tools on PATH yet, so `CONTRIBUTING.md` walks each member
 
 Build in five phases so a working, submittable app exists after phase 3 and later phases only add polish.
 
-1. **Skeleton and tooling** — spec split into `docs/spec/` (see Agent setup directives), CMake presets and pinned dependencies, `.clang-format` / `.clang-tidy` / `.prettierrc`, `scripts/check.*`, CONTRIBUTING.md with tool setup, one passing doctest, GLFW window with an ImGui demo window. *Done when `check` passes on every member's machine.*
+1. **Skeleton and tooling** — spec split into `docs/spec/` (see Agent setup directives), CMake presets and pinned dependencies, `.clang-format` / `.clang-tidy` / `.prettierrc`, `scripts/check.*`, CONTRIBUTING.md with tool setup, one passing doctest, GLFW window with an ImGui demo window. _Done when `check` passes on every member's machine._
 2. **Shell core** — `StateMachine`, `WindowManager`, `AppWindow` base, `Clock`, `Theme` and fonts, each with unit tests; Desktop state with gradient wallpaper and clock.
-3. **Required features** — image wallpaper, taskbar with 3 buttons and running indicators, PWR shutdown with confirm, Task Manager Processes table with dummy data, File Explorer and Terminal with placeholder content. *Done when every row of the traceability table passes and `check` is green.*
+3. **Required features** — image wallpaper, taskbar with 3 buttons and running indicators, PWR shutdown with confirm, Task Manager Processes table with dummy data, File Explorer and Terminal with placeholder content. _Done when every row of the traceability table passes and `check` is green._
 4. **Boot sequence and polish** — BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color shading, optional extras.
 5. **Report and submission** — `TECHNICAL_REPORT.md`, diagrams, video walkthrough, `README.txt`, resize and clean-machine testing, final `check` run.
 
 **Suggested work split (4 members)**
 
-| Area | Features | Depends on |
-| --- | --- | --- |
-| Core, build and boot | CMake, quality gates, App loop, state machine, F1, F2, F5 | — |
-| Desktop and taskbar | F3, F4, F6–F9, WindowManager | Core |
-| Task Manager and File Explorer | F12, F13, F10, DummyProcessTable | AppWindow base |
-| Terminal and report | F11, TerminalCommands, D1, D2 | AppWindow base; all features for the report |
+| Area                           | Features                                                  | Depends on                                  |
+| ------------------------------ | --------------------------------------------------------- | ------------------------------------------- |
+| Core, build and boot           | CMake, quality gates, App loop, state machine, F1, F2, F5 | —                                           |
+| Desktop and taskbar            | F3, F4, F6–F9, WindowManager                              | Core                                        |
+| Task Manager and File Explorer | F12, F13, F10, DummyProcessTable                          | AppWindow base                              |
+| Terminal and report            | F11, TerminalCommands, D1, D2                             | AppWindow base; all features for the report |
 
 **Test checklist**
 
