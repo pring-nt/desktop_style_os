@@ -20,7 +20,7 @@ Image wallpaper, taskbar with 3 buttons and running indicators, PWR shutdown wit
 - [x] 3.5 F09 PWR in the system tray + F05 shutdown flow with confirm modal.
 - [x] 3.6 F13 `DummyProcessTable` + unit tests.
 - [x] 3.7 F12 + F13 Task Manager window with Processes table.
-- [ ] 3.8 F10 File Explorer.
+- [x] 3.8 F10 File Explorer.
 - [ ] 3.9 F11 `TerminalCommands` + unit tests.
 - [ ] 3.10 F11 Terminal window.
 

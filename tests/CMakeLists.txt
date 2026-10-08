@@ -4,6 +4,7 @@ add_executable(
   clock_test.cc
   desktop_test.cc
   dummy_process_table_test.cc
+  file_explorer_test.cc
   imgui_flags_test.cc
   paths_test.cc
   smoke_test.cc
