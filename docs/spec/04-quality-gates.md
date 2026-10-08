@@ -5,7 +5,7 @@ One command, `scripts/check.sh` (or `scripts/check.ps1` on Windows), runs every 
 ## What makes it deterministic
 
 - Pinned tools: clang-format and clang-tidy share one LLVM major version, chosen once during Phase 1 setup and recorded in CONTRIBUTING.md; Prettier is pinned to an exact version. The script checks versions first and fails with a clear message on a mismatch.
-- Pinned config: `.clang-format`, `.clang-tidy`, `.prettierrc` and `.editorconfig` are committed; no tool runs on defaults.
+- Pinned config: `.clang-format`, `.clang-tidy`, `.prettierrc`, `.editorconfig` and `.gitattributes` (`* text=auto eol=lf`, so every checkout has LF line endings) are committed; no tool runs on defaults.
 - Fixed file set: files come from `git ls-files` (sorted), always excluding `third_party/` and `build/`.
 - No hidden inputs in tests: no wall clock, no randomness, no window or GPU. `Clock` takes an injected time point; `DummyProcessTable` is a fixed list (any optional jitter uses a fixed-seed generator written by us, since `std::` distributions differ across standard libraries).
 - Warnings are errors in the `ci` preset, so a warning can't pass on one machine and fail on another.

@@ -45,6 +45,7 @@ csopesy-os/
   .prettierrc
   .editorconfig
   .gitignore        build/, IDE folders, binaries, CLAUDE.md
+  .gitattributes    LF line endings for all text files, binary assets
   README.txt        names, build/run steps, entry point
   CONTRIBUTING.md   tool setup (LLVM, CMake, Ninja, bun), pinned versions, git conventions
   CLAUDE.md         agent instructions (local only, gitignored)
