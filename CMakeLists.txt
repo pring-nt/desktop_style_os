@@ -37,6 +37,7 @@ add_library(
   src/core/state_machine.cc
   src/core/texture.cc
   src/core/theme.cc
+  src/data/dummy_process_table.cc
   src/shell/desktop.cc
   src/shell/taskbar.cc
   src/shell/window_manager.cc)
