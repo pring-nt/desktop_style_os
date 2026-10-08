@@ -59,6 +59,12 @@ class Theme {
   // The PWR confirmation dialog.
   static constexpr ImVec2 kDialogButtonSize{110.0F, 0.0F};
 
+  // Task Manager processes table.
+  static constexpr float kStatusColumnWidth = 90.0F;
+  static constexpr float kNumberColumnWidth = 90.0F;
+  static constexpr float kTaskManagerRowIndent = 14.0F;
+  static constexpr ImVec4 kTaskManagerGroupColor{0.55F, 0.75F, 1.0F, 1.0F};
+
   static constexpr ImVec4 kFolderIconColor{0.98F, 0.78F, 0.30F, 1.0F};
   static constexpr ImVec4 kFolderTabColor{0.85F, 0.62F, 0.18F, 1.0F};
   static constexpr ImVec4 kTerminalIconColor{0.35F, 0.92F, 0.45F, 1.0F};

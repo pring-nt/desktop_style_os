@@ -19,7 +19,7 @@ Image wallpaper, taskbar with 3 buttons and running indicators, PWR shutdown wit
 - [x] 3.4 F08 running-app indicators.
 - [x] 3.5 F09 PWR in the system tray + F05 shutdown flow with confirm modal.
 - [x] 3.6 F13 `DummyProcessTable` + unit tests.
-- [ ] 3.7 F12 + F13 Task Manager window with Processes table.
+- [x] 3.7 F12 + F13 Task Manager window with Processes table.
 - [ ] 3.8 F10 File Explorer.
 - [ ] 3.9 F11 `TerminalCommands` + unit tests.
 - [ ] 3.10 F11 Terminal window.
@@ -37,8 +37,8 @@ _Done when every row of the traceability table passes and `check` is green._
 - [ ] Each screen has its own layout, not a copy of the other or of the Task Manager.
 - [ ] Both show placeholder data and respond to basic interaction (select, type, sort).
 - [ ] Open, minimize, restore and close all work from the window and the taskbar.
-- [ ] Opens from its taskbar button and is recognizably the Windows Task Manager Processes view.
-- [ ] Table shows each process with its CPU and memory usage, all dummy values.
-- [ ] Header totals match the sum of the rows.
+- [x] Opens from its taskbar button and is recognizably the Windows Task Manager Processes view.
+- [x] Table shows each process with its CPU and memory usage, all dummy values.
+- [x] Header totals match the sum of the rows.
 - [ ] `scripts/check` green.
 - [ ] User approves moving to Phase 4.

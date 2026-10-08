@@ -26,8 +26,8 @@
 
 ## Acceptance criteria (Task Manager, shared with F12)
 
-- [ ] Table shows each process with its CPU and memory usage, all dummy values.
-- [ ] Header totals match the sum of the rows.
+- [x] Table shows each process with its CPU and memory usage, all dummy values.
+- [x] Header totals match the sum of the rows.
 
 ## Unit tests to write
 

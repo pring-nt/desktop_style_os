@@ -7,6 +7,7 @@
 #include "core/clock.h"
 #include "core/state_machine.h"
 #include "core/theme.h"
+#include "data/dummy_process_table.h"
 #include "shell/desktop.h"
 #include "shell/taskbar.h"
 #include "shell/window_manager.h"
@@ -35,9 +36,10 @@ class App {
   Clock clock_;
   Theme theme_;
   shell::Desktop desktop_;
+  data::DummyProcessTable process_table_;
   apps::FileExplorer file_explorer_;
   apps::Terminal terminal_;
-  apps::TaskManager task_manager_;
+  apps::TaskManager task_manager_{process_table_};
   shell::WindowManager window_manager_;
   shell::Taskbar taskbar_;
 };

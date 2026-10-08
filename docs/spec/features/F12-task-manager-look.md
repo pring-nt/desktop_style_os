@@ -23,7 +23,7 @@ The spec asks for exactly two things here: a Windows-like look and a placeholder
 
 ## Acceptance criteria (Task Manager, shared with F13)
 
-- [ ] Opens from its taskbar button and is recognizably the Windows Task Manager Processes view.
+- [x] Opens from its taskbar button and is recognizably the Windows Task Manager Processes view.
 
 ## Unit tests to write
 
