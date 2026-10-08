@@ -17,7 +17,7 @@ Details: [phases/phase-1-skeleton-and-tooling.md](phases/phase-1-skeleton-and-to
 | 1.5 | GLFW window with an ImGui demo window from `src/main.cc` (replaces template `main.cpp`)                                                                                                                                                                               | 1.4           | [x]    |
 | 1.6 | One passing doctest in `csopesy_tests`, registered with CTest                                                                                                                                                                                                         | 1.4           | [ ]    |
 | 1.7 | `scripts/check.sh` and `scripts/check.ps1` running all seven gates                                                                                                                                                                                                    | 1.3, 1.5, 1.6 | [x]    |
-| 1.8 | Exit: `check` passes on every member's machine                                                                                                                                                                                                                        | 1.7           | [ ]    |
+| 1.8 | Exit: `check` passes on every member's machine                                                                                                                                                                                                                        | 1.7           | [x]    |
 
 ## Phase 2 — Shell core
 

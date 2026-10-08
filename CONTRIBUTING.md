@@ -46,9 +46,13 @@ bun --version
 Then run the full check from the repo root:
 
 ```
-scripts/check.sh      # macOS / Linux / Git Bash
-scripts/check.ps1     # Windows PowerShell
+scripts/check.sh                                            # macOS / Linux / Git Bash
+powershell -ExecutionPolicy Bypass -File scripts/check.ps1   # Windows PowerShell
 ```
+
+`-ExecutionPolicy Bypass` applies to that one run only. Windows blocks unsigned scripts by default, and this avoids changing your system-wide policy.
+
+Both scripts run the same seven gates and stop at the first failure. They check tracked files plus new files that are not ignored, so you can run them before committing.
 
 ## Build and test
 
