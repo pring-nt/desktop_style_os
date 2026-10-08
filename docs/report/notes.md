@@ -10,3 +10,6 @@ One line per design decision, for the Technical Report.
 - 2026-10-08: clang-tidy `llvm-header-guard` dropped: it derives the expected guard from the absolute file path, so it cannot enforce `CSOPESY_SRC_<DIR>_<FILE>_H_`. Gate 7 of `scripts/check` checks guards instead.
 - 2026-10-08: clang-tidy also disables `readability-identifier-length` (Google allows `i`, `dt`) and exempts snake_case methods from PascalCase so accessors like `is_open()` pass.
 - 2026-10-08: Include order puts `<GLFW/glfw3.h>` before `<glad/gl.h>`, so CMake must define `GLFW_INCLUDE_NONE`.
+- 2026-10-08: Dependencies pinned as release archives with SHA-256 hashes: GLFW 3.4 (as the spec fixes it, although 3.5.1 exists), Dear ImGui v1.92.9b, doctest v2.5.3. Vendored: glad2 2.0.8 (GL 3.3 core, no extensions) and stb_image v2.30.
+- 2026-10-08: ASan + UBSan only run outside Windows: MinGW GCC has no sanitizer runtime. The `release` preset skips tests; `ci` builds them.
+- 2026-10-08: Third-party include dirs are made SYSTEM via `INTERFACE_SYSTEM_INCLUDE_DIRECTORIES`, because the `SYSTEM` option of `FetchContent_Declare` needs CMake 3.25 and the floor is 3.24.
