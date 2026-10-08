@@ -25,7 +25,12 @@ include(CompilerWarnings)
 include(Dependencies)
 include(Tooling)
 
-add_library(csopesy_core STATIC src/core/clock.cc src/core/state_machine.cc src/core/theme.cc)
+add_library(
+  csopesy_core STATIC
+  src/apps/app_window.cc
+  src/core/clock.cc
+  src/core/state_machine.cc
+  src/core/theme.cc)
 target_include_directories(csopesy_core PUBLIC "${PROJECT_SOURCE_DIR}/src")
 target_link_libraries(csopesy_core PUBLIC imgui)
 csopesy_set_warnings(csopesy_core)

@@ -24,3 +24,7 @@ One line per design decision, for the Technical Report.
 - 2026-10-08: `StateMachine` holds state, timers and the PWR confirm step (`RequestShutdown` / `CancelShutdown` / `ConfirmShutdown`) but draws nothing; `App` picks what to render for each state, so the logic stays unit-testable. Default durations: BIOS 4 s, splash 2.5 s, shutdown 1 s.
 - 2026-10-08: Fonts use the two fonts built into Dear ImGui (MIT): ProggyForever, the scalable default, for the shell and ProggyClean, a pixel font, for the boot screens. No font files or extra licenses to ship; a sans font such as Roboto can be added later as polish.
 - 2026-10-08: `Theme` is in `csopesy_core`, which now links `imgui`. Its test runs on a bare ImGui context with no window or GPU.
+- 2026-10-08: `AppWindow::Render` frames each app window: first-use size and a staggered offset, `ClampToWorkArea` keeps the title bar above the taskbar (and 64 px visible sideways), then the subclass's `Draw()`. The minimize button is drawn in the title bar beside ImGui's close button, after the contents, so moving the cursor there never disturbs the content layout.
+- 2026-10-08: `IMGUI_DEFINE_MATH_OPERATORS` is defined on the `imgui` target so `ImVec2` arithmetic works everywhere.
+- 2026-10-08: UI code is tested headless (`tests/imgui_test_support.h`): a bare ImGui context with `RendererHasTextures` set runs real frames with no window or GPU, and Debug builds keep IM_ASSERT on.
+- 2026-10-08: A Roboto sans shell font is planned as optional Phase 4 polish (task 4.6).

@@ -28,7 +28,7 @@ Details: [phases/phase-2-shell-core.md](phases/phase-2-shell-core.md).
 | 2.1 | `Clock` with injected time point + unit tests                                              | Phase 1    | [x]    |
 | 2.2 | `StateMachine` (`Bios`, `Splash`, `Desktop`, `Shutdown`, transitions, timers) + unit tests | Phase 1    | [x]    |
 | 2.3 | `Theme` and fonts (monospace for boot, default/sans for shell), applied once at startup    | Phase 1    | [x]    |
-| 2.4 | `AppWindow` base (shared window behavior)                                                  | 2.3        | [ ]    |
+| 2.4 | `AppWindow` base (shared window behavior)                                                  | 2.3        | [x]    |
 | 2.5 | `WindowManager` (open/close/focus/minimize, z-order, running flags) + unit tests           | 2.4        | [ ]    |
 | 2.6 | `App`: owns GLFW window, ImGui context, state machine; frame loop; single cleanup path     | 2.2, 2.3   | [ ]    |
 | 2.7 | Desktop state with gradient wallpaper (F03 fallback) and clock (F04)                       | 2.1, 2.6   | [ ]    |
@@ -56,15 +56,15 @@ Details: [phases/phase-3-required-features.md](phases/phase-3-required-features.
 
 Details: [phases/phase-4-boot-and-polish.md](phases/phase-4-boot-and-polish.md).
 
-| #   | Task                                               | Depends on | Status |
-| --- | -------------------------------------------------- | ---------- | ------ |
-| 4.1 | F01 BIOS POST screen                               | Phase 3    | [ ]    |
-| 4.2 | F02 Splash screen                                  | 4.1        | [ ]    |
-| 4.3 | F07 hover tooltips                                 | Phase 3    | [ ]    |
-| 4.4 | F09 VOL/NET popups                                 | Phase 3    | [ ]    |
-| 4.5 | F12 CPU and Memory color shading                   | Phase 3    | [ ]    |
-| 4.6 | Optional extras (only if time allows)              | 4.1–4.5    | [ ]    |
-| 4.7 | Exit: phase acceptance boxes ticked, `check` green | 4.1–4.5    | [ ]    |
+| #   | Task                                                                 | Depends on | Status |
+| --- | -------------------------------------------------------------------- | ---------- | ------ |
+| 4.1 | F01 BIOS POST screen                                                 | Phase 3    | [ ]    |
+| 4.2 | F02 Splash screen                                                    | 4.1        | [ ]    |
+| 4.3 | F07 hover tooltips                                                   | Phase 3    | [ ]    |
+| 4.4 | F09 VOL/NET popups                                                   | Phase 3    | [ ]    |
+| 4.5 | F12 CPU and Memory color shading                                     | Phase 3    | [ ]    |
+| 4.6 | Optional extras (only if time allows), including a Roboto shell font | 4.1–4.5    | [ ]    |
+| 4.7 | Exit: phase acceptance boxes ticked, `check` green                   | 4.1–4.5    | [ ]    |
 
 ## Phase 5 — Report and submission
 

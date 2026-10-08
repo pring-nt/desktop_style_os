@@ -15,7 +15,7 @@
 - [x] 2.1 `Clock` with an injected time point + unit tests.
 - [x] 2.2 `StateMachine` (`Bios`, `Splash`, `Desktop`, `Shutdown`; transitions and timers) + unit tests.
 - [x] 2.3 `Theme` and fonts (monospace for boot screens, ImGui default or sans for the shell), applied once at startup.
-- [ ] 2.4 `AppWindow` base (shared window behavior in `01-architecture.md`).
+- [x] 2.4 `AppWindow` base (shared window behavior in `01-architecture.md`).
 - [ ] 2.5 `WindowManager` (open/close/focus/minimize, z-order, running flags) + unit tests.
 - [ ] 2.6 `App`: owns the GLFW window, ImGui context and state machine; runs the frame loop; one cleanup path.
 - [ ] 2.7 Desktop state with gradient wallpaper (F03) and clock (F04).

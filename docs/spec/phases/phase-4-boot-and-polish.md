@@ -18,7 +18,7 @@ BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color
 - [ ] 4.3 F07 hover tooltips.
 - [ ] 4.4 F09 VOL/NET popups.
 - [ ] 4.5 F12 CPU and Memory color shading.
-- [ ] 4.6 Optional extras, only if time allows: F01 "Fun Fact" footer, F03 desktop label, F13 jitter / column sorting / "End task" button.
+- [ ] 4.6 Optional extras, only if time allows: F01 "Fun Fact" footer, F03 desktop label, F13 jitter / column sorting / "End task" button, a Roboto sans font for the shell (with its license file).
 
 ## Exit criteria
 
