@@ -39,6 +39,17 @@ class Theme {
   static constexpr float kTaskbarButtonSpacing = 6.0F;
   static constexpr float kTaskbarButtonRounding = 8.0F;
   static constexpr ImVec4 kTaskbarButtonHoverColor{1.0F, 1.0F, 1.0F, 0.10F};
+  static constexpr ImVec4 kTaskbarButtonActiveColor{1.0F, 1.0F, 1.0F, 0.06F};
+
+  // Running-app indicator under a taskbar button: a short grey bar while the
+  // app is open, a longer accent bar while its window is active.
+  static constexpr float kIndicatorHeight = 3.0F;
+  static constexpr float kIndicatorRounding = 1.5F;
+  static constexpr float kIndicatorRunningWidth = 6.0F;
+  static constexpr float kIndicatorActiveWidth = 16.0F;
+  static constexpr ImVec4 kIndicatorRunningColor{0.62F, 0.64F, 0.70F, 1.0F};
+  static constexpr ImVec4 kIndicatorActiveColor{0.38F, 0.68F, 1.0F, 1.0F};
+
   static constexpr ImVec4 kFolderIconColor{0.98F, 0.78F, 0.30F, 1.0F};
   static constexpr ImVec4 kFolderTabColor{0.85F, 0.62F, 0.18F, 1.0F};
   static constexpr ImVec4 kTerminalIconColor{0.35F, 0.92F, 0.45F, 1.0F};

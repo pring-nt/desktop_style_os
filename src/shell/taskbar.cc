@@ -88,6 +88,15 @@ void DrawActivity(ImDrawList& draw_list, ImVec2 center) {
 
 }  // namespace
 
+IndicatorState IndicatorFor(const WindowManager& window_manager,
+                            const apps::AppWindow& window) {
+  if (!WindowManager::IsRunning(window)) {
+    return IndicatorState::kHidden;
+  }
+  return window_manager.IsActive(window) ? IndicatorState::kActive
+                                         : IndicatorState::kRunning;
+}
+
 ScreenRect TaskbarRect(const ScreenRect& viewport) {
   return {
       .min = ImVec2(viewport.min.x, viewport.max.y - Theme::kTaskbarHeight),
@@ -144,13 +153,21 @@ void Taskbar::Draw(WindowManager& window_manager) const {
     ImGui::PushID(button.window);
     const bool clicked = ImGui::InvisibleButton("##app", rect.max - rect.min);
     ImGui::PopID();
+    const IndicatorState indicator =
+        IndicatorFor(window_manager, *button.window);
     if (ImGui::IsItemHovered()) {
       draw_list.AddRectFilled(
           rect.min, rect.max,
           ImGui::GetColorU32(Theme::kTaskbarButtonHoverColor),
           Theme::kTaskbarButtonRounding);
+    } else if (indicator == IndicatorState::kActive) {
+      draw_list.AddRectFilled(
+          rect.min, rect.max,
+          ImGui::GetColorU32(Theme::kTaskbarButtonActiveColor),
+          Theme::kTaskbarButtonRounding);
     }
     DrawIcon(draw_list, button.icon, rect);
+    DrawIndicator(draw_list, indicator, rect);
     if (clicked) {
       window_manager.ToggleFromTaskbar(*button.window);
     }
@@ -175,6 +192,24 @@ void Taskbar::DrawIcon(ImDrawList& draw_list, TaskbarIcon icon,
       DrawActivity(draw_list, center);
       break;
   }
+}
+
+void Taskbar::DrawIndicator(ImDrawList& draw_list, IndicatorState state,
+                            const ScreenRect& button) {
+  if (state == IndicatorState::kHidden) {
+    return;
+  }
+  const bool active = state == IndicatorState::kActive;
+  const float width =
+      active ? Theme::kIndicatorActiveWidth : Theme::kIndicatorRunningWidth;
+  const ImVec4& color =
+      active ? Theme::kIndicatorActiveColor : Theme::kIndicatorRunningColor;
+  const float center_x = (button.min.x + button.max.x) * 0.5F;
+  const ImVec2 min{center_x - (width * 0.5F), button.max.y};
+  const ImVec2 max{center_x + (width * 0.5F),
+                   button.max.y + Theme::kIndicatorHeight};
+  draw_list.AddRectFilled(min, max, ImGui::GetColorU32(color),
+                          Theme::kIndicatorRounding);
 }
 
 }  // namespace csopesy::shell

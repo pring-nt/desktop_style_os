@@ -16,7 +16,7 @@
 
 ## Acceptance criteria (Taskbar, shared with F06, F07)
 
-- [ ] Running indicators match which windows are open.
+- [x] Running indicators match which windows are open.
 
 ## Unit tests to write
 

@@ -16,6 +16,14 @@ namespace csopesy::shell {
 // The picture drawn on an app's taskbar button.
 enum class TaskbarIcon : std::uint8_t { kFolder, kTerminal, kActivity };
 
+// What the indicator under an app's taskbar button shows.
+enum class IndicatorState : std::uint8_t { kHidden, kRunning, kActive };
+
+// Hidden when the app is closed, active when its window is the front-most
+// one, running otherwise (open but minimized or behind another window).
+[[nodiscard]] IndicatorState IndicatorFor(const WindowManager& window_manager,
+                                          const apps::AppWindow& window);
+
 // The taskbar strip for a viewport: full width, pinned to the bottom.
 [[nodiscard]] ScreenRect TaskbarRect(const ScreenRect& viewport);
 
@@ -45,6 +53,8 @@ class Taskbar {
 
   static void DrawIcon(ImDrawList& draw_list, TaskbarIcon icon,
                        const ScreenRect& button);
+  static void DrawIndicator(ImDrawList& draw_list, IndicatorState state,
+                            const ScreenRect& button);
 
   std::vector<AppButton> buttons_;
 };

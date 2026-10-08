@@ -104,6 +104,38 @@ TEST_CASE("The taskbar is drawn in front of a focused app window") {
   CHECK(std::string_view(context.Windows.back()->Name) == "##taskbar");
 }
 
+TEST_CASE("Indicators match which windows are open and which is active") {
+  WindowManager manager;
+  FakeAppWindow closed("Closed");
+  FakeAppWindow behind("Behind");
+  FakeAppWindow minimized("Minimized");
+  FakeAppWindow front("Front");
+  manager.Add(closed);
+  manager.Add(behind);
+  manager.Add(minimized);
+  manager.Add(front);
+  manager.ToggleFromTaskbar(behind);
+  manager.ToggleFromTaskbar(minimized);
+  minimized.Minimize();
+  manager.ToggleFromTaskbar(front);
+
+  CHECK(IndicatorFor(manager, closed) == IndicatorState::kHidden);
+  CHECK(IndicatorFor(manager, behind) == IndicatorState::kRunning);
+  CHECK(IndicatorFor(manager, minimized) == IndicatorState::kRunning);
+  CHECK(IndicatorFor(manager, front) == IndicatorState::kActive);
+}
+
+TEST_CASE("Closing a window hides its indicator") {
+  WindowManager manager;
+  FakeAppWindow app;
+  manager.Add(app);
+  manager.ToggleFromTaskbar(app);
+  CHECK(IndicatorFor(manager, app) == IndicatorState::kActive);
+
+  app.Close();
+  CHECK(IndicatorFor(manager, app) == IndicatorState::kHidden);
+}
+
 TEST_CASE("Clicking an app button opens, minimizes and restores its window") {
   const HeadlessImGui imgui;
   WindowManager manager;
