@@ -1,5 +1,6 @@
 #include "apps/task_manager.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
 #include <format>
@@ -33,6 +34,12 @@ constexpr int kCpuColumn = 2;
 constexpr int kMemoryColumn = 3;
 constexpr int kColumnCount = 4;
 
+// Fills the current table cell with the Windows-style usage shading.
+void ShadeCell(float heat) {
+  ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg,
+                         ImGui::GetColorU32(HeatColor(heat)));
+}
+
 // Text that hugs the right edge of the current table cell.
 void TextRightAligned(const std::string& text) {
   const float width = ImGui::CalcTextSize(text.c_str()).x;
@@ -55,6 +62,25 @@ void HeaderCell(const std::string& total, const char* name,
 }
 
 }  // namespace
+
+float UsageHeat(double value, double full_scale) {
+  if (full_scale <= 0.0) {
+    return 0.0F;
+  }
+  return static_cast<float>(std::clamp(value / full_scale, 0.0, 1.0));
+}
+
+ImVec4 HeatColor(float heat) {
+  const float t = std::clamp(heat, 0.0F, 1.0F);
+  const ImVec4& low = Theme::kUsageHeatLowColor;
+  const ImVec4& high = Theme::kUsageHeatHighColor;
+  return {
+      low.x + ((high.x - low.x) * t),
+      low.y + ((high.y - low.y) * t),
+      low.z + ((high.z - low.z) * t),
+      low.w + ((high.w - low.w) * t),
+  };
+}
 
 std::string FormatCpu(double percent) {
   return std::format("{:.1f}%", percent);
@@ -108,8 +134,10 @@ void TaskManager::DrawProcessTable() {
   ImGui::TableSetColumnIndex(kStatusColumn);
   HeaderCell("", "Status", false);
   ImGui::TableSetColumnIndex(kCpuColumn);
+  ShadeCell(UsageHeat(totals.cpu_percent, data::kMaxPercent));
   HeaderCell(FormatTotal(totals.cpu_percent), "CPU", true);
   ImGui::TableSetColumnIndex(kMemoryColumn);
+  ShadeCell(UsageHeat(totals.memory_percent, data::kMaxPercent));
   HeaderCell(FormatTotal(totals.memory_percent), "Memory", true);
 
   DrawGroup(ProcessGroup::kApp);
@@ -146,8 +174,10 @@ void TaskManager::DrawGroup(ProcessGroup group) {
       ImGui::TextUnformatted(status.c_str());
     }
     ImGui::TableSetColumnIndex(kCpuColumn);
+    ShadeCell(UsageHeat(row.cpu_percent, kCpuFullHeatPercent));
     TextRightAligned(FormatCpu(row.cpu_percent));
     ImGui::TableSetColumnIndex(kMemoryColumn);
+    ShadeCell(UsageHeat(row.memory_mb, kMemoryFullHeatMb));
     TextRightAligned(FormatMemory(row.memory_mb));
   }
 }

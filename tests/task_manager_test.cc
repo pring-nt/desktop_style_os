@@ -23,6 +23,10 @@ constexpr double kTotalAtHalf = 21.5;
 constexpr std::size_t kApps = 6;
 constexpr std::size_t kBackground = 14;
 constexpr int kFrames = 3;
+constexpr double kHalfShare = 0.5;
+constexpr float kHalfHeat = 0.5F;
+constexpr double kDoubleShare = 2.0;
+constexpr float kOverHeat = 2.0F;
 constexpr WorkArea kArea{
     .min = ImVec2(0.0F, 0.0F),
     .max = ImVec2(1280.0F, 664.0F),
@@ -44,6 +48,24 @@ TEST_CASE("Task Manager labels the process groups with their sizes") {
   CHECK(FormatGroupHeader(data::ProcessGroup::kApp, kApps) == "Apps (6)");
   CHECK(FormatGroupHeader(data::ProcessGroup::kBackground, kBackground) ==
         "Background processes (14)");
+}
+
+TEST_CASE("UsageHeat scales usage into 0 to 1") {
+  CHECK(UsageHeat(0.0, kCpuFullHeatPercent) == 0.0F);
+  CHECK(UsageHeat(kCpuFullHeatPercent * kHalfShare, kCpuFullHeatPercent) ==
+        doctest::Approx(kHalfHeat));
+  CHECK(UsageHeat(kMemoryFullHeatMb * kDoubleShare, kMemoryFullHeatMb) == 1.0F);
+  CHECK(UsageHeat(kCpu, 0.0) == 0.0F);
+}
+
+TEST_CASE("HeatColor runs from pale yellow to deep amber") {
+  const ImVec4 idle = HeatColor(0.0F);
+  const ImVec4 heavy = HeatColor(1.0F);
+  const ImVec4 middle = HeatColor(kHalfHeat);
+  CHECK(idle.w < middle.w);
+  CHECK(middle.w < heavy.w);
+  CHECK(idle.y > heavy.y);
+  CHECK(HeatColor(kOverHeat).w == heavy.w);
 }
 
 TEST_CASE("Task Manager draws its processes table") {

@@ -12,6 +12,16 @@
 
 namespace csopesy::apps {
 
+// A process at this CPU % or memory gets the darkest shading.
+inline constexpr double kCpuFullHeatPercent = 10.0;
+inline constexpr double kMemoryFullHeatMb = 500.0;
+
+// How heavy `value` is, from 0 (idle) to 1 (at or above `full_scale`).
+[[nodiscard]] float UsageHeat(double value, double full_scale);
+// The CPU and Memory cell shading for a heat: pale yellow at 0, deep amber
+// at 1, as in the Windows Task Manager.
+[[nodiscard]] ImVec4 HeatColor(float heat);
+
 // "3.4%": a process's CPU usage as the CPU column shows it.
 [[nodiscard]] std::string FormatCpu(double percent);
 // "128.6 MB": a process's memory as the Memory column shows it.
