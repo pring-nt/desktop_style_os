@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <string>
 #include <vector>
 
 #include "imgui.h"
@@ -28,6 +29,13 @@ enum class IndicatorState : std::uint8_t { kHidden, kRunning, kActive };
 [[nodiscard]] IndicatorState IndicatorFor(const WindowManager& window_manager,
                                           const apps::AppWindow& window);
 
+inline constexpr int kMinVolume = 0;
+inline constexpr int kMaxVolume = 100;
+inline constexpr int kDefaultVolume = 70;
+
+// "Volume: 70%", or "Volume: muted", for the VOL tooltip and popup.
+[[nodiscard]] std::string VolumeLabel(int level, bool muted);
+
 // The taskbar strip for a viewport: full width, pinned to the bottom.
 [[nodiscard]] ScreenRect TaskbarRect(const ScreenRect& viewport);
 
@@ -52,8 +60,10 @@ class Taskbar {
   // must outlive the taskbar.
   void Pin(apps::AppWindow& window, TaskbarIcon icon);
 
-  void Draw(WindowManager& window_manager,
-            core::StateMachine& state_machine) const;
+  void Draw(WindowManager& window_manager, core::StateMachine& state_machine);
+
+  [[nodiscard]] int volume() const { return volume_; }
+  [[nodiscard]] bool muted() const { return muted_; }
 
  private:
   struct AppButton {
@@ -65,11 +75,15 @@ class Taskbar {
                        const ScreenRect& button);
   static void DrawIndicator(ImDrawList& draw_list, IndicatorState state,
                             const ScreenRect& button);
-  static void DrawTray(const ScreenRect& bar,
-                       core::StateMachine& state_machine);
+  void DrawTray(const ScreenRect& bar, core::StateMachine& state_machine);
+  void DrawVolumePopup(const ScreenRect& button);
+  static void DrawNetworkPopup(const ScreenRect& button);
   static void DrawShutdownDialog(core::StateMachine& state_machine);
 
   std::vector<AppButton> buttons_;
+  // Placeholder volume state for the VOL popup; nothing plays sound.
+  int volume_ = kDefaultVolume;
+  bool muted_ = false;
 };
 
 }  // namespace csopesy::shell

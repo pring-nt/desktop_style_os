@@ -66,6 +66,10 @@ class Theme {
   static constexpr ImVec4 kTrayTextColor{0.85F, 0.87F, 0.92F, 1.0F};
   static constexpr ImVec4 kPowerTextColor{0.96F, 0.36F, 0.36F, 1.0F};
 
+  // VOL and NET popups open this far above their tray button.
+  static constexpr float kTrayPopupGap = 8.0F;
+  static constexpr float kVolumeSliderWidth = 180.0F;
+
   // The PWR confirmation dialog.
   static constexpr ImVec2 kDialogButtonSize{110.0F, 0.0F};
 

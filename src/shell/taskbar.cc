@@ -2,6 +2,8 @@
 
 #include <array>
 #include <cstddef>
+#include <format>
+#include <string>
 
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -30,6 +32,11 @@ constexpr ImGuiWindowFlags kDialogFlags = core::CombineFlags(
     ImGuiWindowFlags_NoSavedSettings);
 
 constexpr const char* kShutdownDialogId = "Shut Down##pwr";
+constexpr const char* kVolumePopupId = "##volume_popup";
+constexpr const char* kNetworkPopupId = "##network_popup";
+constexpr ImVec2 kAboveRightPivot{1.0F, 1.0F};
+constexpr ImGuiPopupFlags kAnyPopup = core::CombineFlags(
+    ImGuiPopupFlags_AnyPopupId, ImGuiPopupFlags_AnyPopupLevel);
 constexpr int kTrayButtonCount = 3;
 constexpr ImVec2 kCenterPivot{0.5F, 0.5F};
 
@@ -58,6 +65,13 @@ constexpr std::array<ImVec2, 7> kActivityLine{
 };
 
 constexpr float kIconStroke = 2.0F;
+
+// Call between BeginPopup and EndPopup.
+void CloseOnEscape() {
+  if (ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
+    ImGui::CloseCurrentPopup();
+  }
+}
 
 template <std::size_t N>
 void DrawPolyline(ImDrawList& draw_list, ImVec2 center,
@@ -104,6 +118,11 @@ IndicatorState IndicatorFor(const WindowManager& window_manager,
   }
   return window_manager.IsActive(window) ? IndicatorState::kActive
                                          : IndicatorState::kRunning;
+}
+
+std::string VolumeLabel(int level, bool muted) {
+  return muted ? std::string("Volume: muted")
+               : std::format("Volume: {}%", level);
 }
 
 ScreenRect TaskbarRect(const ScreenRect& viewport) {
@@ -153,7 +172,7 @@ void Taskbar::Pin(apps::AppWindow& window, TaskbarIcon icon) {
 }
 
 void Taskbar::Draw(WindowManager& window_manager,
-                   core::StateMachine& state_machine) const {
+                   core::StateMachine& state_machine) {
   const ScreenRect bar = TaskbarRect(MainViewportRect());
   ImGui::SetNextWindowPos(bar.min);
   ImGui::SetNextWindowSize(bar.max - bar.min);
@@ -162,9 +181,9 @@ void Taskbar::Draw(WindowManager& window_manager,
   ImGui::PushStyleColor(ImGuiCol_WindowBg, Theme::kTaskbarColor);
   ImGui::Begin("##taskbar", nullptr, kTaskbarFlags);
   // App windows come to the front when focused; the taskbar must stay above
-  // them, so it is moved back to the front every frame. A modal dialog stays
-  // above (and dims) the taskbar instead.
-  if (ImGui::GetTopMostPopupModal() == nullptr) {
+  // them, so it is moved back to the front every frame. Popups and the modal
+  // dialog stay above (and the modal dims) the taskbar instead.
+  if (!ImGui::IsPopupOpen("", kAnyPopup)) {
     ImGui::BringWindowToDisplayFront(ImGui::GetCurrentWindow());
   }
   ImDrawList& draw_list = *ImGui::GetWindowDrawList();
@@ -179,6 +198,7 @@ void Taskbar::Draw(WindowManager& window_manager,
     ImGui::PushID(button.window);
     const bool clicked = ImGui::InvisibleButton("##app", rect.max - rect.min);
     ImGui::PopID();
+    ImGui::SetItemTooltip("%s", button.window->title().c_str());
     const IndicatorState indicator =
         IndicatorFor(window_manager, *button.window);
     if (ImGui::IsItemHovered()) {
@@ -246,18 +266,59 @@ void Taskbar::DrawTray(const ScreenRect& bar,
   ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
                         Theme::kTaskbarButtonHoverColor);
   ImGui::PushStyleColor(ImGuiCol_Text, Theme::kTrayTextColor);
-  // VOL and NET are placeholders until their popups arrive in Phase 4.
   ImGui::SetCursorScreenPos(TrayButtonRect(bar, TrayButton::kVolume).min);
-  ImGui::Button("VOL", Theme::kTrayButtonSize);
+  if (ImGui::Button("VOL", Theme::kTrayButtonSize)) {
+    ImGui::OpenPopup(kVolumePopupId);
+  }
+  ImGui::SetItemTooltip("%s", VolumeLabel(volume_, muted_).c_str());
   ImGui::SetCursorScreenPos(TrayButtonRect(bar, TrayButton::kNetwork).min);
-  ImGui::Button("NET", Theme::kTrayButtonSize);
+  if (ImGui::Button("NET", Theme::kTrayButtonSize)) {
+    ImGui::OpenPopup(kNetworkPopupId);
+  }
+  ImGui::SetItemTooltip("Network: CSOPESY-LAN");
 
   ImGui::PushStyleColor(ImGuiCol_Text, Theme::kPowerTextColor);
   ImGui::SetCursorScreenPos(TrayButtonRect(bar, TrayButton::kPower).min);
   if (ImGui::Button("PWR", Theme::kTrayButtonSize)) {
     state_machine.RequestShutdown();
   }
-  ImGui::PopStyleColor(4);
+  ImGui::PopStyleColor();
+  ImGui::SetItemTooltip("Shut down");
+  ImGui::PopStyleColor(3);
+
+  DrawVolumePopup(TrayButtonRect(bar, TrayButton::kVolume));
+  DrawNetworkPopup(TrayButtonRect(bar, TrayButton::kNetwork));
+}
+
+void Taskbar::DrawVolumePopup(const ScreenRect& button) {
+  ImGui::SetNextWindowPos(
+      ImVec2(button.max.x, button.min.y - Theme::kTrayPopupGap),
+      ImGuiCond_Always, kAboveRightPivot);
+  if (!ImGui::BeginPopup(kVolumePopupId)) {
+    return;
+  }
+  ImGui::TextUnformatted(VolumeLabel(volume_, muted_).c_str());
+  ImGui::SetNextItemWidth(Theme::kVolumeSliderWidth);
+  ImGui::BeginDisabled(muted_);
+  ImGui::SliderInt("##volume", &volume_, kMinVolume, kMaxVolume, "%d%%");
+  ImGui::EndDisabled();
+  ImGui::Checkbox("Mute", &muted_);
+  CloseOnEscape();
+  ImGui::EndPopup();
+}
+
+void Taskbar::DrawNetworkPopup(const ScreenRect& button) {
+  ImGui::SetNextWindowPos(
+      ImVec2(button.max.x, button.min.y - Theme::kTrayPopupGap),
+      ImGuiCond_Always, kAboveRightPivot);
+  if (!ImGui::BeginPopup(kNetworkPopupId)) {
+    return;
+  }
+  ImGui::TextUnformatted("Connected: CSOPESY-LAN");
+  ImGui::TextDisabled("Signal: Excellent");
+  ImGui::TextDisabled("IPv4 address: 192.168.1.12");
+  CloseOnEscape();
+  ImGui::EndPopup();
 }
 
 void Taskbar::DrawShutdownDialog(core::StateMachine& state_machine) {

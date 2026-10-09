@@ -32,7 +32,7 @@ constexpr ScreenRect kResizedViewport{
     .max = ImVec2(900.0F, 560.0F),
 };
 
-void DrawFrame(const Taskbar& taskbar, WindowManager& manager,
+void DrawFrame(Taskbar& taskbar, WindowManager& manager,
                core::StateMachine& machine) {
   HeadlessImGui::BeginFrame();
   manager.RenderAll(WorkAreaAboveTaskbar(MainViewportRect()));
@@ -41,11 +41,17 @@ void DrawFrame(const Taskbar& taskbar, WindowManager& manager,
 }
 
 constexpr float kHalf = 0.5F;
+// Long enough at 60 fps for ImGui's tooltip hover delay.
+constexpr int kHoverFrames = 90;
 
 ImVec2 Center(const ScreenRect& rect) { return (rect.min + rect.max) * kHalf; }
 
 ImVec2 AppButtonCenter(std::size_t index) {
   return Center(TaskbarButtonRect(TaskbarRect(MainViewportRect()), index));
+}
+
+ImVec2 TrayButtonCenter(TrayButton button) {
+  return Center(TrayButtonRect(TaskbarRect(MainViewportRect()), button));
 }
 
 ImVec2 PowerButtonCenter() {
@@ -223,7 +229,7 @@ TEST_CASE("Tray buttons are right-aligned with PWR last") {
 TEST_CASE("PWR opens the shutdown dialog in front of the taskbar") {
   const HeadlessImGui imgui;
   WindowManager manager;
-  const Taskbar taskbar;
+  Taskbar taskbar;
   core::StateMachine machine = MakeMachineOnDesktop();
   const auto draw = [&] { DrawFrame(taskbar, manager, machine); };
   draw();
@@ -240,7 +246,7 @@ TEST_CASE("PWR opens the shutdown dialog in front of the taskbar") {
 TEST_CASE("Escape in the shutdown dialog cancels back to the desktop") {
   const HeadlessImGui imgui;
   WindowManager manager;
-  const Taskbar taskbar;
+  Taskbar taskbar;
   core::StateMachine machine = MakeMachineOnDesktop();
   const auto draw = [&] { DrawFrame(taskbar, manager, machine); };
   draw();
@@ -249,6 +255,60 @@ TEST_CASE("Escape in the shutdown dialog cancels back to the desktop") {
   PressKey(ImGuiKey_Escape, draw);
   CHECK_FALSE(machine.is_shutdown_pending());
   CHECK(machine.state() == core::AppState::kDesktop);
+  CHECK_FALSE(IsAnyPopupOpen());
+}
+
+TEST_CASE("VolumeLabel shows the level or that it is muted") {
+  CHECK(VolumeLabel(kDefaultVolume, false) == "Volume: 70%");
+  CHECK(VolumeLabel(kDefaultVolume, true) == "Volume: muted");
+}
+
+TEST_CASE("Hovering an app button shows its name in a tooltip") {
+  const HeadlessImGui imgui;
+  WindowManager manager;
+  FakeAppWindow app("Terminal");
+  manager.Add(app);
+  Taskbar taskbar;
+  taskbar.Pin(app, TaskbarIcon::kTerminal);
+  core::StateMachine machine = MakeMachineOnDesktop();
+  DrawFrame(taskbar, manager, machine);
+  const ImVec2 button = AppButtonCenter(0);
+  ImGui::GetIO().AddMousePosEvent(button.x, button.y);
+  for (int frame = 0; frame < kHoverFrames; ++frame) {
+    DrawFrame(taskbar, manager, machine);
+  }
+  const ImGuiWindow* tooltip = ImGui::FindWindowByName("##Tooltip_00");
+  REQUIRE(tooltip != nullptr);
+  CHECK(tooltip->Active);
+}
+
+TEST_CASE("VOL opens the volume popup above the tray") {
+  const HeadlessImGui imgui;
+  WindowManager manager;
+  Taskbar taskbar;
+  core::StateMachine machine = MakeMachineOnDesktop();
+  const auto draw = [&] { DrawFrame(taskbar, manager, machine); };
+  draw();
+
+  ClickAt(TrayButtonCenter(TrayButton::kVolume), draw);
+  CHECK(IsAnyPopupOpen());
+  const ImGuiWindow* front = ImGui::GetCurrentContext()->Windows.back();
+  CHECK(front->Pos.y + front->Size.y <= TaskbarRect(MainViewportRect()).min.y);
+  CHECK(taskbar.volume() == kDefaultVolume);
+  CHECK_FALSE(taskbar.muted());
+}
+
+TEST_CASE("NET opens the network popup, and Escape closes it") {
+  const HeadlessImGui imgui;
+  WindowManager manager;
+  Taskbar taskbar;
+  core::StateMachine machine = MakeMachineOnDesktop();
+  const auto draw = [&] { DrawFrame(taskbar, manager, machine); };
+  draw();
+
+  ClickAt(TrayButtonCenter(TrayButton::kNetwork), draw);
+  CHECK(IsAnyPopupOpen());
+  PressKey(ImGuiKey_Escape, draw);
   CHECK_FALSE(IsAnyPopupOpen());
 }
 
