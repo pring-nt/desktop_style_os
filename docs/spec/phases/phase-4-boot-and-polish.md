@@ -25,5 +25,5 @@ BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color
 - [x] Launching the app always shows BIOS → Splash → Desktop in that order.
 - [x] Text animates in real time; no frame freezes during the sequence.
 - [x] Both screens fill the window and stay correct when it is resized.
-- [ ] `scripts/check` green.
+- [x] `scripts/check` green.
 - [ ] User approves moving to Phase 5.
