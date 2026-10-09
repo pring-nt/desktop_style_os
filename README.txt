@@ -3,9 +3,9 @@ CSOPESY Desktop OS Emulator
 
 A single-window desktop OS mock-up in C++20 (GLFW + OpenGL 3.3 + Dear ImGui).
 It boots through a BIOS POST screen and a splash screen into a desktop with a
-wallpaper, a clock, a taskbar, File Explorer, Terminal and Task Manager
-windows, and shuts down through the PWR button. All system data is
-placeholder.
+wallpaper, a clock, a taskbar, File Explorer, Terminal, Task Manager and
+Minesweeper windows, and shuts down through the PWR button. All system data
+is placeholder.
 
 
 Group and authors
@@ -53,6 +53,23 @@ Entry point
 
 src/main.cc holds int main(). It creates the App class (src/core/app.cc),
 which opens the window and runs everything until shutdown.
+
+
+Customizing
+-----------
+
+  - BIOS fun facts: assets/fun_facts.txt, one fact per line (lines starting
+    with # are comments). Each boot shows one at random. Rebuild, or edit the
+    copy in build\release\assets\ to try a change without rebuilding.
+eleasessets\ to try a change without rebuilding.
+  - Wallpaper: assets/, loaded by the path in src/core/app.cc.
+
+
+Third-party assets
+------------------
+
+  - assets/fonts/Roboto-Medium.ttf: Roboto by Christian Robertson, Apache
+    License 2.0 (assets/fonts/LICENSE-Roboto.txt).
 
 
 Development

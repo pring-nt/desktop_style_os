@@ -66,6 +66,12 @@ constexpr std::array<ImVec2, 7> kActivityLine{
 
 constexpr float kIconStroke = 2.0F;
 
+constexpr float kMineIconRadius = 8.0F;
+constexpr float kMineIconSpike = 12.0F;
+constexpr float kMineIconDiagonal = 8.5F;
+constexpr ImVec2 kMineIconShineOffset{-3.0F, -3.0F};
+constexpr float kMineIconShineRadius = 2.0F;
+
 // Call between BeginPopup and EndPopup.
 void CloseOnEscape() {
   if (ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
@@ -107,6 +113,23 @@ void DrawTerminal(ImDrawList& draw_list, ImVec2 center) {
 void DrawActivity(ImDrawList& draw_list, ImVec2 center) {
   DrawPolyline(draw_list, center, kActivityLine,
                ImGui::GetColorU32(Theme::kActivityIconColor));
+}
+
+void DrawMineIcon(ImDrawList& draw_list, ImVec2 center) {
+  const ImU32 color = ImGui::GetColorU32(Theme::kMineIconColor);
+  draw_list.AddLine(center - ImVec2(kMineIconSpike, 0.0F),
+                    center + ImVec2(kMineIconSpike, 0.0F), color, kIconStroke);
+  draw_list.AddLine(center - ImVec2(0.0F, kMineIconSpike),
+                    center + ImVec2(0.0F, kMineIconSpike), color, kIconStroke);
+  draw_list.AddLine(center - ImVec2(kMineIconDiagonal, kMineIconDiagonal),
+                    center + ImVec2(kMineIconDiagonal, kMineIconDiagonal),
+                    color, kIconStroke);
+  draw_list.AddLine(center + ImVec2(-kMineIconDiagonal, kMineIconDiagonal),
+                    center + ImVec2(kMineIconDiagonal, -kMineIconDiagonal),
+                    color, kIconStroke);
+  draw_list.AddCircleFilled(center, kMineIconRadius, color);
+  draw_list.AddCircleFilled(center + kMineIconShineOffset, kMineIconShineRadius,
+                            ImGui::GetColorU32(Theme::kMineIconShine));
 }
 
 }  // namespace
@@ -238,6 +261,9 @@ void Taskbar::DrawIcon(ImDrawList& draw_list, TaskbarIcon icon,
       break;
     case TaskbarIcon::kActivity:
       DrawActivity(draw_list, center);
+      break;
+    case TaskbarIcon::kMine:
+      DrawMineIcon(draw_list, center);
       break;
   }
 }

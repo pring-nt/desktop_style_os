@@ -169,6 +169,7 @@ App::App() : launch_seed_(TimeSeed()) {
   add(file_explorer_, shell::TaskbarIcon::kFolder);
   add(terminal_, shell::TaskbarIcon::kTerminal);
   add(task_manager_, shell::TaskbarIcon::kActivity);
+  add(minesweeper_, shell::TaskbarIcon::kMine);
 }
 
 int App::Run() {

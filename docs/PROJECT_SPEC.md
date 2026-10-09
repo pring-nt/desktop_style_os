@@ -308,9 +308,9 @@ Added at the team's request as Phase 4 polish; the spec does not ask for it.
 
 **Acceptance criteria**
 
-- [ ] Opens from its taskbar button and behaves like the other app windows.
-- [ ] The first click never hits a mine, empty areas flood-reveal, and flags block reveals.
-- [ ] Winning and losing are detected and shown; the face button starts a new game.
+- [x] Opens from its taskbar button and behaves like the other app windows.
+- [x] The first click never hits a mine, empty areas flood-reveal, and flags block reveals.
+- [x] Winning and losing are detected and shown; the face button starts a new game.
 
 ## Requirements traceability
 

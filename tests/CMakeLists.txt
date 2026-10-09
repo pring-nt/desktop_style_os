@@ -8,6 +8,8 @@ add_executable(
   file_explorer_test.cc
   fun_facts_test.cc
   imgui_flags_test.cc
+  minesweeper_board_test.cc
+  minesweeper_test.cc
   paths_test.cc
   smoke_test.cc
   state_machine_test.cc

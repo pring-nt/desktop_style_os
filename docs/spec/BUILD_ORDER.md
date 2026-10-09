@@ -63,9 +63,9 @@ Details: [phases/phase-4-boot-and-polish.md](phases/phase-4-boot-and-polish.md).
 | 4.3 | F07 hover tooltips                                                   | Phase 3    | [x]    |
 | 4.4 | F09 VOL/NET popups                                                   | Phase 3    | [x]    |
 | 4.5 | F12 CPU and Memory color shading                                     | Phase 3    | [x]    |
-| 4.6 | Optional extras (only if time allows), including a Roboto shell font | 4.1–4.5    | [ ]    |
+| 4.6 | Optional extras (only if time allows), including a Roboto shell font | 4.1–4.5    | [x]    |
 | 4.7 | Exit: phase acceptance boxes ticked, `check` green                   | 4.1–4.5    | [x]    |
-| 4.8 | F14 Minesweeper (team request)                                       | Phase 3    | [ ]    |
+| 4.8 | F14 Minesweeper (team request)                                       | Phase 3    | [x]    |
 
 ## Phase 5 — Report and submission
 

@@ -29,6 +29,7 @@ add_library(
   csopesy_core STATIC
   src/apps/app_window.cc
   src/apps/file_explorer.cc
+  src/apps/minesweeper.cc
   src/apps/task_manager.cc
   src/apps/terminal.cc
   src/boot/bios_screen.cc
@@ -41,6 +42,7 @@ add_library(
   src/core/theme.cc
   src/data/dummy_process_table.cc
   src/data/fun_facts.cc
+  src/data/minesweeper_board.cc
   src/data/terminal_commands.cc
   src/shell/desktop.cc
   src/shell/taskbar.cc

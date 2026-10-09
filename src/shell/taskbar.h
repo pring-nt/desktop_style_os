@@ -16,7 +16,7 @@
 namespace csopesy::shell {
 
 // The picture drawn on an app's taskbar button.
-enum class TaskbarIcon : std::uint8_t { kFolder, kTerminal, kActivity };
+enum class TaskbarIcon : std::uint8_t { kFolder, kTerminal, kActivity, kMine };
 
 // The system tray buttons, left to right.
 enum class TrayButton : std::uint8_t { kVolume, kNetwork, kPower };

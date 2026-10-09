@@ -5,6 +5,7 @@
 #include <string>
 
 #include "apps/file_explorer.h"
+#include "apps/minesweeper.h"
 #include "apps/task_manager.h"
 #include "apps/terminal.h"
 #include "core/clock.h"
@@ -46,6 +47,7 @@ class App {
   apps::FileExplorer file_explorer_;
   apps::Terminal terminal_{clock_, process_table_};
   apps::TaskManager task_manager_{process_table_};
+  apps::Minesweeper minesweeper_{launch_seed_};
   shell::WindowManager window_manager_;
   shell::Taskbar taskbar_;
 };

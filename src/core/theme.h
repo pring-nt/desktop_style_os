@@ -1,6 +1,7 @@
 #ifndef CSOPESY_SRC_CORE_THEME_H_
 #define CSOPESY_SRC_CORE_THEME_H_
 
+#include <array>
 #include <filesystem>
 #include <string_view>
 #include <vector>
@@ -111,11 +112,36 @@ class Theme {
   static constexpr ImVec4 kTerminalBackground{0.02F, 0.02F, 0.02F, 1.0F};
   static constexpr ImVec4 kTerminalTextColor{0.72F, 0.95F, 0.72F, 1.0F};
 
+  // Minesweeper, in the classic grey look with bevelled hidden cells.
+  static constexpr float kMineCellSize = 24.0F;
+  static constexpr float kMineBevel = 2.0F;
+  static constexpr float kMineStroke = 1.5F;
+  static constexpr ImVec4 kMineHiddenColor{0.75F, 0.75F, 0.75F, 1.0F};
+  static constexpr ImVec4 kMineBevelLightColor{1.0F, 1.0F, 1.0F, 1.0F};
+  static constexpr ImVec4 kMineBevelDarkColor{0.50F, 0.50F, 0.50F, 1.0F};
+  static constexpr ImVec4 kMineRevealedColor{0.75F, 0.75F, 0.75F, 1.0F};
+  static constexpr ImVec4 kMineGridColor{0.50F, 0.50F, 0.50F, 1.0F};
+  static constexpr ImVec4 kMineExplodedColor{1.0F, 0.0F, 0.0F, 1.0F};
+  static constexpr ImVec4 kMineFlagColor{0.90F, 0.0F, 0.0F, 1.0F};
+  static constexpr ImVec4 kMineBlackColor{0.0F, 0.0F, 0.0F, 1.0F};
+  static constexpr ImVec4 kMineHighlightColor{1.0F, 1.0F, 1.0F, 1.0F};
+  static constexpr ImVec4 kMineCounterBackground{0.0F, 0.0F, 0.0F, 1.0F};
+  static constexpr ImVec4 kMineCounterColor{1.0F, 0.15F, 0.10F, 1.0F};
+  // The classic colors for 1 to 8 adjacent mines.
+  static constexpr std::array<ImVec4, 8> kMineNumberColors{
+      ImVec4(0.0F, 0.0F, 1.0F, 1.0F),  ImVec4(0.0F, 0.50F, 0.0F, 1.0F),
+      ImVec4(1.0F, 0.0F, 0.0F, 1.0F),  ImVec4(0.0F, 0.0F, 0.50F, 1.0F),
+      ImVec4(0.50F, 0.0F, 0.0F, 1.0F), ImVec4(0.0F, 0.50F, 0.50F, 1.0F),
+      ImVec4(0.0F, 0.0F, 0.0F, 1.0F),  ImVec4(0.50F, 0.50F, 0.50F, 1.0F),
+  };
+
   static constexpr ImVec4 kFolderIconColor{0.98F, 0.78F, 0.30F, 1.0F};
   static constexpr ImVec4 kFolderTabColor{0.85F, 0.62F, 0.18F, 1.0F};
   static constexpr ImVec4 kTerminalIconColor{0.35F, 0.92F, 0.45F, 1.0F};
   static constexpr ImVec4 kTerminalIconBackground{0.07F, 0.08F, 0.10F, 1.0F};
   static constexpr ImVec4 kActivityIconColor{0.38F, 0.72F, 1.0F, 1.0F};
+  static constexpr ImVec4 kMineIconColor{0.86F, 0.88F, 0.92F, 1.0F};
+  static constexpr ImVec4 kMineIconShine{0.07F, 0.08F, 0.10F, 1.0F};
 
   // Loads the fonts and sets the ImGui style. Call once, after
   // ImGui::CreateContext() and before the first frame. The shell font is read
