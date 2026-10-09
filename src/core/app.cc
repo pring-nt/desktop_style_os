@@ -5,6 +5,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <memory>
+#include <optional>
+#include <string>
+#include <utility>
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -19,6 +22,8 @@
 #include "core/state_machine.h"
 #include "core/theme.h"
 #include "data/fun_facts.h"
+#include "data/settings.h"
+#include "data/wallpaper_catalog.h"
 #include "shell/desktop.h"
 #include "shell/taskbar.h"
 
@@ -33,7 +38,6 @@ constexpr int kGlVersionMajor = 3;
 constexpr int kGlVersionMinor = 3;
 constexpr const char* kGlslVersion = "#version 330 core";
 constexpr ImVec4 kClearColor{0.0F, 0.0F, 0.0F, 1.0F};
-constexpr const char* kWallpaperPath = "assets/frieren_wallpaper.jpg";
 
 void PrintGlfwError(int code, const char* description) {
   std::fprintf(stderr, "GLFW error %d: %s\n", code, description);
@@ -161,7 +165,7 @@ void DrawCenteredText(ImFont* font, const char* text) {
 
 }  // namespace
 
-App::App() : launch_seed_(TimeSeed()) {
+App::App() : launch_seed_(TimeSeed()), wallpaper_picker_(WallpaperDirectory()) {
   const auto add = [this](apps::AppWindow& window, shell::TaskbarIcon icon) {
     window_manager_.Add(window);
     taskbar_.Pin(window, icon);
@@ -170,6 +174,7 @@ App::App() : launch_seed_(TimeSeed()) {
   add(terminal_, shell::TaskbarIcon::kTerminal);
   add(task_manager_, shell::TaskbarIcon::kActivity);
   add(minesweeper_, shell::TaskbarIcon::kMine);
+  window_manager_.Add(wallpaper_picker_);
 }
 
 int App::Run() {
@@ -193,7 +198,10 @@ int App::Run() {
     return EXIT_FAILURE;
   }
   theme_.Apply(ExecutableDirectory() / Theme::kShellFontPath);
-  desktop_.LoadWallpaper(ExecutableDirectory() / kWallpaperPath);
+  wallpaper_picker_.Rescan();
+  ShowWallpaper(
+      data::ResolveWallpaper(data::LoadSettings(SettingsPath()).wallpaper,
+                             wallpaper_picker_.wallpapers()));
   fun_fact_ = data::PickFunFact(
       data::LoadFunFacts(ExecutableDirectory() / data::kFunFactsPath),
       launch_seed_);
@@ -210,6 +218,7 @@ int App::Run() {
   }
   // GL objects must be freed while the context still exists.
   desktop_.ReleaseWallpaper();
+  wallpaper_picker_.ReleaseThumbnails();
   return EXIT_SUCCESS;
 }
 
@@ -234,18 +243,59 @@ void App::Render() {
                                theme_.boot_font());
       break;
     case AppState::kDesktop:
-      desktop_.Draw(clock_);
-      window_manager_.RenderAll(
-          shell::WorkAreaAboveTaskbar(shell::MainViewportRect()));
-#ifdef CSOPESY_SHOW_IMGUI_DEMO
-      ImGui::ShowDemoWindow();
-#endif
-      taskbar_.Draw(window_manager_, state_machine_);
+      RenderDesktop();
       break;
     case AppState::kShutdown:
       DrawCenteredText(theme_.boot_font(), "Shutting down...");
       break;
   }
+}
+
+void App::RenderDesktop() {
+  if (pending_wallpaper_) {
+    ShowWallpaper(*pending_wallpaper_);
+    data::SaveSettings(SettingsPath(), {.wallpaper = pending_wallpaper_});
+    pending_wallpaper_.reset();
+  }
+  desktop_.Draw(clock_);
+  // Before the windows, so a reopened picker reloads its thumbnails before
+  // it draws them.
+  if (shell::Desktop::DrawContextMenu() ==
+      shell::DesktopAction::kChangeWallpaper) {
+    OpenWallpaperPicker();
+  }
+  window_manager_.RenderAll(
+      shell::WorkAreaAboveTaskbar(shell::MainViewportRect()));
+  if (std::optional<std::string> choice = wallpaper_picker_.TakeSelection()) {
+    pending_wallpaper_ = std::move(choice);
+  }
+#ifdef CSOPESY_SHOW_IMGUI_DEMO
+  ImGui::ShowDemoWindow();
+#endif
+  taskbar_.Draw(window_manager_, state_machine_);
+}
+
+void App::ShowWallpaper(const std::string& name) {
+  if (name == data::kGradientWallpaper) {
+    desktop_.ReleaseWallpaper();
+  } else {
+    desktop_.LoadWallpaper(WallpaperDirectory() / name);
+  }
+  wallpaper_picker_.set_current(name);
+}
+
+void App::OpenWallpaperPicker() {
+  wallpaper_picker_.Rescan();
+  wallpaper_picker_.LoadThumbnails();
+  window_manager_.OpenAndActivate(wallpaper_picker_);
+}
+
+std::filesystem::path App::WallpaperDirectory() {
+  return ExecutableDirectory() / data::kWallpaperDirectory;
+}
+
+std::filesystem::path App::SettingsPath() {
+  return ExecutableDirectory() / data::kSettingsFileName;
 }
 
 }  // namespace csopesy::core

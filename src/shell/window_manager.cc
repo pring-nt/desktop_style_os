@@ -29,6 +29,11 @@ void WindowManager::ToggleFromTaskbar(apps::AppWindow& window) {
   Activate(window);
 }
 
+void WindowManager::OpenAndActivate(apps::AppWindow& window) {
+  window.Open();
+  Activate(window);
+}
+
 void WindowManager::RenderAll(const apps::WorkArea& area) {
   for (apps::AppWindow* window : windows_) {
     window->Render(area);

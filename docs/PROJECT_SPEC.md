@@ -326,9 +326,9 @@ Added at the team's request as Phase 4 polish; the spec does not ask for it.
 
 **Acceptance criteria**
 
-- [ ] Right-clicking the desktop background opens the menu; right-clicking a window or the taskbar does not.
-- [ ] Picking a thumbnail or "Gradient" changes the wallpaper immediately.
-- [ ] The choice survives a restart, and a deleted wallpaper falls back without crashing.
+- [x] Right-clicking the desktop background opens the menu; right-clicking a window or the taskbar does not.
+- [x] Picking a thumbnail or "Gradient" changes the wallpaper immediately.
+- [x] The choice survives a restart, and a deleted wallpaper falls back without crashing.
 
 ## Requirements traceability
 

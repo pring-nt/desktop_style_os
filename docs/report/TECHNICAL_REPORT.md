@@ -201,7 +201,7 @@ Commands return lines plus an effect such as "clear the screen", and the Termina
 ## Slide 12 — Conclusion and next steps
 
 - Every item of the specification is covered, plus BIOS and splash screens from the reference images
-- Extras: Minesweeper, a desktop label, BIOS fun facts, Task Manager sorting, jitter and End task, a Roboto font
+- Extras: Minesweeper, a wallpaper picker that remembers your choice, BIOS fun facts, Task Manager sorting, jitter and End task
 - Next: real file browsing, a process scheduler simulation behind the Task Manager, saved settings
 - Lesson: separating what to show from what to draw made the system easy to test and change
 

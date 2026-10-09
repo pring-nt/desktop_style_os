@@ -1,6 +1,7 @@
 #include "shell/desktop.h"
 
 #include <chrono>
+#include <tuple>
 
 #include "imgui.h"
 #include "imgui_test_support.h"
@@ -32,6 +33,9 @@ constexpr ScreenRect kSquareViewport{
 };
 constexpr float kQuarter = 0.25F;
 constexpr float kThreeQuarters = 0.75F;
+constexpr ImVec2 kClickPoint{100.0F, 100.0F};
+constexpr ImVec2 kBlockerSize{400.0F, 400.0F};
+constexpr int kMenuFrames = 4;
 
 TEST_CASE("ClockPanelRect sits in the top-right corner") {
   const ScreenRect panel = ClockPanelRect(kSmallViewport, kTextSize);
@@ -108,6 +112,42 @@ TEST_CASE("Desktop draws the wallpaper and clock on the background layer") {
   desktop.Draw(clock);
   CHECK(ImGui::GetBackgroundDrawList()->VtxBuffer.Size > 0);
   testing::HeadlessImGui::EndFrame();
+}
+
+// Right-clicks at kClickPoint, one input event per frame, with `blocker`
+// drawn as a window there when set. Returns whether a popup opened.
+bool RightClickOpensMenu(bool blocker) {
+  const testing::HeadlessImGui imgui;
+  ImGuiIO& io = ImGui::GetIO();
+  bool popup_open = false;
+  for (int frame = 0; frame < kMenuFrames; ++frame) {
+    testing::HeadlessImGui::BeginFrame();
+    if (blocker) {
+      ImGui::SetNextWindowPos(ImVec2(0.0F, 0.0F));
+      ImGui::SetNextWindowSize(kBlockerSize);
+      ImGui::Begin("Blocker");
+      ImGui::End();
+    }
+    std::ignore = Desktop::DrawContextMenu();
+    popup_open = ImGui::IsPopupOpen("", ImGuiPopupFlags_AnyPopupId);
+    testing::HeadlessImGui::EndFrame();
+    if (frame == 0) {
+      io.AddMousePosEvent(kClickPoint.x, kClickPoint.y);
+    } else if (frame == 1) {
+      io.AddMouseButtonEvent(ImGuiMouseButton_Right, true);
+    } else if (frame == 2) {
+      io.AddMouseButtonEvent(ImGuiMouseButton_Right, false);
+    }
+  }
+  return popup_open;
+}
+
+TEST_CASE("Right-clicking the bare desktop opens its menu") {
+  CHECK(RightClickOpensMenu(false));
+}
+
+TEST_CASE("Right-clicking a window does not open the desktop menu") {
+  CHECK_FALSE(RightClickOpensMenu(true));
 }
 
 }  // namespace

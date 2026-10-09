@@ -17,6 +17,7 @@ using core::Theme;
 namespace {
 
 constexpr float kHalf = 0.5F;
+constexpr const char* kContextMenuId = "##desktop_menu";
 
 }  // namespace
 
@@ -72,6 +73,21 @@ void Desktop::Draw(const core::Clock& clock) const {
   DrawWallpaper(draw_list, bounds);
   DrawLabel(draw_list, bounds);
   DrawClock(draw_list, bounds, clock);
+}
+
+DesktopAction Desktop::DrawContextMenu() {
+  if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) &&
+      !ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
+    ImGui::OpenPopup(kContextMenuId);
+  }
+  DesktopAction action = DesktopAction::kNone;
+  if (ImGui::BeginPopup(kContextMenuId)) {
+    if (ImGui::MenuItem("Change wallpaper...")) {
+      action = DesktopAction::kChangeWallpaper;
+    }
+    ImGui::EndPopup();
+  }
+  return action;
 }
 
 void Desktop::DrawWallpaper(ImDrawList& draw_list,

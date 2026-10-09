@@ -11,6 +11,7 @@ add_executable(
   minesweeper_board_test.cc
   minesweeper_test.cc
   paths_test.cc
+  settings_test.cc
   smoke_test.cc
   state_machine_test.cc
   task_manager_test.cc
@@ -18,6 +19,8 @@ add_executable(
   terminal_test.cc
   taskbar_test.cc
   theme_test.cc
+  wallpaper_catalog_test.cc
+  wallpaper_picker_test.cc
   window_manager_test.cc)
 target_link_libraries(csopesy_tests PRIVATE csopesy_core doctest::doctest_with_main)
 target_compile_definitions(csopesy_tests PRIVATE CSOPESY_SOURCE_DIR="${PROJECT_SOURCE_DIR}")

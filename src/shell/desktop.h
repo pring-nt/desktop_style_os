@@ -1,6 +1,7 @@
 #ifndef CSOPESY_SRC_SHELL_DESKTOP_H_
 #define CSOPESY_SRC_SHELL_DESKTOP_H_
 
+#include <cstdint>
 #include <filesystem>
 #include <optional>
 #include <string_view>
@@ -45,6 +46,9 @@ inline constexpr std::string_view kDesktopLabel =
 // image's aspect ratio: the overflowing axis is cropped equally on both sides.
 [[nodiscard]] UvRect CoverUv(ImVec2 image_size, const ScreenRect& viewport);
 
+// What the desktop's right-click menu asked for this frame.
+enum class DesktopAction : std::uint8_t { kNone, kChangeWallpaper };
+
 // The desktop's base layer: the wallpaper, then the label and the clock. Both
 // go on ImGui's background draw list, which is drawn under every window, so
 // they are always the first layers of the frame.
@@ -58,6 +62,10 @@ class Desktop {
   [[nodiscard]] bool has_wallpaper() const { return wallpaper_.has_value(); }
 
   void Draw(const core::Clock& clock) const;
+
+  // Opens a context menu on a right-click over the bare desktop (not over a
+  // window or the taskbar) and reports the item picked.
+  static DesktopAction DrawContextMenu();
 
  private:
   void DrawWallpaper(ImDrawList& draw_list, const ScreenRect& viewport) const;

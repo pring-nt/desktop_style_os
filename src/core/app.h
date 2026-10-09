@@ -2,6 +2,8 @@
 #define CSOPESY_SRC_CORE_APP_H_
 
 #include <cstdint>
+#include <filesystem>
+#include <optional>
 #include <string>
 
 #include "apps/file_explorer.h"
@@ -14,6 +16,7 @@
 #include "data/dummy_process_table.h"
 #include "shell/desktop.h"
 #include "shell/taskbar.h"
+#include "shell/wallpaper_picker.h"
 #include "shell/window_manager.h"
 
 namespace csopesy::core {
@@ -35,6 +38,14 @@ class App {
   void Update(Seconds elapsed);
   // Draws the current state.
   void Render();
+  // The desktop state: wallpaper, menu, windows, then the taskbar.
+  void RenderDesktop();
+
+  // Shows a wallpaper by file name, or the gradient for kGradientWallpaper.
+  void ShowWallpaper(const std::string& name);
+  void OpenWallpaperPicker();
+  [[nodiscard]] static std::filesystem::path WallpaperDirectory();
+  [[nodiscard]] static std::filesystem::path SettingsPath();
 
   // Varies per launch; picks the fun fact and seeds the Minesweeper boards.
   std::uint64_t launch_seed_;
@@ -48,6 +59,10 @@ class App {
   apps::Terminal terminal_{clock_, process_table_};
   apps::TaskManager task_manager_{process_table_};
   apps::Minesweeper minesweeper_{launch_seed_};
+  shell::WallpaperPicker wallpaper_picker_;
+  // Picked in the last frame; applied before the next frame draws, so the
+  // old texture is never freed while a draw list still uses it.
+  std::optional<std::string> pending_wallpaper_;
   shell::WindowManager window_manager_;
   shell::Taskbar taskbar_;
 };

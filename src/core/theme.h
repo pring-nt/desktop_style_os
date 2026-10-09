@@ -45,6 +45,11 @@ class Theme {
   static constexpr float kClockPanelRounding = 8.0F;
   static constexpr float kClockPanelMargin = 12.0F;
 
+  // Wallpaper picker tiles: a 16:9 thumbnail with its name underneath.
+  static constexpr ImVec2 kWallpaperThumbSize{176.0F, 99.0F};
+  static constexpr float kWallpaperThumbRounding = 6.0F;
+  static constexpr float kWallpaperSelectedThickness = 3.0F;
+
   // Desktop label in the top-left corner, styled like the clock panel.
   static constexpr float kDesktopLabelDotGap = 4.0F;
   // The status dot's radius as a share of the text height.

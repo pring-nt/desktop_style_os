@@ -46,7 +46,7 @@ The build copies `assets/` next to the executable, so it can be started from any
 ## Customizing
 
 - **BIOS fun facts:** [`assets/fun_facts.txt`](assets/fun_facts.txt), one fact per line (lines starting with `#` are comments). Each boot shows one at random. Rebuild after editing, or edit the copy in `build/release/assets/` to try a change without rebuilding.
-- **Wallpaper:** images live in `assets/`; the path is set by `kWallpaperPath` in [`src/core/app.cc`](src/core/app.cc).
+- **Wallpaper:** right-click the desktop and choose **Change wallpaper...**. The picker lists every `.jpg`, `.jpeg` and `.png` in [`assets/wallpapers/`](assets/wallpapers/), so drop an image there (and rebuild, or copy it to `build/release/assets/wallpapers/`) to add one. The choice is saved to `settings.ini` next to the executable and restored on the next launch; delete that file to go back to the default.
 
 ## Third-party assets
 

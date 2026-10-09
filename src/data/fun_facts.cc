@@ -3,54 +3,35 @@
 #include <cstddef>
 #include <cstdint>
 #include <filesystem>
-#include <fstream>
-#include <ios>
-#include <iterator>
+#include <optional>
 #include <span>
 #include <string>
 #include <string_view>
 #include <vector>
 
+#include "data/text.h"
+
 namespace csopesy::data {
 
 namespace {
 
-constexpr std::string_view kWhitespace = " \t\r";
 constexpr char kCommentMarker = '#';
-
-std::string_view Trim(std::string_view text) {
-  const std::size_t first = text.find_first_not_of(kWhitespace);
-  if (first == std::string_view::npos) {
-    return {};
-  }
-  const std::size_t last = text.find_last_not_of(kWhitespace);
-  return text.substr(first, last - first + 1);
-}
 
 }  // namespace
 
 std::vector<std::string> ParseFunFacts(std::string_view text) {
   std::vector<std::string> facts;
-  while (!text.empty()) {
-    const std::size_t end = text.find('\n');
-    const std::string_view line = Trim(text.substr(0, end));
+  for (const std::string_view line : SplitLines(text)) {
     if (!line.empty() && line.front() != kCommentMarker) {
       facts.emplace_back(line);
     }
-    text = end == std::string_view::npos ? std::string_view{}
-                                         : text.substr(end + 1);
   }
   return facts;
 }
 
 std::vector<std::string> LoadFunFacts(const std::filesystem::path& path) {
-  std::ifstream file(path, std::ios::binary);
-  if (!file) {
-    return {};
-  }
-  const std::string text{std::istreambuf_iterator<char>(file),
-                         std::istreambuf_iterator<char>()};
-  return ParseFunFacts(text);
+  const std::optional<std::string> text = ReadTextFile(path);
+  return text ? ParseFunFacts(*text) : std::vector<std::string>{};
 }
 
 std::string PickFunFact(std::span<const std::string> facts,

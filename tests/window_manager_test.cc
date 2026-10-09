@@ -59,6 +59,18 @@ TEST_CASE("WindowManager taskbar click on a window behind brings it front") {
   CHECK_FALSE(manager.IsActive(second));
 }
 
+TEST_CASE("WindowManager opens a window without a taskbar button") {
+  WindowManager manager;
+  FakeAppWindow picker;
+  manager.Add(picker);
+  manager.OpenAndActivate(picker);
+  CHECK(picker.is_open());
+  CHECK(manager.IsActive(picker));
+  picker.Minimize();
+  manager.OpenAndActivate(picker);
+  CHECK_FALSE(picker.is_minimized());
+}
+
 TEST_CASE("WindowManager running flags match open windows") {
   WindowManager manager;
   FakeAppWindow open_app("Open");

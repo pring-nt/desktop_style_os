@@ -43,9 +43,13 @@ add_library(
   src/data/dummy_process_table.cc
   src/data/fun_facts.cc
   src/data/minesweeper_board.cc
+  src/data/settings.cc
   src/data/terminal_commands.cc
+  src/data/text.cc
+  src/data/wallpaper_catalog.cc
   src/shell/desktop.cc
   src/shell/taskbar.cc
+  src/shell/wallpaper_picker.cc
   src/shell/window_manager.cc)
 target_include_directories(csopesy_core PUBLIC "${PROJECT_SOURCE_DIR}/src")
 target_link_libraries(csopesy_core PUBLIC imgui PRIVATE glad glfw stb)

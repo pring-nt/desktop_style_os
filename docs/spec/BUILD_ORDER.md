@@ -66,7 +66,7 @@ Details: [phases/phase-4-boot-and-polish.md](phases/phase-4-boot-and-polish.md).
 | 4.6 | Optional extras (only if time allows), including a Roboto shell font | 4.1–4.5    | [x]    |
 | 4.7 | Exit: phase acceptance boxes ticked, `check` green                   | 4.1–4.5    | [x]    |
 | 4.8 | F14 Minesweeper (team request)                                       | Phase 3    | [x]    |
-| 4.9 | F15 Wallpaper picker (team request)                                  | F03        | [ ]    |
+| 4.9 | F15 Wallpaper picker (team request)                                  | F03        | [x]    |
 
 ## Phase 5 — Report and submission
 

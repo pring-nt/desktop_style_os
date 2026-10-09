@@ -20,6 +20,10 @@ class WindowManager {
   // minimized or behind another window -> restore and focus.
   void ToggleFromTaskbar(apps::AppWindow& window);
 
+  // Opens a window that has no taskbar button (such as the wallpaper picker),
+  // restoring it if minimized, and brings it to the front.
+  void OpenAndActivate(apps::AppWindow& window);
+
   // Draws every open window and updates which one is active.
   void RenderAll(const apps::WorkArea& area);
 
