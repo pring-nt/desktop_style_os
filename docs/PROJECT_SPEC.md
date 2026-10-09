@@ -128,7 +128,7 @@ The app opens on a BIOS POST screen, then an ASCII-logo splash with a loading in
 - Black full-window background, monospace light-grey text, top-left aligned.
 - Content mirrors the reference: product name, release date, copyright line, a memory test that counts up (e.g. `Checking RAM : 0K` → `64000K OK`), CPU type, BIOS version, processor lines, and the IDE drive list (Primary/Secondary Master/Slave).
 - Lines appear progressively (typewriter or line-by-line on a timer) for a real-time feel.
-- Optional "Fun Fact" footer line.
+- Optional "Fun Fact" footer line, picked from `assets/fun_facts.txt` (one fact per line) so the team can edit the facts without rebuilding.
 - Duration ~3–5 s, or skip on any key/click.
 
 **F2. Splash / loading screen**
@@ -292,6 +292,26 @@ The spec asks for exactly two things here: a Windows-like look and a placeholder
 - [ ] Table shows each process with its CPU and memory usage, all dummy values.
 - [ ] Header totals match the sum of the rows.
 
+## Feature: Minesweeper (optional extra)
+
+Added at the team's request as Phase 4 polish; the spec does not ask for it.
+
+**F14. Minesweeper**
+
+- Opens from its own taskbar button (a mine icon) with the same open, minimize, restore and close behavior as the other apps.
+- Three difficulties as in Windows: Beginner 9 × 9 with 10 mines, Intermediate 16 × 16 with 40 mines, Expert 30 × 16 with 99 mines.
+- Left click reveals a cell; an empty cell reveals its neighbors in a flood fill. Right click places or removes a flag. Clicking a revealed number whose flags match it reveals the remaining neighbors (chording).
+- The first reveal is always safe: mines are placed after it, away from the clicked cell and its neighbors.
+- A status bar shows mines left (mines minus flags), a face button that starts a new game, and the elapsed time in seconds.
+- Revealing a mine loses (all mines shown, wrong flags crossed out); revealing every safe cell wins (remaining mines flagged).
+- The board logic lives in `data/` with no ImGui or GL includes. Mine placement uses a fixed-seed generator written by us, so tests are deterministic.
+
+**Acceptance criteria**
+
+- [ ] Opens from its taskbar button and behaves like the other app windows.
+- [ ] The first click never hits a mine, empty areas flood-reveal, and flags block reveals.
+- [ ] Winning and losing are detected and shown; the face button starts a new game.
+
 ## Requirements traceability
 
 Every bullet in the spec's checklist maps to one feature above; the boot screens are extra polish taken from the reference images.
@@ -313,6 +333,7 @@ Every bullet in the spec's checklist maps to one feature above; the boot screens
 | SOURCE                 | Source code, README.txt with names, run instructions and entry file (or GitHub link) | D1                             |
 | PPT (Technical Report) | Cover, video walkthrough, architectural diagram, code snippets, design discussion    | D2                             |
 | (Reference images)     | BIOS POST and splash screens                                                         | F1, F2                         |
+| (Team request)         | Minesweeper game                                                                     | F14                            |
 
 ## Deliverables
 
@@ -518,7 +539,7 @@ Build in five phases so a working, submittable app exists after phase 3 and late
 1. **Skeleton and tooling** — spec split into `docs/spec/` (see Agent setup directives), CMake presets and pinned dependencies, `.clang-format` / `.clang-tidy` / `.prettierrc`, `scripts/check.*`, CONTRIBUTING.md with tool setup, one passing doctest, GLFW window with an ImGui demo window. _Done when `check` passes on every member's machine._
 2. **Shell core** — `StateMachine`, `WindowManager`, `AppWindow` base, `Clock`, `Theme` and fonts, each with unit tests; Desktop state with gradient wallpaper and clock.
 3. **Required features** — image wallpaper, taskbar with 3 buttons and running indicators, PWR shutdown with confirm, Task Manager Processes table with dummy data, File Explorer and Terminal with placeholder content. _Done when every row of the traceability table passes and `check` is green._
-4. **Boot sequence and polish** — BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color shading, optional extras.
+4. **Boot sequence and polish** — BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color shading, optional extras, and a Minesweeper game.
 5. **Report and submission** — `TECHNICAL_REPORT.md`, diagrams, video walkthrough, `README.txt`, resize and clean-machine testing, final `check` run.
 
 **Suggested work split (4 members)**
@@ -563,7 +584,7 @@ docs/spec/
   03-coding-standards.md    C++ and Dear ImGui rules
   04-quality-gates.md       check script, gates, configs, unit test list
   features/
-    F01-bios-screen.md  ...  F13-processes-table.md    one file per feature
+    F01-bios-screen.md  ...  F14-minesweeper.md        one file per feature
     D1-source.md             D2-technical-report.md
   phases/
     phase-1-skeleton-and-tooling.md

@@ -14,7 +14,7 @@
 - Black full-window background, monospace light-grey text, top-left aligned.
 - Content mirrors the reference: product name, release date, copyright line, a memory test that counts up (e.g. `Checking RAM : 0K` → `64000K OK`), CPU type, BIOS version, processor lines, and the IDE drive list (Primary/Secondary Master/Slave).
 - Lines appear progressively (typewriter or line-by-line on a timer) for a real-time feel.
-- Optional "Fun Fact" footer line.
+- Optional "Fun Fact" footer line, picked from `assets/fun_facts.txt` (one fact per line) so the team can edit the facts without rebuilding.
 - Duration ~3–5 s, or skip on any key/click.
 
 ## Acceptance criteria (Boot sequence, shared with F02)
