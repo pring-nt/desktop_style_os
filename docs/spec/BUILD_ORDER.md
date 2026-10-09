@@ -73,7 +73,7 @@ Details: [phases/phase-5-report-and-submission.md](phases/phase-5-report-and-sub
 
 | #   | Task                                                     | Depends on | Status |
 | --- | -------------------------------------------------------- | ---------- | ------ |
-| 5.1 | D1 `README.txt`                                          | Phase 4    | [x]    |
+| 5.1 | D1 `README.md`                                           | Phase 4    | [x]    |
 | 5.2 | D2 diagrams in `docs/report/diagrams/` (Mermaid + PNG)   | Phase 4    | [x]    |
 | 5.3 | Video walkthrough                                        | Phase 4    | [ ]    |
 | 5.4 | D2 `docs/report/TECHNICAL_REPORT.md`                     | 5.2, 5.3   | [x]    |

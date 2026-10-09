@@ -45,24 +45,24 @@ Split from `docs/PROJECT_SPEC.md` (last updated Oct 8, 2026). These files are th
 
 Every bullet in the spec's checklist maps to one feature above; the boot screens are extra polish taken from the reference images.
 
-| Spec requirement       | Spec bullet                                                                          | Feature                        |
-| ---------------------- | ------------------------------------------------------------------------------------ | ------------------------------ |
-| Desktop                | Full-screen base layer, rendered first each frame                                    | F3, Architecture frame loop    |
-| Desktop                | Fills the entire application window                                                  | F3                             |
-| Desktop                | Wallpaper: gradient, ImGui pattern, or image texture                                 | F3 (image + gradient fallback) |
-| Desktop                | Real-time clock, updated every frame, fixed corner                                   | F4                             |
-| Desktop                | PWR button as shutdown; no force exit                                                | F5, F9                         |
-| Taskbar                | Fixed panel at top or bottom                                                         | F6                             |
-| Taskbar                | Shows running applications                                                           | F8                             |
-| Taskbar                | ≥ 3 clickable icon buttons                                                           | F7                             |
-| Taskbar                | Two buttons open unique UI screens with placeholder info                             | F10, F11                       |
-| Taskbar                | Third button opens the Task Manager                                                  | F7, F12                        |
-| Task Manager           | Closely resembles Windows Task Manager                                               | F12                            |
-| Task Manager           | Placeholder Processes table with CPU and memory, dummy values                        | F13                            |
-| SOURCE                 | Source code, README.txt with names, run instructions and entry file (or GitHub link) | D1                             |
-| PPT (Technical Report) | Cover, video walkthrough, architectural diagram, code snippets, design discussion    | D2                             |
-| (Reference images)     | BIOS POST and splash screens                                                         | F1, F2                         |
-| (Team request)         | Minesweeper game                                                                     | F14                            |
+| Spec requirement       | Spec bullet                                                                         | Feature                        |
+| ---------------------- | ----------------------------------------------------------------------------------- | ------------------------------ |
+| Desktop                | Full-screen base layer, rendered first each frame                                   | F3, Architecture frame loop    |
+| Desktop                | Fills the entire application window                                                 | F3                             |
+| Desktop                | Wallpaper: gradient, ImGui pattern, or image texture                                | F3 (image + gradient fallback) |
+| Desktop                | Real-time clock, updated every frame, fixed corner                                  | F4                             |
+| Desktop                | PWR button as shutdown; no force exit                                               | F5, F9                         |
+| Taskbar                | Fixed panel at top or bottom                                                        | F6                             |
+| Taskbar                | Shows running applications                                                          | F8                             |
+| Taskbar                | ≥ 3 clickable icon buttons                                                          | F7                             |
+| Taskbar                | Two buttons open unique UI screens with placeholder info                            | F10, F11                       |
+| Taskbar                | Third button opens the Task Manager                                                 | F7, F12                        |
+| Task Manager           | Closely resembles Windows Task Manager                                              | F12                            |
+| Task Manager           | Placeholder Processes table with CPU and memory, dummy values                       | F13                            |
+| SOURCE                 | Source code, README.md with names, run instructions and entry file (or GitHub link) | D1                             |
+| PPT (Technical Report) | Cover, video walkthrough, architectural diagram, code snippets, design discussion   | D2                             |
+| (Reference images)     | BIOS POST and splash screens                                                        | F1, F2                         |
+| (Team request)         | Minesweeper game                                                                    | F14                            |
 
 ## Standing rules while building
 

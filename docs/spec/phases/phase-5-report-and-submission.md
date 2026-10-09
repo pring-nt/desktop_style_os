@@ -2,7 +2,7 @@
 
 ## Goal
 
-`TECHNICAL_REPORT.md`, diagrams, video walkthrough, `README.txt`, resize and clean-machine testing, final `check` run.
+`TECHNICAL_REPORT.md`, diagrams, video walkthrough, `README.md`, resize and clean-machine testing, final `check` run.
 
 ## Feature IDs included
 
@@ -10,7 +10,7 @@
 
 ## Task order
 
-- [x] 5.1 D1 `README.txt`.
+- [x] 5.1 D1 `README.md`.
 - [x] 5.2 D2 diagrams in `docs/report/diagrams/` (Mermaid source + exported PNG).
 - [ ] 5.3 Video walkthrough.
 - [x] 5.4 D2 `docs/report/TECHNICAL_REPORT.md`.

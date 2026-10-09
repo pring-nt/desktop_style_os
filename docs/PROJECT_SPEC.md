@@ -47,7 +47,7 @@ csopesy-os/
   .prettierrc
   .editorconfig
   .gitignore        build/, IDE folders, binaries, CLAUDE.md
-  README.txt        names, build/run steps, entry point
+  README.md        names, build/run steps, entry point
   CONTRIBUTING.md   tool setup (LLVM, CMake, Ninja, bun), pinned versions, git conventions
   CLAUDE.md         agent instructions (local only, gitignored)
   cmake/            CompilerWarnings.cmake, Dependencies.cmake, Tooling.cmake
@@ -134,7 +134,7 @@ The app opens on a BIOS POST screen, then an ASCII-logo splash with a loading in
 **F2. Splash / loading screen**
 
 - Centered ASCII-art logo ("CSOPESY") in a blue accent color.
-- Under it: emulator name and version, and the group credit ("CSOPESY - Section S01 - Group 12"); member names are in `README.txt`.
+- Under it: emulator name and version, and the group credit ("CSOPESY - Section S01 - Group 12"); member names are in `README.md`.
 - Animated green "Loading." → "Loading.." → "Loading..." cycling every ~0.4 s.
 - Duration ~2–3 s, then fade or cut to the Desktop state.
 
@@ -316,24 +316,24 @@ Added at the team's request as Phase 4 polish; the spec does not ask for it.
 
 Every bullet in the spec's checklist maps to one feature above; the boot screens are extra polish taken from the reference images.
 
-| Spec requirement       | Spec bullet                                                                          | Feature                        |
-| ---------------------- | ------------------------------------------------------------------------------------ | ------------------------------ |
-| Desktop                | Full-screen base layer, rendered first each frame                                    | F3, Architecture frame loop    |
-| Desktop                | Fills the entire application window                                                  | F3                             |
-| Desktop                | Wallpaper: gradient, ImGui pattern, or image texture                                 | F3 (image + gradient fallback) |
-| Desktop                | Real-time clock, updated every frame, fixed corner                                   | F4                             |
-| Desktop                | PWR button as shutdown; no force exit                                                | F5, F9                         |
-| Taskbar                | Fixed panel at top or bottom                                                         | F6                             |
-| Taskbar                | Shows running applications                                                           | F8                             |
-| Taskbar                | ≥ 3 clickable icon buttons                                                           | F7                             |
-| Taskbar                | Two buttons open unique UI screens with placeholder info                             | F10, F11                       |
-| Taskbar                | Third button opens the Task Manager                                                  | F7, F12                        |
-| Task Manager           | Closely resembles Windows Task Manager                                               | F12                            |
-| Task Manager           | Placeholder Processes table with CPU and memory, dummy values                        | F13                            |
-| SOURCE                 | Source code, README.txt with names, run instructions and entry file (or GitHub link) | D1                             |
-| PPT (Technical Report) | Cover, video walkthrough, architectural diagram, code snippets, design discussion    | D2                             |
-| (Reference images)     | BIOS POST and splash screens                                                         | F1, F2                         |
-| (Team request)         | Minesweeper game                                                                     | F14                            |
+| Spec requirement       | Spec bullet                                                                         | Feature                        |
+| ---------------------- | ----------------------------------------------------------------------------------- | ------------------------------ |
+| Desktop                | Full-screen base layer, rendered first each frame                                   | F3, Architecture frame loop    |
+| Desktop                | Fills the entire application window                                                 | F3                             |
+| Desktop                | Wallpaper: gradient, ImGui pattern, or image texture                                | F3 (image + gradient fallback) |
+| Desktop                | Real-time clock, updated every frame, fixed corner                                  | F4                             |
+| Desktop                | PWR button as shutdown; no force exit                                               | F5, F9                         |
+| Taskbar                | Fixed panel at top or bottom                                                        | F6                             |
+| Taskbar                | Shows running applications                                                          | F8                             |
+| Taskbar                | ≥ 3 clickable icon buttons                                                          | F7                             |
+| Taskbar                | Two buttons open unique UI screens with placeholder info                            | F10, F11                       |
+| Taskbar                | Third button opens the Task Manager                                                 | F7, F12                        |
+| Task Manager           | Closely resembles Windows Task Manager                                              | F12                            |
+| Task Manager           | Placeholder Processes table with CPU and memory, dummy values                       | F13                            |
+| SOURCE                 | Source code, README.md with names, run instructions and entry file (or GitHub link) | D1                             |
+| PPT (Technical Report) | Cover, video walkthrough, architectural diagram, code snippets, design discussion   | D2                             |
+| (Reference images)     | BIOS POST and splash screens                                                        | F1, F2                         |
+| (Team request)         | Minesweeper game                                                                    | F14                            |
 
 ## Deliverables
 
@@ -343,7 +343,7 @@ Two things are submitted: the SOURCE (as a GitHub link) and the technical report
 
 - Submitted as a **GitHub repository link**. The repo holds all source, CMake files, assets and the quality-gate config (`.clang-format`, `.clang-tidy`, `.prettierrc`, `scripts/`).
 - Never committed: `build/`, `.vs/`, binaries, IDE caches and `CLAUDE.md`; `.gitignore` enforces this.
-- `README.txt` at the repo root containing:
+- `README.md` at the repo root containing:
   - Group member names.
   - Requirements: OS, compiler (e.g. MSVC 2022 / GCC 13 / Clang 17), CMake ≥ 3.24, Ninja.
   - Build and run steps, copy-pasteable: `cmake --preset release`, `cmake --build --preset release`, then the path of the executable.
@@ -540,7 +540,7 @@ Build in five phases so a working, submittable app exists after phase 3 and late
 2. **Shell core** — `StateMachine`, `WindowManager`, `AppWindow` base, `Clock`, `Theme` and fonts, each with unit tests; Desktop state with gradient wallpaper and clock.
 3. **Required features** — image wallpaper, taskbar with 3 buttons and running indicators, PWR shutdown with confirm, Task Manager Processes table with dummy data, File Explorer and Terminal with placeholder content. _Done when every row of the traceability table passes and `check` is green._
 4. **Boot sequence and polish** — BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color shading, optional extras, and a Minesweeper game.
-5. **Report and submission** — `TECHNICAL_REPORT.md`, diagrams, video walkthrough, `README.txt`, resize and clean-machine testing, final `check` run.
+5. **Report and submission** — `TECHNICAL_REPORT.md`, diagrams, video walkthrough, `README.md`, resize and clean-machine testing, final `check` run.
 
 **Suggested work split (4 members)**
 
