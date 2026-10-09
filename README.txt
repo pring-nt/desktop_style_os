@@ -61,7 +61,6 @@ Customizing
   - BIOS fun facts: assets/fun_facts.txt, one fact per line (lines starting
     with # are comments). Each boot shows one at random. Rebuild, or edit the
     copy in build\release\assets\ to try a change without rebuilding.
-eleasessets\ to try a change without rebuilding.
   - Wallpaper: assets/, loaded by the path in src/core/app.cc.
 
 
