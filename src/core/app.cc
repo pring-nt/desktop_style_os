@@ -30,7 +30,7 @@ constexpr int kGlVersionMajor = 3;
 constexpr int kGlVersionMinor = 3;
 constexpr const char* kGlslVersion = "#version 330 core";
 constexpr ImVec4 kClearColor{0.0F, 0.0F, 0.0F, 1.0F};
-constexpr const char* kWallpaperPath = "assets/wallpaper.jpg";
+constexpr const char* kWallpaperPath = "assets/frieren_wallpaper.jpg";
 
 void PrintGlfwError(int code, const char* description) {
   std::fprintf(stderr, "GLFW error %d: %s\n", code, description);
