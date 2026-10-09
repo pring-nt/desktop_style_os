@@ -25,7 +25,7 @@ Two things are submitted: the SOURCE (as a GitHub link) and the technical report
 ## Acceptance criteria
 
 - [ ] README steps, followed exactly on a machine without the dev setup, produce a running build.
-- [ ] `scripts/check` passes from a clean clone (all seven gates).
+- [x] `scripts/check` passes from a clean clone (all seven gates).
 
 ## Unit tests to write
 

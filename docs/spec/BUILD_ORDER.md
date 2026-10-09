@@ -73,10 +73,10 @@ Details: [phases/phase-5-report-and-submission.md](phases/phase-5-report-and-sub
 
 | #   | Task                                                     | Depends on | Status |
 | --- | -------------------------------------------------------- | ---------- | ------ |
-| 5.1 | D1 `README.txt`                                          | Phase 4    | [ ]    |
-| 5.2 | D2 diagrams in `docs/report/diagrams/` (Mermaid + PNG)   | Phase 4    | [ ]    |
+| 5.1 | D1 `README.txt`                                          | Phase 4    | [x]    |
+| 5.2 | D2 diagrams in `docs/report/diagrams/` (Mermaid + PNG)   | Phase 4    | [x]    |
 | 5.3 | Video walkthrough                                        | Phase 4    | [ ]    |
-| 5.4 | D2 `docs/report/TECHNICAL_REPORT.md`                     | 5.2, 5.3   | [ ]    |
+| 5.4 | D2 `docs/report/TECHNICAL_REPORT.md`                     | 5.2, 5.3   | [x]    |
 | 5.5 | Resize and clean-machine testing (manual test checklist) | 5.1        | [ ]    |
 | 5.6 | Final `check` run                                        | 5.1–5.5    | [ ]    |
 

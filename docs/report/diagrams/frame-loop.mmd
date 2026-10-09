@@ -1,0 +1,16 @@
+flowchart TB
+    subgraph loop["Each frame, 60 per sec"]
+        direction LR
+        A["Poll input<br/>(GLFW)"] --> B["Start the<br/>ImGui frame"]
+        B --> C["StateMachine<br/>Update(dt)"]
+        C --> D["Render the<br/>current state"]
+        D --> E["ImGui builds<br/>draw lists"]
+        E --> F["OpenGL draws,<br/>swap buffers"]
+    end
+    subgraph layers["Layers, back to front"]
+        direction LR
+        L1["Wallpaper<br/>(image or gradient)"] --> L2["Desktop label<br/>and clock"]
+        L2 --> L3["App windows<br/>(WindowManager order)"]
+        L3 --> L4["Taskbar<br/>(always on top)"]
+    end
+    loop ~~~ layers

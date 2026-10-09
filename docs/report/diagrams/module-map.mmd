@@ -1,0 +1,26 @@
+flowchart TB
+    main["main.cc: int main()"] --> core
+    subgraph core["core/"]
+        direction LR
+        app["App"] ~~~ sm["StateMachine"] ~~~ clock["Clock"] ~~~ theme["Theme"]
+    end
+    subgraph boot["boot/"]
+        direction LR
+        bios["BiosScreen"] ~~~ splash["SplashScreen"]
+    end
+    subgraph shell["shell/"]
+        direction LR
+        desktop["Desktop"] ~~~ taskbar["Taskbar"] ~~~ wm["WindowManager"]
+    end
+    subgraph apps["apps/ (all AppWindows)"]
+        direction LR
+        fe["FileExplorer"] ~~~ term["Terminal"] ~~~ tm["TaskManager"] ~~~ ms["Minesweeper"]
+    end
+    subgraph data["data/ (pure logic, no UI)"]
+        direction LR
+        ptable["DummyProcessTable"] ~~~ cmds["TerminalCommands"] ~~~ board["MinesweeperBoard"] ~~~ facts["FunFacts"]
+    end
+    core --> boot
+    core --> shell
+    shell -->|"opens, focuses, minimizes"| apps
+    apps -->|"reads and updates"| data

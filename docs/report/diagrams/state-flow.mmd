@@ -1,0 +1,10 @@
+stateDiagram-v2
+    direction LR
+    state "PWR dialog (still Desktop)" as Confirm
+    [*] --> Bios: launch
+    Bios --> Splash: 4 s, or any key or click
+    Splash --> Desktop: 2.5 s
+    Desktop --> Confirm: PWR
+    Confirm --> Desktop: Cancel
+    Confirm --> Shutdown: Shut Down
+    Shutdown --> [*]: 1 s, window closes

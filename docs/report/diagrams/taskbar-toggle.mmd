@@ -1,0 +1,6 @@
+flowchart TB
+    click["Taskbar button clicked"] --> open{"Window open?"}
+    open -- no --> o["Open it and bring it to the front"]
+    open -- yes --> active{"Is it the front-most<br/>(active) window?"}
+    active -- yes --> m["Minimize it"]
+    active -- "no (behind or minimized)" --> r["Restore it and bring it to the front"]
