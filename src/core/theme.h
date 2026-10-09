@@ -15,6 +15,16 @@ class Theme {
   // multiples.
   static constexpr float kBootFontSize = 13.0F;
 
+  // BIOS, splash and shutdown screens: the pixel font at twice its size.
+  static constexpr float kBootTextScale = 2.0F;
+  static constexpr float kBootLineSpacing = 1.25F;
+  static constexpr ImVec2 kBootMargin{28.0F, 24.0F};
+  static constexpr ImVec4 kBootBackgroundColor{0.0F, 0.0F, 0.0F, 1.0F};
+  static constexpr ImVec4 kBootTextColor{0.78F, 0.78F, 0.78F, 1.0F};
+  static constexpr ImVec4 kSplashLogoColor{0.33F, 0.60F, 1.0F, 1.0F};
+  static constexpr ImVec4 kSplashSubtitleColor{0.55F, 0.58F, 0.65F, 1.0F};
+  static constexpr ImVec4 kSplashLoadingColor{0.35F, 0.92F, 0.45F, 1.0F};
+
   // Desktop wallpaper fallback: a vertical gradient, top to bottom.
   static constexpr ImVec4 kWallpaperTopColor{0.11F, 0.23F, 0.45F, 1.0F};
   static constexpr ImVec4 kWallpaperBottomColor{0.02F, 0.05F, 0.14F, 1.0F};

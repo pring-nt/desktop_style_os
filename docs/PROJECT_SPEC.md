@@ -134,7 +134,7 @@ The app opens on a BIOS POST screen, then an ASCII-logo splash with a loading in
 **F2. Splash / loading screen**
 
 - Centered ASCII-art logo ("CSOPESY") in a blue accent color.
-- Under it: emulator name and version, author credit, project tagline.
+- Under it: emulator name and version, and the group credit ("CSOPESY - Section S01 - Group 12"); member names are in `README.txt`.
 - Animated green "Loading." → "Loading.." → "Loading..." cycling every ~0.4 s.
 - Duration ~2–3 s, then fade or cut to the Desktop state.
 

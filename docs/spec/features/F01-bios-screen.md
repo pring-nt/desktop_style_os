@@ -19,9 +19,9 @@
 
 ## Acceptance criteria (Boot sequence, shared with F02)
 
-- [ ] Launching the app always shows BIOS → Splash → Desktop in that order.
-- [ ] Text animates in real time; no frame freezes during the sequence.
-- [ ] Both screens fill the window and stay correct when it is resized.
+- [x] Launching the app always shows BIOS → Splash → Desktop in that order.
+- [x] Text animates in real time; no frame freezes during the sequence.
+- [x] Both screens fill the window and stay correct when it is resized.
 
 ## Unit tests to write
 

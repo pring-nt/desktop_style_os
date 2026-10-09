@@ -11,6 +11,8 @@
 #include <glad/gl.h>
 
 #include "apps/app_window.h"
+#include "boot/bios_screen.h"
+#include "boot/splash_screen.h"
 #include "core/paths.h"
 #include "core/state_machine.h"
 #include "core/theme.h"
@@ -28,8 +30,6 @@ constexpr int kGlVersionMajor = 3;
 constexpr int kGlVersionMinor = 3;
 constexpr const char* kGlslVersion = "#version 330 core";
 constexpr ImVec4 kClearColor{0.0F, 0.0F, 0.0F, 1.0F};
-// Boot placeholders are drawn at this multiple of the pixel font's size.
-constexpr float kBootTextScale = 2.0F;
 constexpr const char* kWallpaperPath = "assets/wallpaper.jpg";
 
 void PrintGlfwError(int code, const char* description) {
@@ -139,10 +139,10 @@ void EndFrame(GLFWwindow* window) {
   return false;
 }
 
-// Stand-in for the boot and shutdown screens until Phase 4 builds them.
-void DrawCenteredPlaceholder(ImFont* font, const char* text) {
+// The shutdown screen: one centered line of pixel text.
+void DrawCenteredText(ImFont* font, const char* text) {
   const ImGuiViewport* viewport = ImGui::GetMainViewport();
-  const float size = Theme::kBootFontSize * kBootTextScale;
+  const float size = Theme::kBootFontSize * Theme::kBootTextScale;
   const ImVec2 text_size =
       font->CalcTextSizeA(size, viewport->WorkSize.x, 0.0F, text);
   const ImVec2 position =
@@ -211,10 +211,12 @@ void App::Update(Seconds elapsed) {
 void App::Render() {
   switch (state_machine_.state()) {
     case AppState::kBios:
-      DrawCenteredPlaceholder(theme_.boot_font(), "CSOPESY BIOS");
+      boot::BiosScreen::Draw(state_machine_.time_in_state(),
+                             theme_.boot_font());
       break;
     case AppState::kSplash:
-      DrawCenteredPlaceholder(theme_.boot_font(), "Loading...");
+      boot::SplashScreen::Draw(state_machine_.time_in_state(),
+                               theme_.boot_font());
       break;
     case AppState::kDesktop:
       desktop_.Draw(clock_);
@@ -226,7 +228,7 @@ void App::Render() {
       taskbar_.Draw(window_manager_, state_machine_);
       break;
     case AppState::kShutdown:
-      DrawCenteredPlaceholder(theme_.boot_font(), "Shutting down...");
+      DrawCenteredText(theme_.boot_font(), "Shutting down...");
       break;
   }
 }

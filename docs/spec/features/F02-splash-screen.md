@@ -12,15 +12,15 @@
 ## Requirements
 
 - Centered ASCII-art logo ("CSOPESY") in a blue accent color.
-- Under it: emulator name and version, author credit, project tagline.
+- Under it: emulator name and version, and the group credit ("CSOPESY - Section S01 - Group 12"); member names are in `README.txt`.
 - Animated green "Loading." → "Loading.." → "Loading..." cycling every ~0.4 s.
 - Duration ~2–3 s, then fade or cut to the Desktop state.
 
 ## Acceptance criteria (Boot sequence, shared with F01)
 
-- [ ] Launching the app always shows BIOS → Splash → Desktop in that order.
-- [ ] Text animates in real time; no frame freezes during the sequence.
-- [ ] Both screens fill the window and stay correct when it is resized.
+- [x] Launching the app always shows BIOS → Splash → Desktop in that order.
+- [x] Text animates in real time; no frame freezes during the sequence.
+- [x] Both screens fill the window and stay correct when it is resized.
 
 ## Unit tests to write
 

@@ -1,6 +1,7 @@
 add_executable(
   csopesy_tests
   app_window_test.cc
+  boot_screens_test.cc
   clock_test.cc
   desktop_test.cc
   dummy_process_table_test.cc

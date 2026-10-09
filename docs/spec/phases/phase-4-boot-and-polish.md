@@ -13,8 +13,8 @@ BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color
 
 ## Task order
 
-- [ ] 4.1 F01 BIOS POST screen.
-- [ ] 4.2 F02 Splash screen.
+- [x] 4.1 F01 BIOS POST screen.
+- [x] 4.2 F02 Splash screen.
 - [ ] 4.3 F07 hover tooltips.
 - [ ] 4.4 F09 VOL/NET popups.
 - [ ] 4.5 F12 CPU and Memory color shading.
@@ -22,8 +22,8 @@ BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color
 
 ## Exit criteria
 
-- [ ] Launching the app always shows BIOS → Splash → Desktop in that order.
-- [ ] Text animates in real time; no frame freezes during the sequence.
-- [ ] Both screens fill the window and stay correct when it is resized.
+- [x] Launching the app always shows BIOS → Splash → Desktop in that order.
+- [x] Text animates in real time; no frame freezes during the sequence.
+- [x] Both screens fill the window and stay correct when it is resized.
 - [ ] `scripts/check` green.
 - [ ] User approves moving to Phase 5.
