@@ -6,6 +6,7 @@ add_executable(
   desktop_test.cc
   dummy_process_table_test.cc
   file_explorer_test.cc
+  fun_facts_test.cc
   imgui_flags_test.cc
   paths_test.cc
   smoke_test.cc
@@ -17,6 +18,7 @@ add_executable(
   theme_test.cc
   window_manager_test.cc)
 target_link_libraries(csopesy_tests PRIVATE csopesy_core doctest::doctest_with_main)
+target_compile_definitions(csopesy_tests PRIVATE CSOPESY_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 csopesy_set_warnings(csopesy_tests)
 csopesy_enable_sanitizers(csopesy_tests)
 csopesy_use_portable_runtime(csopesy_tests)

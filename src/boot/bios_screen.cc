@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cfloat>
 #include <cmath>
 #include <cstdint>
 #include <format>
@@ -80,12 +81,17 @@ std::vector<std::string> VisibleBiosLines(Seconds elapsed) {
   return lines;
 }
 
+std::string FunFactFooter(std::string_view fact) {
+  return std::format("Fun Fact: {}", fact);
+}
+
 bool BiosCursorVisible(Seconds elapsed) {
   return std::fmod(elapsed.count(), kCursorBlinkPeriod.count()) <
          kCursorBlinkPeriod.count() * kCursorDutyCycle;
 }
 
-void BiosScreen::Draw(Seconds elapsed, ImFont* font) {
+void BiosScreen::Draw(Seconds elapsed, ImFont* font,
+                      std::string_view fun_fact) {
   const shell::ScreenRect viewport = shell::MainViewportRect();
   ImDrawList& draw_list = *ImGui::GetBackgroundDrawList();
   draw_list.AddRectFilled(viewport.min, viewport.max,
@@ -103,6 +109,19 @@ void BiosScreen::Draw(Seconds elapsed, ImFont* font) {
     draw_list.AddText(font, size, position, color, line.c_str());
     position.y += line_height;
   }
+
+  // Wrapped to the window width and anchored to the bottom margin.
+  const std::string footer = FunFactFooter(fun_fact);
+  const float wrap_width =
+      viewport.max.x - viewport.min.x - (Theme::kBootMargin.x * 2.0F);
+  const float footer_height =
+      font->CalcTextSizeA(size, FLT_MAX, wrap_width, footer.c_str()).y;
+  const ImVec2 footer_position{
+      viewport.min.x + Theme::kBootMargin.x,
+      viewport.max.y - Theme::kBootMargin.y - footer_height};
+  draw_list.AddText(font, size, footer_position,
+                    ImGui::GetColorU32(Theme::kBiosFunFactColor),
+                    footer.c_str(), nullptr, wrap_width);
 }
 
 }  // namespace csopesy::boot

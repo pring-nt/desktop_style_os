@@ -2,6 +2,9 @@
 
 #include <cstddef>
 #include <filesystem>
+#include <fstream>
+#include <ios>
+#include <iterator>
 #include <system_error>
 #include <vector>
 
@@ -63,6 +66,15 @@ std::filesystem::path ExecutableDirectory() {
   const std::filesystem::path working_directory =
       std::filesystem::current_path(error);
   return error ? std::filesystem::path{} : working_directory;
+}
+
+std::vector<unsigned char> ReadFileBytes(const std::filesystem::path& path) {
+  std::ifstream file(path, std::ios::binary);
+  if (!file) {
+    return {};
+  }
+  return {std::istreambuf_iterator<char>(file),
+          std::istreambuf_iterator<char>()};
 }
 
 }  // namespace csopesy::core

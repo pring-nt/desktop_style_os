@@ -1,6 +1,10 @@
 #ifndef CSOPESY_SRC_CORE_THEME_H_
 #define CSOPESY_SRC_CORE_THEME_H_
 
+#include <filesystem>
+#include <string_view>
+#include <vector>
+
 #include "imgui.h"
 
 namespace csopesy::core {
@@ -9,6 +13,9 @@ namespace csopesy::core {
 // startup. Features take their styling from here instead of hard-coding it.
 class Theme {
  public:
+  // The shell font, relative to the executable.
+  static constexpr std::string_view kShellFontPath =
+      "assets/fonts/Roboto-Medium.ttf";
   // Unscaled shell font size, in pixels.
   static constexpr float kShellFontSize = 16.0F;
   // ProggyClean is pixel-exact at 13 px; boot screens scale it by whole
@@ -21,6 +28,7 @@ class Theme {
   static constexpr ImVec2 kBootMargin{28.0F, 24.0F};
   static constexpr ImVec4 kBootBackgroundColor{0.0F, 0.0F, 0.0F, 1.0F};
   static constexpr ImVec4 kBootTextColor{0.78F, 0.78F, 0.78F, 1.0F};
+  static constexpr ImVec4 kBiosFunFactColor{0.98F, 0.86F, 0.35F, 1.0F};
   static constexpr ImVec4 kSplashLogoColor{0.33F, 0.60F, 1.0F, 1.0F};
   static constexpr ImVec4 kSplashSubtitleColor{0.55F, 0.58F, 0.65F, 1.0F};
   static constexpr ImVec4 kSplashLoadingColor{0.35F, 0.92F, 0.45F, 1.0F};
@@ -35,6 +43,12 @@ class Theme {
   static constexpr ImVec2 kClockPanelPadding{12.0F, 6.0F};
   static constexpr float kClockPanelRounding = 8.0F;
   static constexpr float kClockPanelMargin = 12.0F;
+
+  // Desktop label in the top-left corner, styled like the clock panel.
+  static constexpr float kDesktopLabelDotGap = 4.0F;
+  // The status dot's radius as a share of the text height.
+  static constexpr float kDesktopLabelDotScale = 0.25F;
+  static constexpr ImVec4 kDesktopLabelDotColor{0.35F, 0.92F, 0.45F, 1.0F};
 
   // Taskbar: a dark, semi-opaque strip along the bottom with a thin top
   // border.
@@ -100,16 +114,20 @@ class Theme {
   static constexpr ImVec4 kActivityIconColor{0.38F, 0.72F, 1.0F, 1.0F};
 
   // Loads the fonts and sets the ImGui style. Call once, after
-  // ImGui::CreateContext() and before the first frame.
-  void Apply();
+  // ImGui::CreateContext() and before the first frame. The shell font is read
+  // from `shell_font_path`; if it is empty or can't be read, Dear ImGui's
+  // scalable default font (ProggyForever) is used instead.
+  void Apply(const std::filesystem::path& shell_font_path = {});
 
-  // ProggyForever, Dear ImGui's scalable default font. The default font for
-  // every window.
+  // Roboto (or the fallback). The default font for every window.
   [[nodiscard]] ImFont* shell_font() const { return shell_font_; }
   // ProggyClean, the pixel font for the BIOS and splash screens.
   [[nodiscard]] ImFont* boot_font() const { return boot_font_; }
 
  private:
+  // The font file's bytes; ImGui reads them from here, so they live as long
+  // as the theme.
+  std::vector<unsigned char> shell_font_data_;
   ImFont* shell_font_ = nullptr;
   ImFont* boot_font_ = nullptr;
 };

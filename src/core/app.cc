@@ -1,5 +1,7 @@
 #include "core/app.h"
 
+#include <chrono>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <memory>
@@ -16,6 +18,7 @@
 #include "core/paths.h"
 #include "core/state_machine.h"
 #include "core/theme.h"
+#include "data/fun_facts.h"
 #include "shell/desktop.h"
 #include "shell/taskbar.h"
 
@@ -151,9 +154,14 @@ void DrawCenteredText(ImFont* font, const char* text) {
       font, size, position, ImGui::GetColorU32(ImGuiCol_Text), text);
 }
 
+[[nodiscard]] std::uint64_t TimeSeed() {
+  return static_cast<std::uint64_t>(
+      std::chrono::system_clock::now().time_since_epoch().count());
+}
+
 }  // namespace
 
-App::App() {
+App::App() : launch_seed_(TimeSeed()) {
   const auto add = [this](apps::AppWindow& window, shell::TaskbarIcon icon) {
     window_manager_.Add(window);
     taskbar_.Pin(window, icon);
@@ -183,8 +191,11 @@ int App::Run() {
   if (!imgui.ok()) {
     return EXIT_FAILURE;
   }
-  theme_.Apply();
+  theme_.Apply(ExecutableDirectory() / Theme::kShellFontPath);
   desktop_.LoadWallpaper(ExecutableDirectory() / kWallpaperPath);
+  fun_fact_ = data::PickFunFact(
+      data::LoadFunFacts(ExecutableDirectory() / data::kFunFactsPath),
+      launch_seed_);
 
   while (glfwWindowShouldClose(window.get()) == GLFW_FALSE) {
     glfwPollEvents();
@@ -211,8 +222,8 @@ void App::Update(Seconds elapsed) {
 void App::Render() {
   switch (state_machine_.state()) {
     case AppState::kBios:
-      boot::BiosScreen::Draw(state_machine_.time_in_state(),
-                             theme_.boot_font());
+      boot::BiosScreen::Draw(state_machine_.time_in_state(), theme_.boot_font(),
+                             fun_fact_);
       break;
     case AppState::kSplash:
       boot::SplashScreen::Draw(state_machine_.time_in_state(),

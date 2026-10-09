@@ -1,6 +1,9 @@
 #ifndef CSOPESY_SRC_CORE_APP_H_
 #define CSOPESY_SRC_CORE_APP_H_
 
+#include <cstdint>
+#include <string>
+
 #include "apps/file_explorer.h"
 #include "apps/task_manager.h"
 #include "apps/terminal.h"
@@ -32,6 +35,9 @@ class App {
   // Draws the current state.
   void Render();
 
+  // Varies per launch; picks the fun fact and seeds the Minesweeper boards.
+  std::uint64_t launch_seed_;
+  std::string fun_fact_;
   StateMachine state_machine_;
   Clock clock_;
   Theme theme_;

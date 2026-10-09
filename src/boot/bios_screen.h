@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "imgui.h"
@@ -28,10 +29,15 @@ inline constexpr core::Seconds kMemoryTestDuration{1.5F};
 // Whether the blinking cursor after the last line is shown.
 [[nodiscard]] bool BiosCursorVisible(core::Seconds elapsed);
 
-// The retro BIOS POST screen: light-grey pixel text on black, top-left.
+// "Fun Fact: <fact>", the footer line at the bottom of the BIOS screen.
+[[nodiscard]] std::string FunFactFooter(std::string_view fact);
+
+// The retro BIOS POST screen: light-grey pixel text on black, top-left, with
+// a fun fact along the bottom.
 class BiosScreen {
  public:
-  static void Draw(core::Seconds elapsed, ImFont* font);
+  static void Draw(core::Seconds elapsed, ImFont* font,
+                   std::string_view fun_fact);
 };
 
 }  // namespace csopesy::boot

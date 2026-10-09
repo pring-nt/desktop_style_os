@@ -14,6 +14,12 @@ namespace csopesy::shell {
 
 using core::Theme;
 
+namespace {
+
+constexpr float kHalf = 0.5F;
+
+}  // namespace
+
 ScreenRect MainViewportRect() {
   const ImGuiViewport* viewport = ImGui::GetMainViewport();
   return {
@@ -27,6 +33,13 @@ ScreenRect ClockPanelRect(const ScreenRect& viewport, ImVec2 text_size) {
   const ImVec2 max{viewport.max.x - Theme::kClockPanelMargin,
                    viewport.min.y + Theme::kClockPanelMargin + panel_size.y};
   return {.min = max - panel_size, .max = max};
+}
+
+ScreenRect DesktopLabelRect(const ScreenRect& viewport, ImVec2 content_size) {
+  const ImVec2 panel_size = content_size + (Theme::kClockPanelPadding * 2.0F);
+  const ImVec2 min =
+      viewport.min + ImVec2(Theme::kClockPanelMargin, Theme::kClockPanelMargin);
+  return {.min = min, .max = min + panel_size};
 }
 
 UvRect CoverUv(ImVec2 image_size, const ScreenRect& viewport) {
@@ -57,6 +70,7 @@ void Desktop::Draw(const core::Clock& clock) const {
   const ScreenRect bounds = MainViewportRect();
   ImDrawList& draw_list = *ImGui::GetBackgroundDrawList();
   DrawWallpaper(draw_list, bounds);
+  DrawLabel(draw_list, bounds);
   DrawClock(draw_list, bounds, clock);
 }
 
@@ -76,6 +90,25 @@ void Desktop::DrawGradient(ImDrawList& draw_list, const ScreenRect& viewport) {
   const ImU32 bottom = ImGui::GetColorU32(Theme::kWallpaperBottomColor);
   draw_list.AddRectFilledMultiColor(viewport.min, viewport.max, top, top,
                                     bottom, bottom);
+}
+
+void Desktop::DrawLabel(ImDrawList& draw_list, const ScreenRect& viewport) {
+  const std::string text(kDesktopLabel);
+  const ImVec2 text_size = ImGui::CalcTextSize(text.c_str());
+  // A green "online" dot, one line high, sits before the text.
+  const float dot_space = text_size.y + Theme::kDesktopLabelDotGap;
+  const ScreenRect panel =
+      DesktopLabelRect(viewport, ImVec2(dot_space + text_size.x, text_size.y));
+  draw_list.AddRectFilled(panel.min, panel.max,
+                          ImGui::GetColorU32(Theme::kClockPanelColor),
+                          Theme::kClockPanelRounding);
+  const ImVec2 content = panel.min + Theme::kClockPanelPadding;
+  const float radius = text_size.y * Theme::kDesktopLabelDotScale;
+  draw_list.AddCircleFilled(
+      content + (ImVec2(text_size.y, text_size.y) * kHalf), radius,
+      ImGui::GetColorU32(Theme::kDesktopLabelDotColor));
+  draw_list.AddText(content + ImVec2(dot_space, 0.0F),
+                    ImGui::GetColorU32(Theme::kClockTextColor), text.c_str());
 }
 
 void Desktop::DrawClock(ImDrawList& draw_list, const ScreenRect& viewport,

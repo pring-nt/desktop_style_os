@@ -54,6 +54,11 @@ TEST_CASE("The whole POST fits in the default BIOS duration") {
   CHECK(lines.size() == kAllPostLines);
 }
 
+TEST_CASE("The fun fact footer is labelled") {
+  CHECK(FunFactFooter("Linux is from 1991.") ==
+        "Fun Fact: Linux is from 1991.");
+}
+
 TEST_CASE("The loading text cycles through one to three dots") {
   CHECK(LoadingText(kStart) == "Loading.");
   CHECK(LoadingText(kLoadingDotInterval) == "Loading..");
@@ -73,7 +78,7 @@ TEST_CASE("Both boot screens draw on the background layer") {
   core::Theme theme;
   theme.Apply();
   HeadlessImGui::BeginFrame();
-  BiosScreen::Draw(kLongAfter, theme.boot_font());
+  BiosScreen::Draw(kLongAfter, theme.boot_font(), "Test fact.");
   SplashScreen::Draw(kLongAfter, theme.boot_font());
   CHECK(ImGui::GetBackgroundDrawList()->VtxBuffer.Size > 0);
   HeadlessImGui::EndFrame();

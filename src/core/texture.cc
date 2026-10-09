@@ -3,9 +3,6 @@
 #include <climits>
 #include <cstddef>
 #include <filesystem>
-#include <fstream>
-#include <ios>
-#include <iterator>
 #include <memory>
 #include <optional>
 #include <utility>
@@ -19,6 +16,8 @@
 #define STBI_ONLY_PNG
 #include <stb_image.h>
 
+#include "core/paths.h"
+
 namespace csopesy::core {
 
 namespace {
@@ -30,20 +29,11 @@ struct StbiDeleter {
 };
 using PixelsPtr = std::unique_ptr<stbi_uc, StbiDeleter>;
 
-[[nodiscard]] std::vector<stbi_uc> ReadFile(const std::filesystem::path& path) {
-  std::ifstream file(path, std::ios::binary);
-  if (!file) {
-    return {};
-  }
-  return {std::istreambuf_iterator<char>(file),
-          std::istreambuf_iterator<char>()};
-}
-
 }  // namespace
 
 std::optional<Texture> Texture::LoadFromFile(
     const std::filesystem::path& path) {
-  const std::vector<stbi_uc> bytes = ReadFile(path);
+  const std::vector<stbi_uc> bytes = ReadFileBytes(path);
   if (bytes.empty() || bytes.size() > static_cast<std::size_t>(INT_MAX)) {
     return std::nullopt;
   }

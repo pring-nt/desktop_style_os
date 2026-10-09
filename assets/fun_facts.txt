@@ -1,0 +1,22 @@
+# Fun facts for the BIOS screen footer. One fact per line; each boot picks
+# one. Blank lines and lines starting with # are ignored. Keep facts short
+# and ASCII only (the boot font has no accented letters or symbols).
+
+The first computer bug was a real moth, found in the Harvard Mark II in 1947.
+UNIX time counts the seconds since 00:00 UTC on January 1, 1970.
+A signed 32-bit UNIX clock overflows on January 19, 2038.
+Linus Torvalds announced Linux in 1991 as a hobby project.
+A deadlock needs four conditions at once: mutual exclusion, hold and wait, no preemption and circular wait.
+The banker's algorithm avoids deadlock by only granting requests that keep the system in a safe state.
+Belady's anomaly: with FIFO page replacement, more frames can mean more page faults.
+Thrashing is when a system spends more time paging than running processes.
+Dijkstra introduced semaphores in the 1960s; P and V come from Dutch words.
+On UNIX-like systems the first user process gets PID 1.
+A context switch saves one process's registers and loads another's.
+Round-robin scheduling gives every process the same time slice, called a quantum.
+Shortest Job First gives the lowest average waiting time, but needs to know burst times in advance.
+Aging fixes starvation by slowly raising the priority of processes that wait a long time.
+fork() with copy-on-write shares memory between parent and child until one of them writes.
+Ctrl+Shift+Esc opens the Windows Task Manager directly.
+Minesweeper first shipped with Windows in Windows 3.1 in 1992.
+Every frame of this emulator is redrawn from scratch: that is what immediate-mode GUI means.

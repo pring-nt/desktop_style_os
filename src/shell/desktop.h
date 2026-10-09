@@ -3,6 +3,7 @@
 
 #include <filesystem>
 #include <optional>
+#include <string_view>
 
 #include "imgui.h"
 
@@ -31,13 +32,22 @@ struct UvRect {
 [[nodiscard]] ScreenRect ClockPanelRect(const ScreenRect& viewport,
                                         ImVec2 text_size);
 
+// The status label in the desktop's top-left corner.
+inline constexpr std::string_view kDesktopLabel =
+    "CSOPESY OS v1.0 - System Online";
+
+// Where the desktop label panel goes: anchored to the viewport's top-left
+// corner, mirroring the clock panel.
+[[nodiscard]] ScreenRect DesktopLabelRect(const ScreenRect& viewport,
+                                          ImVec2 content_size);
+
 // The centered part of an image that covers the viewport while keeping the
 // image's aspect ratio: the overflowing axis is cropped equally on both sides.
 [[nodiscard]] UvRect CoverUv(ImVec2 image_size, const ScreenRect& viewport);
 
-// The desktop's base layer: the wallpaper, then the clock. Both go on ImGui's
-// background draw list, which is drawn under every window, so they are always
-// the first layers of the frame.
+// The desktop's base layer: the wallpaper, then the label and the clock. Both
+// go on ImGui's background draw list, which is drawn under every window, so
+// they are always the first layers of the frame.
 class Desktop {
  public:
   // Needs a current GL context. If the image can't be loaded, the gradient is
@@ -52,6 +62,7 @@ class Desktop {
  private:
   void DrawWallpaper(ImDrawList& draw_list, const ScreenRect& viewport) const;
   static void DrawGradient(ImDrawList& draw_list, const ScreenRect& viewport);
+  static void DrawLabel(ImDrawList& draw_list, const ScreenRect& viewport);
   static void DrawClock(ImDrawList& draw_list, const ScreenRect& viewport,
                         const core::Clock& clock);
 

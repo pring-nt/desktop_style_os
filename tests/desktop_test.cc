@@ -51,6 +51,14 @@ TEST_CASE("ClockPanelRect follows the corner when the window resizes") {
   CHECK(large.min.y == small.min.y);
 }
 
+TEST_CASE("DesktopLabelRect sits in the top-left corner") {
+  const ScreenRect panel = DesktopLabelRect(kSquareViewport, kTextSize);
+  CHECK(panel.min.x == kSquareViewport.min.x + Theme::kClockPanelMargin);
+  CHECK(panel.min.y == kSquareViewport.min.y + Theme::kClockPanelMargin);
+  CHECK(panel.max.x - panel.min.x ==
+        kTextSize.x + kPanelPadding.x + kPanelPadding.x);
+}
+
 TEST_CASE("CoverUv shows the whole image when aspect ratios match") {
   const UvRect uv = CoverUv(kWideImage, kLargeViewport);
   CHECK(uv.min.x == doctest::Approx(0.0F));
