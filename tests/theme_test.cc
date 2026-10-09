@@ -41,6 +41,14 @@ TEST_CASE("Theme falls back to the built-in font when the file is missing") {
   CHECK(theme.shell_font() != theme.boot_font());
 }
 
+TEST_CASE("Theme makes window backgrounds opaque") {
+  const testing::HeadlessImGui imgui;
+  Theme theme;
+  theme.Apply();
+
+  CHECK(ImGui::GetStyle().Colors[ImGuiCol_WindowBg].w == 1.0F);
+}
+
 TEST_CASE("Theme sets the shell font size") {
   const testing::HeadlessImGui imgui;
   Theme theme;

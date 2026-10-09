@@ -50,6 +50,9 @@ void Theme::Apply(const std::filesystem::path& shell_font_path) {
 
   ImGuiStyle& style = ImGui::GetStyle();
   ImGui::StyleColorsDark(&style);
+  // The dark style leaves windows 6% see-through; overlapping app windows
+  // then show each other's text.
+  style.Colors[ImGuiCol_WindowBg].w = 1.0F;
   style.FontSizeBase = kShellFontSize;
   style.WindowRounding = kWindowRounding;
   style.ChildRounding = kFrameRounding;
