@@ -92,6 +92,10 @@ class Theme {
   static constexpr float kNumberColumnWidth = 90.0F;
   static constexpr float kTaskManagerRowIndent = 14.0F;
   static constexpr ImVec4 kTaskManagerGroupColor{0.55F, 0.75F, 1.0F, 1.0F};
+  // The sort arrow beside the sorted column's name.
+  static constexpr float kSortArrowHalfWidth = 4.0F;
+  static constexpr float kSortArrowHalfHeight = 2.5F;
+  static constexpr float kSortArrowInset = 4.0F;
   // CPU and Memory cell shading, blended over the dark table from idle to
   // heavy use.
   static constexpr ImVec4 kUsageHeatLowColor{1.0F, 0.92F, 0.55F, 0.10F};

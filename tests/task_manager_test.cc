@@ -1,6 +1,7 @@
 #include "apps/task_manager.h"
 
 #include <cstddef>
+#include <vector>
 // doctest prints std::string_view operands with operator<<.
 #include <ostream>  // IWYU pragma: keep
 
@@ -9,6 +10,7 @@
 #include <doctest/doctest.h>
 
 #include "apps/app_window.h"
+#include "apps/sort_direction.h"
 #include "data/dummy_process_table.h"
 
 namespace csopesy::apps {
@@ -27,6 +29,7 @@ constexpr double kHalfShare = 0.5;
 constexpr float kHalfHeat = 0.5F;
 constexpr double kDoubleShare = 2.0;
 constexpr float kOverHeat = 2.0F;
+constexpr ProcessSort kUnsorted = ProcessSort();
 constexpr WorkArea kArea{
     .min = ImVec2(0.0F, 0.0F),
     .max = ImVec2(1280.0F, 664.0F),
@@ -70,7 +73,7 @@ TEST_CASE("HeatColor runs from pale yellow to deep amber") {
 
 TEST_CASE("Task Manager draws its processes table") {
   const HeadlessImGui imgui;
-  const data::DummyProcessTable table;
+  data::DummyProcessTable table;
   TaskManager task_manager(table);
   task_manager.Open();
   for (int frame = 0; frame < kFrames; ++frame) {
@@ -80,6 +83,65 @@ TEST_CASE("Task Manager draws its processes table") {
   }
   CHECK(task_manager.is_open());
   CHECK(task_manager.selected_process().empty());
+}
+
+TEST_CASE("Clicking a new column sorts numbers heaviest first") {
+  const ProcessSort cpu = ToggleSort(kUnsorted, ProcessColumn::kCpu);
+  CHECK(cpu.column == ProcessColumn::kCpu);
+  CHECK(cpu.direction == SortDirection::kDescending);
+  const ProcessSort name = ToggleSort(cpu, ProcessColumn::kName);
+  CHECK(name.column == ProcessColumn::kName);
+  CHECK(name.direction == SortDirection::kAscending);
+}
+
+TEST_CASE("Clicking the sorted column flips its direction") {
+  const ProcessSort once = ToggleSort(kUnsorted, ProcessColumn::kMemory);
+  const ProcessSort twice = ToggleSort(once, ProcessColumn::kMemory);
+  CHECK(twice.direction == SortDirection::kAscending);
+}
+
+TEST_CASE("Unsorted rows keep the table order within their group") {
+  const data::DummyProcessTable table;
+  const std::vector<const data::ProcessRow*> apps =
+      RowsInGroup(table.rows(), data::ProcessGroup::kApp, kUnsorted);
+  REQUIRE(apps.size() == kApps);
+  CHECK(apps.front()->name == "csopesy_shell.exe");
+}
+
+TEST_CASE("Rows sort by CPU, heaviest first") {
+  const data::DummyProcessTable table;
+  const std::vector<const data::ProcessRow*> apps = RowsInGroup(
+      table.rows(), data::ProcessGroup::kApp,
+      {.column = ProcessColumn::kCpu, .direction = SortDirection::kDescending});
+  REQUIRE(apps.size() == kApps);
+  CHECK(apps.front()->name == "web_browser.exe");
+  CHECK(apps.back()->name == "notepad.exe");
+}
+
+TEST_CASE("Rows sort by name, A to Z") {
+  const data::DummyProcessTable table;
+  const std::vector<const data::ProcessRow*> apps = RowsInGroup(
+      table.rows(), data::ProcessGroup::kApp,
+      {.column = ProcessColumn::kName, .direction = SortDirection::kAscending});
+  REQUIRE(apps.size() == kApps);
+  CHECK(apps.front()->name == "csopesy_shell.exe");
+  CHECK(apps.back()->name == "web_browser.exe");
+}
+
+TEST_CASE("End task removes the selected process and clears the selection") {
+  data::DummyProcessTable table;
+  TaskManager task_manager(table);
+  task_manager.set_selected_process("notepad.exe");
+  task_manager.EndSelectedTask();
+  CHECK(task_manager.selected_process().empty());
+  CHECK(table.CountInGroup(data::ProcessGroup::kApp) == kApps - 1);
+}
+
+TEST_CASE("End task does nothing without a selection") {
+  data::DummyProcessTable table;
+  TaskManager task_manager(table);
+  task_manager.EndSelectedTask();
+  CHECK(table.rows().size() == kApps + kBackground);
 }
 
 }  // namespace

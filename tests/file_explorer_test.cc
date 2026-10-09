@@ -11,6 +11,7 @@
 #include <doctest/doctest.h>
 
 #include "apps/app_window.h"
+#include "apps/sort_direction.h"
 
 namespace csopesy::apps {
 namespace {

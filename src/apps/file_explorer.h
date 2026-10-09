@@ -10,6 +10,7 @@
 #include "imgui.h"
 
 #include "apps/app_window.h"
+#include "apps/sort_direction.h"
 
 namespace csopesy::apps {
 
@@ -35,7 +36,6 @@ struct FileEntry {
 };
 
 enum class SortColumn : std::uint8_t { kName, kType, kSize, kModified };
-enum class SortDirection : std::uint8_t { kAscending, kDescending };
 
 [[nodiscard]] std::string_view FolderLabel(Folder folder);
 // The address bar text, e.g. "C:\Users\csopesy\Documents".

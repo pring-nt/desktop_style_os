@@ -2,9 +2,13 @@
 
 #include <algorithm>
 #include <array>
+#include <chrono>
+#include <cmath>
 #include <cstddef>
+#include <iterator>
 #include <span>
 #include <string_view>
+#include <vector>
 
 namespace csopesy::data {
 
@@ -156,6 +160,13 @@ constexpr std::array kRows{
     },
 };
 
+constexpr double kDisplayStepsPerUnit = 10.0;
+
+// Rounds to the 0.1 step the Task Manager displays.
+double RoundToDisplay(double value) {
+  return std::round(value * kDisplayStepsPerUnit) / kDisplayStepsPerUnit;
+}
+
 }  // namespace
 
 std::string_view StatusLabel(ProcessStatus status) {
@@ -183,11 +194,48 @@ ProcessTotals ComputeTotals(std::span<const ProcessRow> rows) {
   };
 }
 
-DummyProcessTable::DummyProcessTable() : rows_(kRows) {}
+DummyProcessTable::DummyProcessTable()
+    : base_(kRows.begin(), kRows.end()), rows_(base_) {}
 
 std::size_t DummyProcessTable::CountInGroup(ProcessGroup group) const {
   return static_cast<std::size_t>(
       std::ranges::count(rows_, group, &ProcessRow::group));
+}
+
+void DummyProcessTable::Advance(std::chrono::duration<float> elapsed) {
+  since_jitter_ += elapsed;
+  while (since_jitter_ >= kJitterInterval) {
+    since_jitter_ -= kJitterInterval;
+    Jitter();
+  }
+}
+
+void DummyProcessTable::Jitter() {
+  for (std::size_t i = 0; i < rows_.size(); ++i) {
+    const ProcessRow& base = base_.at(i);
+    ProcessRow& row = rows_.at(i);
+    if (row.status == kSuspended) {
+      continue;
+    }
+    const double cpu_spread =
+        (base.cpu_percent * kCpuJitterShare) + kCpuJitterFloor;
+    row.cpu_percent = RoundToDisplay(
+        std::clamp(base.cpu_percent + (random_.NextSigned() * cpu_spread), 0.0,
+                   kMaxPercent));
+    row.memory_mb = RoundToDisplay(
+        base.memory_mb * (1.0 + (random_.NextSigned() * kMemoryJitterShare)));
+  }
+}
+
+bool DummyProcessTable::EndProcess(std::string_view name) {
+  const auto found = std::ranges::find(rows_, name, &ProcessRow::name);
+  if (found == rows_.end()) {
+    return false;
+  }
+  const auto index = std::distance(rows_.begin(), found);
+  rows_.erase(found);
+  base_.erase(std::next(base_.begin(), index));
+  return true;
 }
 
 }  // namespace csopesy::data

@@ -217,6 +217,9 @@ void App::Update(Seconds elapsed) {
     state_machine_.SkipBios();
   }
   state_machine_.Update(elapsed);
+  if (state_machine_.state() == AppState::kDesktop) {
+    process_table_.Advance(elapsed);
+  }
 }
 
 void App::Render() {

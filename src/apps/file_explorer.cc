@@ -12,6 +12,7 @@
 
 #include "imgui.h"
 
+#include "apps/sort_direction.h"
 #include "core/imgui_flags.h"
 #include "core/theme.h"
 
