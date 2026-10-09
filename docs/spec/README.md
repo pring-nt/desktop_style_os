@@ -6,7 +6,7 @@ Split from `docs/PROJECT_SPEC.md` (last updated Oct 8, 2026). These files are th
 
 - `BUILD_ORDER.md` is the single ordered task list. Work top to bottom; each task names its dependencies and has a `[ ]` status box.
 - `00`–`04` are cross-cutting: they apply to every feature.
-- `features/` holds one file per feature (`F01`–`F14`) and deliverable (`D1`, `D2`). Each lists the spec requirement it satisfies, dependencies, files touched, acceptance criteria and unit tests.
+- `features/` holds one file per feature (`F01`–`F15`) and deliverable (`D1`, `D2`). Each lists the spec requirement it satisfies, dependencies, files touched, acceptance criteria and unit tests.
 - `phases/` groups features and tasks into the five milestones. A phase is done when all its acceptance boxes are ticked and `scripts/check` is green.
 
 ## Index
@@ -33,6 +33,7 @@ Split from `docs/PROJECT_SPEC.md` (last updated Oct 8, 2026). These files are th
 | [features/F12-task-manager-look.md](features/F12-task-manager-look.md)             | Task Manager look and layout                             |
 | [features/F13-processes-table.md](features/F13-processes-table.md)                 | Processes table                                          |
 | [features/F14-minesweeper.md](features/F14-minesweeper.md)                         | Minesweeper (optional extra)                             |
+| [features/F15-wallpaper-picker.md](features/F15-wallpaper-picker.md)               | Wallpaper picker (optional extra)                        |
 | [features/D1-source.md](features/D1-source.md)                                     | SOURCE submission                                        |
 | [features/D2-technical-report.md](features/D2-technical-report.md)                 | Technical Report                                         |
 | [phases/phase-1-skeleton-and-tooling.md](phases/phase-1-skeleton-and-tooling.md)   | Phase 1                                                  |
@@ -63,6 +64,7 @@ Every bullet in the spec's checklist maps to one feature above; the boot screens
 | PPT (Technical Report) | Cover, video walkthrough, architectural diagram, code snippets, design discussion   | D2                             |
 | (Reference images)     | BIOS POST and splash screens                                                        | F1, F2                         |
 | (Team request)         | Minesweeper game                                                                    | F14                            |
+| (Team request)         | Wallpaper picker with a remembered choice                                           | F15                            |
 
 ## Standing rules while building
 

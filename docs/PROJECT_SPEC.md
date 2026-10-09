@@ -52,7 +52,7 @@ csopesy-os/
   CLAUDE.md         agent instructions (local only, gitignored)
   cmake/            CompilerWarnings.cmake, Dependencies.cmake, Tooling.cmake
   third_party/      glad/, stb/ (vendored, unmodified)
-  assets/           wallpaper.jpg, icons/, fonts/
+  assets/           wallpapers/, icons/, fonts/
   docs/
     spec/           split spec files (see Agent setup directives)
     report/         TECHNICAL_REPORT.md + diagrams/
@@ -312,6 +312,24 @@ Added at the team's request as Phase 4 polish; the spec does not ask for it.
 - [x] The first click never hits a mine, empty areas flood-reveal, and flags block reveals.
 - [x] Winning and losing are detected and shown; the face button starts a new game.
 
+## Feature: Wallpaper picker (optional extra)
+
+Added at the team's request as Phase 4 polish; the spec does not ask for it.
+
+**F15. Wallpaper picker**
+
+- Wallpapers are the `.jpg`, `.jpeg` and `.png` files in `assets/wallpapers/`, found when the app starts and each time the picker opens, so adding one needs no code change.
+- Right-clicking the desktop background (not a window or the taskbar) opens a context menu with "Change wallpaper...".
+- That opens a "Wallpaper" window with a thumbnail of each image plus a "Gradient" option; the current choice is highlighted, and clicking one changes the wallpaper at once.
+- The choice is saved to `settings.ini` next to the executable and restored on the next launch. A missing or unreadable settings file, or a saved image that no longer exists, falls back to the default wallpaper; a missing default falls back to the gradient.
+- Settings parsing, formatting and the wallpaper list are pure logic in `data/` with unit tests.
+
+**Acceptance criteria**
+
+- [ ] Right-clicking the desktop background opens the menu; right-clicking a window or the taskbar does not.
+- [ ] Picking a thumbnail or "Gradient" changes the wallpaper immediately.
+- [ ] The choice survives a restart, and a deleted wallpaper falls back without crashing.
+
 ## Requirements traceability
 
 Every bullet in the spec's checklist maps to one feature above; the boot screens are extra polish taken from the reference images.
@@ -334,6 +352,7 @@ Every bullet in the spec's checklist maps to one feature above; the boot screens
 | PPT (Technical Report) | Cover, video walkthrough, architectural diagram, code snippets, design discussion   | D2                             |
 | (Reference images)     | BIOS POST and splash screens                                                        | F1, F2                         |
 | (Team request)         | Minesweeper game                                                                    | F14                            |
+| (Team request)         | Wallpaper picker with a remembered choice                                           | F15                            |
 
 ## Deliverables
 
@@ -539,7 +558,7 @@ Build in five phases so a working, submittable app exists after phase 3 and late
 1. **Skeleton and tooling** — spec split into `docs/spec/` (see Agent setup directives), CMake presets and pinned dependencies, `.clang-format` / `.clang-tidy` / `.prettierrc`, `scripts/check.*`, CONTRIBUTING.md with tool setup, one passing doctest, GLFW window with an ImGui demo window. _Done when `check` passes on every member's machine._
 2. **Shell core** — `StateMachine`, `WindowManager`, `AppWindow` base, `Clock`, `Theme` and fonts, each with unit tests; Desktop state with gradient wallpaper and clock.
 3. **Required features** — image wallpaper, taskbar with 3 buttons and running indicators, PWR shutdown with confirm, Task Manager Processes table with dummy data, File Explorer and Terminal with placeholder content. _Done when every row of the traceability table passes and `check` is green._
-4. **Boot sequence and polish** — BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color shading, optional extras, and a Minesweeper game.
+4. **Boot sequence and polish** — BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color shading, optional extras, a Minesweeper game and a wallpaper picker.
 5. **Report and submission** — `TECHNICAL_REPORT.md`, diagrams, video walkthrough, `README.md`, resize and clean-machine testing, final `check` run.
 
 **Suggested work split (4 members)**
@@ -584,7 +603,7 @@ docs/spec/
   03-coding-standards.md    C++ and Dear ImGui rules
   04-quality-gates.md       check script, gates, configs, unit test list
   features/
-    F01-bios-screen.md  ...  F14-minesweeper.md        one file per feature
+    F01-bios-screen.md  ...  F15-wallpaper-picker.md   one file per feature
     D1-source.md             D2-technical-report.md
   phases/
     phase-1-skeleton-and-tooling.md

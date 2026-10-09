@@ -2,7 +2,7 @@
 
 ## Goal
 
-BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color shading, optional extras, and a Minesweeper game.
+BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color shading, optional extras, a Minesweeper game and a wallpaper picker.
 
 ## Feature IDs included
 
@@ -11,6 +11,7 @@ BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color
 - [F09](../features/F09-system-tray.md) (VOL/NET popups)
 - [F12](../features/F12-task-manager-look.md) (CPU and Memory shading)
 - [F14](../features/F14-minesweeper.md) (Minesweeper, team request)
+- [F15](../features/F15-wallpaper-picker.md) (wallpaper picker, team request)
 
 ## Task order
 
@@ -21,6 +22,7 @@ BIOS POST and splash screens, hover tooltips, VOL/NET popups, Task Manager color
 - [x] 4.5 F12 CPU and Memory color shading.
 - [x] 4.6 Optional extras, only if time allows: F01 "Fun Fact" footer, F03 desktop label, F13 jitter / column sorting / "End task" button, a Roboto sans font for the shell (with its license file).
 - [x] 4.8 F14 Minesweeper (team request).
+- [ ] 4.9 F15 Wallpaper picker with a remembered choice (team request).
 
 ## Exit criteria
 

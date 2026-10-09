@@ -51,7 +51,7 @@ csopesy-os/
   CLAUDE.md         agent instructions (local only, gitignored)
   cmake/            CompilerWarnings.cmake, Dependencies.cmake, Tooling.cmake
   third_party/      glad/, stb/ (vendored, unmodified)
-  assets/           wallpaper.jpg, icons/, fonts/
+  assets/           wallpapers/, icons/, fonts/
   docs/
     spec/           split spec files (see Agent setup directives)
     report/         TECHNICAL_REPORT.md + diagrams/
